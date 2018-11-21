@@ -12,24 +12,23 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-using Monopoly.View;
-namespace Monopoly
+
+namespace Monopoly.View
 {
     /// <summary>
-    /// Logique d'interaction pour MainWindow.xaml
+    /// Logique d'interaction pour ConfigurationInterface.xaml
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class ConfigurationInterface : Page
     {
-        public MainWindow()
+        public ConfigurationInterface()
         {
             InitializeComponent();
         }
 
-        private void ShowConfiguration(object sender, RoutedEventArgs e)
+        private void ReturnToMenu(object sender, RoutedEventArgs e)
         {
-            MainContent.Content = new ConfigurationInterface();
-            MenuContent.Visibility = Visibility.Hidden;
-               
+            ((MainWindow)Window.GetWindow(this)).MainContent.Content = "";
+            ((MainWindow)Window.GetWindow(this)).MenuContent.Visibility = Visibility.Visible;
         }
     }
 }
