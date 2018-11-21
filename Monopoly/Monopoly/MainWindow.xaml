@@ -7,6 +7,10 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
     <Grid>
+        <Frame x:Name="MainContent" NavigationUIVisibility="Hidden"/>
+        <Grid x:Name="MenuContent">
+            <Button x:Name="btnConfiguration" Click="ShowConfiguration"></Button>
+        </Grid>
         
     </Grid>
 </Window>
