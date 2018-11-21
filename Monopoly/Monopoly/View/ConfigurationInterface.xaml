@@ -58,6 +58,13 @@
                         <TextBlock HorizontalAlignment="Center" Text="Options" FontFamily="Champagne &amp; Limousines"/>
                     </Grid>
                 </Button>
+
+                <Button x:Name="btnReturnToMenu" Margin="10" Click="ReturnToMenu">
+                    <Grid Width="150">
+                        <MaterialDesign:PackIcon Kind="ArrowLeft" VerticalAlignment="Center"/>
+                        <TextBlock HorizontalAlignment="Center" Text="Retour au menu" FontFamily="Champagne &amp; Limousines"/>
+                    </Grid>
+                </Button>
             </StackPanel>
         </Grid>
         
