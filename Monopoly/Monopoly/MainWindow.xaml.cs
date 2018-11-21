@@ -12,7 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-
+using Monopoly.View;
 namespace Monopoly
 {
     /// <summary>
@@ -32,7 +32,8 @@ namespace Monopoly
 
         private void btnCustomize_Click(object sender, RoutedEventArgs e)
         {
-            
+            MainContent.Content = new ConfigurationInterface();
+            MenuContent.Visibility = Visibility.Hidden;
         }
 
         private void btnNetworkPlay_Click(object sender, RoutedEventArgs e)
@@ -42,7 +43,7 @@ namespace Monopoly
 
         private void btnRules_Click(object sender, RoutedEventArgs e)
         {
-           
+
         }
     }
 }
