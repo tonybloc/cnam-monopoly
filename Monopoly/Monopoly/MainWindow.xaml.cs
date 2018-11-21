@@ -24,5 +24,25 @@ namespace Monopoly
         {
             InitializeComponent();
         }
+
+        private void btnPlayAlone_Click(object sender, RoutedEventArgs e)
+        {
+            
+        }
+
+        private void btnCustomize_Click(object sender, RoutedEventArgs e)
+        {
+            
+        }
+
+        private void btnNetworkPlay_Click(object sender, RoutedEventArgs e)
+        {
+            
+        }
+
+        private void btnRules_Click(object sender, RoutedEventArgs e)
+        {
+           
+        }
     }
 }
