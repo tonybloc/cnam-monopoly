@@ -1,0 +1,131 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Deck xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <Card xsi:type="CardExitToJail">
+    <Id>1</Id>
+    <Title>CAISSE DE COMMUNAUTE</Title>
+    <Type>1</Type>
+    <Description>Vous êtes libéré de prison. Cette carte peut être conservée jusqu'à ce qu'elle soit utilisée ou vendue.</Description>
+    <EventType>2</EventType>
+  </Card>
+  <Card xsi:type="CardMoney">
+    <Id>2</Id>
+    <Title>CAISSE DE COMMUNAUTE</Title>
+    <Type>1</Type>
+    <Description>Recevez votre intérêt sur emprunt à 7%. 25€.</Description>
+    <EventType>3</EventType>
+    <Amount>+25</Amount>
+  </Card>
+  <Card xsi:type="CardMoveTo">
+    <Id>3</Id>
+    <Title>CAISSE DE COMMUNAUTE</Title>
+    <Type>1</Type>
+    <Description>Retournez à Belleville.</Description>
+    <EventType>0</EventType>
+    <CellPosition>2</CellPosition>
+  </Card>
+  <Card xsi:type="CardMoney">
+    <Id>4</Id>
+    <Title>CAISSE DE COMMUNAUTE</Title>
+    <Type>1</Type>
+    <Description>Recevez votre revenu annuel 100€.</Description>
+    <EventType>3</EventType>
+    <Amount>+100</Amount>
+  </Card>
+  <Card xsi:type="CardMoveTo">
+    <Id>5</Id>
+    <Title>CAISSE DE COMMUNAUTE</Title>
+    <Type>1</Type>
+    <Description>Avancez jusqu'à la case Départ.</Description>
+    <EventType>0</EventType>
+    <CellPosition>1</CellPosition>
+  </Card>
+  <Card xsi:type="CardMoney">
+    <Id>6</Id>
+    <Title>CAISSE DE COMMUNAUTE</Title>
+    <Type>1</Type>
+    <Description>Payez votre police d'Assurance s'élevant à 50€.</Description>
+    <EventType>1</EventType>
+    <Amount>-50</Amount>
+  </Card>
+  <Card xsi:type="CardMoney">
+    <Id>7</Id>
+    <Title>CAISSE DE COMMUNAUTE</Title>
+    <Type>1</Type>
+    <Description>Payez à l'Hôpital 100€.</Description>
+    <EventType>1</EventType>
+    <Amount>-100</Amount>
+  </Card>
+  <Card xsi:type="CardMoney">
+    <Id>8</Id>
+    <Title>CAISSE DE COMMUNAUTE</Title>
+    <Type>1</Type>
+    <Description>Payez la note du médecin 50€.</Description>
+    <EventType>1</EventType>
+    <Amount>-50</Amount>
+  </Card>
+  <Card xsi:type="CardGoToJail">
+    <Id>9</Id>
+    <Title>CAISSE DE COMMUNAUTE</Title>
+    <Type>1</Type>
+    <Description>Allez en prison. Avancez tout droit en prison. Ne passez par la case Départ. Ne recevez pas 200€.</Description>
+    <EventType>4</EventType>
+    <CellPosition>11</CellPosition>
+  </Card>
+  <Card xsi:type="CardMoney">
+    <Id>10</Id>
+    <Title>CAISSE DE COMMUNAUTE</Title>
+    <Type>1</Type>
+    <Description>Les contributions vous remboursent la somme de 20€.</Description>
+    <EventType>3</EventType>
+    <Amount>+20</Amount>
+  </Card>
+  <Card xsi:type="CardMoney">
+    <Id>11</Id>
+    <Title>CAISSE DE COMMUNAUTE</Title>
+    <Type>1</Type>
+    <Description>Vous héritez 100€.</Description>
+    <EventType>3</EventType>
+    <Amount>+100</Amount>
+  </Card>
+  <Card xsi:type="CardMoney">
+    <Id>12</Id>
+    <Title>CAISSE DE COMMUNAUTE</Title>
+    <Type>1</Type>
+    <Description>Vous avez gagné le deuxième prix de beauté. Recevez 10€.</Description>
+    <EventType>3</EventType>
+    <Amount>+10</Amount>
+  </Card>
+  <Card xsi:type="CardMoney">
+    <Id>13</Id>
+    <Title>CAISSE DE COMMUNAUTE</Title>
+    <Type>1</Type>
+    <Description>La vente de votre stock vous rapporte 50€.</Description>
+    <EventType>3</EventType>
+    <Amount>+50</Amount>
+  </Card>
+    <Card xsi:type="CardMoneyPlayers">
+    <Id>14</Id>
+    <Title>CAISSE DE COMMUNAUTE</Title>
+    <Type>1</Type>
+    <Description>C'est votre anniversaire : chaque joueur doit vous donner 10€.</Description>
+    <EventType>3</EventType>
+    <Amount>10</Amount>
+  </Card>
+  <Card xsi:type="CardMoney">
+    <Id>15</Id>
+    <Title>CAISSE DE COMMUNAUTE</Title>
+    <Type>1</Type>
+    <Description>Erreur de la banque en votre faveur. Recevez 200€.</Description>
+    <EventType>3</EventType>
+    <Amount>+200</Amount>
+  </Card>
+  <Card xsi:type="CardMoneyOrDrawCard">
+    <Id>16</Id>
+    <Title>CAISSE DE COMMUNAUTE</Title>
+    <Type>1</Type>
+    <Description>Payez une amende de 10€ ou bien tirer une carte "CHANCE"</Description>
+    <EventType>1</EventType>
+    <Amount>10</Amount>
+    <CardTypeToDraw>2</CardTypeToDraw>
+  </Card>
+</Deck>

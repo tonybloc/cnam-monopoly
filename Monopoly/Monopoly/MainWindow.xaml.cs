@@ -25,11 +25,25 @@ namespace Monopoly
             InitializeComponent();
         }
 
-        private void ShowConfiguration(object sender, RoutedEventArgs e)
+        private void btnPlayAlone_Click(object sender, RoutedEventArgs e)
+        {
+            
+        }
+
+        private void btnCustomize_Click(object sender, RoutedEventArgs e)
         {
             MainContent.Content = new ConfigurationInterface();
             MenuContent.Visibility = Visibility.Hidden;
-               
+        }
+
+        private void btnNetworkPlay_Click(object sender, RoutedEventArgs e)
+        {
+            
+        }
+
+        private void btnRules_Click(object sender, RoutedEventArgs e)
+        {
+
         }
     }
 }
