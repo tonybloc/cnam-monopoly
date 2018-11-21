@@ -1,0 +1,132 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Deck xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <Card xsi:type="CardMoneyAccordingBuilds">
+    <Id>1</Id>
+    <Title>CHANCE</Title>
+    <Type>2</Type>
+    <Description>Vous êtes imposé pour les réparations de voirie à raison de : 40€ par maison et 115€ par hôtel.</Description>
+    <EventType>1</EventType>
+    <CostHotel>115</CostHotel>
+    <CostHouse>40</CostHouse>
+  </Card>
+  <Card xsi:type="CardMoney">
+    <Id>2</Id>
+    <Title>CHANCE</Title>
+    <Type>2</Type>
+    <Description>Amende pour ivresse : 20 €.</Description>
+    <EventType>1</EventType>
+    <Amount>-20</Amount>
+  </Card>
+  <Card xsi:type="CardMoney">
+    <Id>3</Id>
+    <Title>CHANCE</Title>
+    <Type>2</Type>
+    <Description>Payer pour frais de scolarité 150 €.</Description>
+    <EventType>1</EventType>
+    <Amount>-150</Amount>
+  </Card>
+  <Card xsi:type="CardGoToJail">
+    <Id>4</Id>
+    <Title>CHANCE</Title>
+    <Type>2</Type>
+    <Description>Allez en prison. Avancez tout droit en prison. Ne pas passer par la case Départ. Ne recevez pas 200€.</Description>
+    <EventType>4</EventType>
+    <CellPosition>31</CellPosition>
+  </Card>
+  <Card xsi:type="CardMoveTo">
+    <Id>5</Id>
+    <Title>CHANCE</Title>
+    <Type>2</Type>
+    <Description>Rendez-vous à la Rue de la Paix.</Description>
+    <EventType>0</EventType>
+    <CellPosition>40</CellPosition>
+  </Card>
+  <Card xsi:type="CardMoveTo">
+    <Id>6</Id>
+    <Title>CHANCE</Title>
+    <Type>2</Type>
+    <Description>Avancez jusqu'à la case Départ.</Description>
+    <EventType>5</EventType>
+    <CellPosition>1</CellPosition>
+  </Card>
+  <Card xsi:type="CardMoneyAccordingBuilds">
+    <Id>7</Id>
+    <Title>CHANCE</Title>
+    <Type>2</Type>
+    <Description>Faites des réparations dans toutes vos maisons. Versez pour chaque maison 25€. Versez pour chaque hôtel 100€</Description>
+    <EventType>1</EventType>
+    <CostHotel>-25</CostHotel>
+    <CostHouse>-100</CostHouse>
+  </Card>
+  <Card xsi:type="CardMoney">
+    <Id>8</Id>
+    <Title>CHANCE</Title>
+    <Type>2</Type>
+    <Description>Amende pour excès de vitesse : 15 €.</Description>
+    <EventType>1</EventType>
+    <Amount>-15</Amount>
+  </Card>
+  <Card xsi:type="CardMoney">
+    <Id>9</Id>
+    <Title>CHANCE</Title>
+    <Type>2</Type>
+    <Description>La banque vous verse un dividende de 50€.</Description>
+    <EventType>3</EventType>
+    <Amount>+50</Amount>
+  </Card>
+  <Card xsi:type="CardMoney">
+    <Id>10</Id>
+    <Title>CHANCE</Title>
+    <Type>2</Type>
+    <Description>Vous avez gagné le prix de mots croisés. Recevez 100€.</Description>
+    <EventType>3</EventType>
+    <Amount>+100</Amount>
+  </Card>
+  <Card xsi:type="CardMoney">
+    <Id>11</Id>
+    <Title>CHANCE</Title>
+    <Type>2</Type>
+    <Description>Votre immeuble et votre prêt rapportent. Vous devez toucher 150€.</Description>
+    <EventType>3</EventType>
+    <Amount>+150</Amount>
+  </Card>
+  <Card xsi:type="CardMoveTo">
+    <Id>12</Id>
+    <Title>CHANCE</Title>
+    <Type>2</Type>
+    <Description>Rendez-vous à l'Avenue Henri-martin. Si vous passez par la case Départ recevez 200€.</Description>
+    <EventType>5</EventType>
+    <CellPosition>25</CellPosition>
+  </Card>
+  <Card xsi:type="CardMoveTo">
+    <Id>13</Id>
+    <Title>CHANCE</Title>
+    <Type>2</Type>
+    <Description>Allez à la gare de Lyon. Si vous passez par la case Départ recevez 200€.</Description>
+    <EventType>5</EventType>
+    <CellPosition>16</CellPosition>
+  </Card>
+  <Card xsi:type="CardMoveTo">
+    <Id>14</Id>
+    <Title>CHANCE</Title>
+    <Type>2</Type>
+    <Description>Avancez au Boulevard de la Villette. Si vous passez par la case Départ recevez 200€.</Description>
+    <EventType>5</EventType>
+    <CellPosition>12</CellPosition>
+  </Card>
+  <Card xsi:type="CardMove">
+    <Id>15</Id>
+    <Title>CHANCE</Title>
+    <Type>2</Type>
+    <Description>Reculez de trois cases.</Description>
+    <EventType>0</EventType>
+    <NbMove>-3</NbMove>
+  </Card>
+  <Card xsi:type="CardExitToJail">
+    <Id>16</Id>
+    <Title>CHANCE</Title>
+    <Type>2</Type>
+    <Description>Vous êtes libéré de prison. Cette carte peut être conservée jusqu'à ce qu'elle soit utilisée ou vendue.</Description>
+    <EventType>2</EventType>
+  </Card>
+</Deck>

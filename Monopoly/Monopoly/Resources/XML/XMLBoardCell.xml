@@ -1,0 +1,580 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Board xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <Cell xsi:type="StartPoint">
+    <Id>0</Id>
+    <Title>DÉPART : Recevez 200€</Title>
+  </Cell>
+  <Cell xsi:type="Land">
+    <Id>1</Id>
+    <Title>BOULEVARD DE BELLEVILLE</Title>
+    <Status>0</Status>
+    <PurchasePrice>60</PurchasePrice>
+    <MortgagePrice>30</MortgagePrice>
+    <LandGroup>
+      <IdGroup>1</IdGroup>
+      <Color>#F5A9E1</Color>
+      <HousePrice>50</HousePrice>
+      <HotelPrice>250</HotelPrice>
+    </LandGroup>
+    <RantalList>
+      <Rantal>2</Rantal>
+      <Rantal>10</Rantal>
+      <Rantal>30</Rantal>
+      <Rantal>90</Rantal>
+      <Rantal>160</Rantal>
+      <Rantal>250</Rantal>
+    </RantalList>
+  </Cell>
+  <Cell xsi:type="DrawCard">
+    <Id>2</Id>
+    <Title>CAISSE DE COMMUNAUTÉ</Title>
+    <Icon>linkIcon</Icon>
+    <Type>0</Type>
+  </Cell>
+  <Cell xsi:type="Land">
+    <Id>3</Id>
+    <Title>RUE LECOURBE</Title>
+    <Status>0</Status>
+    <PurchasePrice>60</PurchasePrice>
+    <MortgagePrice>30</MortgagePrice>
+    <LandGroup>
+      <IdGroup>1</IdGroup>
+      <Color>#F5A9E1</Color>
+      <HousePrice>50</HousePrice>
+      <HotelPrice>250</HotelPrice>
+    </LandGroup>
+    <RantalList>
+      <Rantal>4</Rantal>
+      <Rantal>20</Rantal>
+      <Rantal>60</Rantal>
+      <Rantal>180</Rantal>
+      <Rantal>320</Rantal>
+      <Rantal>450</Rantal>
+    </RantalList>
+  </Cell>
+  <Cell xsi:type="Tax">
+    <Id>4</Id>
+    <Title>IMPÔTS SUR LE REVENU</Title>
+    <Logo>linkLogo</Logo>
+    <Amount>100</Amount>
+  </Cell>
+  <Cell xsi:type="TrainStation">
+    <Id>5</Id>
+    <Title>GARE MONTPARNASSE</Title>
+    <PurchasePrice>200</PurchasePrice>
+    <MortgagePrice>100</MortgagePrice>
+    <Status>0</Status>
+    <Logo>linkLogo</Logo>
+  </Cell>
+  <Cell xsi:type="Land">
+    <Id>6</Id>
+    <Title>RUE DE VAUGIRARD</Title>
+    <PurchasePrice>50</PurchasePrice>
+    <MortgagePrice>50</MortgagePrice>
+    <Status>0</Status>
+    <LandGroup>
+      <IdGroup>2</IdGroup>
+      <Color>#81DAF5</Color>
+      <HousePrice>50</HousePrice>
+      <HotelPrice>250</HotelPrice>
+    </LandGroup>
+    <RantalList>
+      <Rantal>6</Rantal>
+      <Rantal>30</Rantal>
+      <Rantal>90</Rantal>
+      <Rantal>270</Rantal>
+      <Rantal>400</Rantal>
+      <Rantal>550</Rantal>
+    </RantalList>
+  </Cell>
+  <Cell xsi:type="DrawCard">
+    <Id>7</Id>
+    <Title>CHANCE</Title>
+    <Icon>linkIcon</Icon>
+    <Type>1</Type>
+  </Cell>
+  <Cell xsi:type="Land">
+    <Id>8</Id>
+    <Title>RUE DE COURCELLES</Title>
+    <PurchasePrice>100</PurchasePrice>
+    <MortgagePrice>50</MortgagePrice>
+    <Status>0</Status>
+    <LandGroup>
+      <IdGroup>2</IdGroup>
+      <Color>#81DAF5</Color>
+      <HousePrice>50</HousePrice>
+      <HotelPrice>250</HotelPrice>
+    </LandGroup>
+    <RantalList>
+      <Rantal>6</Rantal>
+      <Rantal>30</Rantal>
+      <Rantal>90</Rantal>
+      <Rantal>270</Rantal>
+      <Rantal>400</Rantal>
+      <Rantal>550</Rantal>
+    </RantalList>
+  </Cell>
+  <Cell xsi:type="Land">
+    <Id>9</Id>
+    <Title>AVENUE DE LA RÉPUBLIQUE</Title>
+    <PurchasePrice>120</PurchasePrice>
+    <MortgagePrice>60</MortgagePrice>
+    <Status>0</Status>
+    <LandGroup>
+      <IdGroup>2</IdGroup>
+      <Color>#81DAF5</Color>
+      <HousePrice>50</HousePrice>
+      <HotelPrice>250</HotelPrice>
+    </LandGroup>
+    <RantalList>
+      <Rantal>8</Rantal>
+      <Rantal>40</Rantal>
+      <Rantal>100</Rantal>
+      <Rantal>300</Rantal>
+      <Rantal>450</Rantal>
+      <Rantal>600</Rantal>
+    </RantalList>
+  </Cell>
+  <Cell xsi:type="Jail">
+    <Id>10</Id>
+    <Title>EN PRISON</Title>
+    <Logo>linkLogo</Logo>
+  </Cell>
+  <Cell xsi:type="Land">
+    <Id>11</Id>
+    <Title>BOULEVARD DE LA VILLETTE</Title>
+    <PurchasePrice>140</PurchasePrice>
+    <MortgagePrice>70</MortgagePrice>
+    <Status>0</Status>
+    <LandGroup>
+      <IdGroup>3</IdGroup>
+      <Color>#9A2EFE</Color>
+      <HousePrice>100</HousePrice>
+      <HotelPrice>500</HotelPrice>
+    </LandGroup>
+    <RantalList>
+      <Rantal>10</Rantal>
+      <Rantal>50</Rantal>
+      <Rantal>150</Rantal>
+      <Rantal>450</Rantal>
+      <Rantal>625</Rantal>
+      <Rantal>750</Rantal>
+    </RantalList>
+  </Cell>
+  <Cell xsi:type="PublicService">
+    <Id>12</Id>
+    <Title>COMPAGNIE DE DISTRIBUTION D'ÉLECTRICITÉ</Title>
+    <PurchasePrice>150</PurchasePrice>
+    <MortgagePrice>75</MortgagePrice>
+    <Status>0</Status>
+    <Logo>linkLogo</Logo>
+  </Cell>
+  <Cell xsi:type="Land">
+    <Id>13</Id>
+    <Title>AVENUE DE NEUILLY</Title>
+    <PurchasePrice>140</PurchasePrice>
+    <MortgagePrice>70</MortgagePrice>
+    <Status>0</Status>
+    <LandGroup>
+      <IdGroup>3</IdGroup>
+      <Color>#9A2EFE</Color>
+      <HousePrice>100</HousePrice>
+      <HotelPrice>500</HotelPrice>
+    </LandGroup>
+    <RantalList>
+      <Rantal>10</Rantal>
+      <Rantal>50</Rantal>
+      <Rantal>150</Rantal>
+      <Rantal>450</Rantal>
+      <Rantal>625</Rantal>
+      <Rantal>750</Rantal>
+    </RantalList>
+  </Cell>
+  <Cell xsi:type="Land">
+    <Id>14</Id>
+    <Title>RUE DE PARADIS</Title>
+    <PurchasePrice>160</PurchasePrice>
+    <MortgagePrice>80</MortgagePrice>
+    <Status>0</Status>
+    <LandGroup>
+      <IdGroup>3</IdGroup>
+      <Color>#9A2EFE</Color>
+      <HousePrice>100</HousePrice>
+      <HotelPrice>500</HotelPrice>
+    </LandGroup>
+    <RantalList>
+      <Rantal>12</Rantal>
+      <Rantal>60</Rantal>
+      <Rantal>180</Rantal>
+      <Rantal>500</Rantal>
+      <Rantal>700</Rantal>
+      <Rantal>900</Rantal>
+    </RantalList>
+  </Cell>
+  <Cell xsi:type="TrainStation">
+    <Id>15</Id>
+    <Title>GARE DE LYON</Title>
+    <PurchasePrice>200</PurchasePrice>
+    <MortgagePrice>100</MortgagePrice>
+    <Status>0</Status>
+    <Logo>linkLogo</Logo>
+  </Cell>
+  <Cell xsi:type="Land">
+    <Id>16</Id>
+    <Title>AVENUE MOZART</Title>
+    <PurchasePrice>180</PurchasePrice>
+    <MortgagePrice>90</MortgagePrice>
+    <Status>0</Status>
+    <LandGroup>
+      <IdGroup>4</IdGroup>
+      <Color>#FE9A2E</Color>
+      <HousePrice>100</HousePrice>
+      <HotelPrice>500</HotelPrice>
+    </LandGroup>
+    <RantalList>
+      <Rantal>14</Rantal>
+      <Rantal>70</Rantal>
+      <Rantal>200</Rantal>
+      <Rantal>550</Rantal>
+      <Rantal>750</Rantal>
+      <Rantal>950</Rantal>
+    </RantalList>
+  </Cell>
+  <Cell xsi:type="DrawCard">
+    <Id>17</Id>
+    <Title>CAISSE DE COMMUNAUTÉ</Title>
+    <Icon>linkIcon</Icon>
+    <Type>1</Type>
+  </Cell>
+  <Cell xsi:type="Land">
+    <Id>18</Id>
+    <Title>BOULEVARD SAINT-MICHEL</Title>
+    <PurchasePrice>180</PurchasePrice>
+    <MortgagePrice>90</MortgagePrice>
+    <Status>0</Status>
+    <LandGroup>
+      <IdGroup>4</IdGroup>
+      <Color>#FE9A2E</Color>
+      <HousePrice>100</HousePrice>
+      <HotelPrice>500</HotelPrice>
+    </LandGroup>
+    <RantalList>
+      <Rantal>14</Rantal>
+      <Rantal>70</Rantal>
+      <Rantal>200</Rantal>
+      <Rantal>550</Rantal>
+      <Rantal>750</Rantal>
+      <Rantal>950</Rantal>
+    </RantalList>
+  </Cell>
+  <Cell xsi:type="Land">
+    <Id>19</Id>
+    <Title>PLACE PIGALLE</Title>
+    <PurchasePrice>200</PurchasePrice>
+    <MortgagePrice>100</MortgagePrice>
+    <Status>0</Status>
+    <LandGroup>
+      <IdGroup>4</IdGroup>
+      <Color>#FE9A2E</Color>
+      <HousePrice>100</HousePrice>
+      <HotelPrice>500</HotelPrice>
+    </LandGroup>
+    <RantalList>
+      <Rantal>16</Rantal>
+      <Rantal>80</Rantal>
+      <Rantal>220</Rantal>
+      <Rantal>600</Rantal>
+      <Rantal>800</Rantal>
+      <Rantal>1000</Rantal>
+    </RantalList>
+  </Cell>
+  <Cell xsi:type="Parking">
+    <Id>20</Id>
+    <Title>PARC GRATUIT</Title>
+    <Logo>linkIcon</Logo>
+  </Cell>
+  <Cell xsi:type="Land">
+    <Id>21</Id>
+    <Title>AVENUE MATIGNON</Title>
+    <PurchasePrice>220</PurchasePrice>
+    <MortgagePrice>110</MortgagePrice>
+    <Status>0</Status>
+    <LandGroup>
+      <IdGroup>5</IdGroup>
+      <Color>#FF0000</Color>
+      <HousePrice>150</HousePrice>
+      <HotelPrice>750</HotelPrice>
+    </LandGroup>
+    <RantalList>
+      <Rantal>18</Rantal>
+      <Rantal>90</Rantal>
+      <Rantal>250</Rantal>
+      <Rantal>700</Rantal>
+      <Rantal>875</Rantal>
+      <Rantal>1050</Rantal>
+    </RantalList>
+  </Cell>
+  <Cell xsi:type="DrawCard">
+    <Id>22</Id>
+    <Title>CHANCE</Title>
+    <Icon>linkIcon</Icon>
+    <Type>0</Type>
+  </Cell>
+  <Cell xsi:type="Land">
+    <Id>23</Id>
+    <Title>BOULEVARD MALESHERBES</Title>
+    <PurchasePrice>220</PurchasePrice>
+    <MortgagePrice>110</MortgagePrice>
+    <Status>0</Status>
+    <LandGroup>
+      <IdGroup>5</IdGroup>
+      <Color>#FF0000</Color>
+      <HousePrice>150</HousePrice>
+      <HotelPrice>750</HotelPrice>
+    </LandGroup>
+    <RantalList>
+      <Rantal>18</Rantal>
+      <Rantal>90</Rantal>
+      <Rantal>250</Rantal>
+      <Rantal>700</Rantal>
+      <Rantal>875</Rantal>
+      <Rantal>1050</Rantal>
+    </RantalList>
+  </Cell>
+  <Cell xsi:type="Land">
+    <Id>24</Id>
+    <Title>AVENUE HENRI-MARTIN</Title>
+    <PurchasePrice>240</PurchasePrice>
+    <MortgagePrice>120</MortgagePrice>
+    <Status>0</Status>
+    <LandGroup>
+      <IdGroup>5</IdGroup>
+      <Color>#FF0000</Color>
+      <HousePrice>150</HousePrice>
+      <HotelPrice>750</HotelPrice>
+    </LandGroup>
+    <RantalList>
+      <Rantal>20</Rantal>
+      <Rantal>100</Rantal>
+      <Rantal>300</Rantal>
+      <Rantal>750</Rantal>
+      <Rantal>925</Rantal>
+      <Rantal>1100</Rantal>
+    </RantalList>
+  </Cell>
+  <Cell xsi:type="TrainStation">
+    <Id>25</Id>
+    <Title>GARE DU NORD</Title>
+    <PurchasePrice>200</PurchasePrice>
+    <MortgagePrice>100</MortgagePrice>
+    <Status>0</Status>
+    <Logo>linkLogo</Logo>
+  </Cell>
+  <Cell xsi:type="Land">
+    <Id>26</Id>
+    <Title>FAUBOURG SAINT-HONORÉ</Title>
+    <PurchasePrice>260</PurchasePrice>
+    <MortgagePrice>130</MortgagePrice>
+    <Status>0</Status>
+    <LandGroup>
+      <IdGroup>6</IdGroup>
+      <Color>#FFFF00</Color>
+      <HousePrice>150</HousePrice>
+      <HotelPrice>750</HotelPrice>
+    </LandGroup>
+    <RantalList>
+      <Rantal>22</Rantal>
+      <Rantal>110</Rantal>
+      <Rantal>330</Rantal>
+      <Rantal>800</Rantal>
+      <Rantal>975</Rantal>
+      <Rantal>1150</Rantal>
+    </RantalList>
+  </Cell>
+  <Cell xsi:type="Land">
+    <Id>27</Id>
+    <Title>PLACE DE LA BOURSE</Title>
+    <PurchasePrice>260</PurchasePrice>
+    <MortgagePrice>130</MortgagePrice>
+    <Status>0</Status>
+    <LandGroup>
+      <IdGroup>6</IdGroup>
+      <Color>#FFFF00</Color>
+      <HousePrice>150</HousePrice>
+      <HotelPrice>750</HotelPrice>
+    </LandGroup>
+    <RantalList>
+      <Rantal>22</Rantal>
+      <Rantal>110</Rantal>
+      <Rantal>330</Rantal>
+      <Rantal>800</Rantal>
+      <Rantal>975</Rantal>
+      <Rantal>1150</Rantal>
+    </RantalList>
+  </Cell>
+  <Cell xsi:type="PublicService">
+    <Id>28</Id>
+    <Title>COMPAGNIE DE DISTRIBUTION DE L'EAU</Title>
+    <PurchasePrice>150</PurchasePrice>
+    <MortgagePrice>75</MortgagePrice>
+    <Status>0</Status>
+    <Logo>linkLogo</Logo>
+  </Cell>
+  <Cell xsi:type="Cell">
+    <Id>29</Id>
+    <Title>RUE LA FAYETTE</Title>
+    <PurchasePrice>280</PurchasePrice>
+    <MortgagePrice>140</MortgagePrice>
+    <Status>0</Status>
+    <LandGroup>
+      <IdGroup>6</IdGroup>
+      <Color>#FF0000</Color>
+      <HousePrice>150</HousePrice>
+      <HotelPrice>750</HotelPrice>
+    </LandGroup>
+    <RantalList>
+      <Rantal>24</Rantal>
+      <Rantal>120</Rantal>
+      <Rantal>360</Rantal>
+      <Rantal>850</Rantal>
+      <Rantal>1025</Rantal>
+      <Rantal>1200</Rantal>
+    </RantalList>
+  </Cell>
+  <Cell xsi:type="GoToJail">
+    <Id>30</Id>
+    <Title>ALLEZ EN PRISON</Title>
+    <Logo>linkLogo</Logo>
+  </Cell>
+  <Cell xsi:type="Cell">
+    <Id>31</Id>
+    <Title>AVENUE DE BRETEUIL</Title>
+    <PurchasePrice>300</PurchasePrice>
+    <MortgagePrice>150</MortgagePrice>
+    <Status>0</Status>
+    <LandGroup>
+      <IdGroup>7</IdGroup>
+      <Color>#01DF01</Color>
+      <HousePrice>200</HousePrice>
+      <HotelPrice>1000</HotelPrice>
+    </LandGroup>
+    <RantalList>
+      <Rantal>26</Rantal>
+      <Rantal>130</Rantal>
+      <Rantal>390</Rantal>
+      <Rantal>900</Rantal>
+      <Rantal>1100</Rantal>
+      <Rantal>1275</Rantal>
+    </RantalList>
+  </Cell>
+  <Cell xsi:type="Land">
+    <Id>32</Id>
+    <Title>AVENUE FOCH</Title>
+    <PurchasePrice>300</PurchasePrice>
+    <MortgagePrice>150</MortgagePrice>
+    <Status>0</Status>
+    <LandGroup>
+      <IdGroup>7</IdGroup>
+      <Color>#01DF01</Color>
+      <HousePrice>200</HousePrice>
+      <HotelPrice>1000</HotelPrice>
+    </LandGroup>
+    <RantalList>
+      <Rantal>26</Rantal>
+      <Rantal>130</Rantal>
+      <Rantal>390</Rantal>
+      <Rantal>900</Rantal>
+      <Rantal>1100</Rantal>
+      <Rantal>1275</Rantal>
+    </RantalList>
+  </Cell>
+  <Cell xsi:type="DrawCard">
+    <Id>33</Id>
+    <Title>CAISSE DE COMMUNAUTÉ</Title>
+    <Icon>linkLogo</Icon>
+    <Type>0</Type>
+  </Cell>
+  <Cell xsi:type="Land">
+    <Id>34</Id>
+    <Title>BOULEVARD DES CAPUCINES</Title>
+    <PurchasePrice>320</PurchasePrice>
+    <MortgagePrice>160</MortgagePrice>
+    <Status>0</Status>
+    <LandGroup>
+      <IdGroup>7</IdGroup>
+      <Color>#01DF01</Color>
+      <HousePrice>200</HousePrice>
+      <HotelPrice>1000</HotelPrice>
+    </LandGroup>
+    <RantalList>
+      <Rantal>28</Rantal>
+      <Rantal>150</Rantal>
+      <Rantal>450</Rantal>
+      <Rantal>1000</Rantal>
+      <Rantal>1200</Rantal>
+      <Rantal>1400</Rantal>
+    </RantalList>
+  </Cell>
+  <Cell xsi:type="TrainStation">
+    <Id>35</Id>
+    <Title>GARE SAINT-LAZARD</Title>
+    <PurchasePrice>200</PurchasePrice>
+    <MortgagePrice>100</MortgagePrice>
+    <Status>0</Status>
+    <Logo>linkLogo</Logo>
+  </Cell>
+  <Cell xsi:type="DrawCard">
+    <Id>36</Id>
+    <Title>CHANCE</Title>
+    <Icon>linkLogo</Icon>
+    <Type>0</Type>
+  </Cell>
+  <Cell xsi:type="Land">
+    <Id>37</Id>
+    <Title>AVENUE DES CHAMPS-ÉLYSÉES</Title>
+    <PurchasePrice>350</PurchasePrice>
+    <MortgagePrice>175</MortgagePrice>
+    <Status>0</Status>
+    <LandGroup>
+      <IdGroup>8</IdGroup>
+      <Color>#0000FF</Color>
+      <HousePrice>200</HousePrice>
+      <HotelPrice>1000</HotelPrice>
+    </LandGroup>
+    <RantalList>
+      <Rantal>35</Rantal>
+      <Rantal>175</Rantal>
+      <Rantal>500</Rantal>
+      <Rantal>1100</Rantal>
+      <Rantal>1300</Rantal>
+      <Rantal>1500</Rantal>
+    </RantalList>
+  </Cell>
+  <Cell xsi:type="Tax">
+    <Id>38</Id>
+    <Title>TAXE DE LUXE</Title>
+    <Logo>linkLogo</Logo>
+    <Amount>100</Amount>
+  </Cell>
+  <Cell xsi:type="Land">
+    <Id>39</Id>
+    <Title>RUE DE LA PAIX</Title>
+    <PurchasePrice>400</PurchasePrice>
+    <MortgagePrice>200</MortgagePrice>
+    <Status>0</Status>
+    <LandGroup>
+      <IdGroup>8</IdGroup>
+      <Color>#0000FF</Color>
+      <HousePrice>200</HousePrice>
+      <HotelPrice>1000</HotelPrice>
+    </LandGroup>
+    <RantalList>
+      <Rantal>50</Rantal>
+      <Rantal>200</Rantal>
+      <Rantal>600</Rantal>
+      <Rantal>1400</Rantal>
+      <Rantal>1700</Rantal>
+      <Rantal>2000</Rantal>
+    </RantalList>
+  </Cell>
+</Board>
