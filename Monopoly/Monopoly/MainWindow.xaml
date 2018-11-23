@@ -7,7 +7,7 @@
         xmlns:gif="http://wpfanimatedgif.codeplex.com"
         mc:Ignorable="d"
         Title="Menu" Height="450" Width="800"
-        WindowStartupLocation="CenterScreen" WindowState="Maximized">
+        WindowStartupLocation="CenterScreen">
 
     
     
@@ -17,22 +17,31 @@
     <Grid HorizontalAlignment="Center"  VerticalAlignment="Center">
 	
 		<Frame x:Name="MainContent" Margin="0" NavigationUIVisibility="Hidden"/>
-     
-		<Grid x:Name="MenuContent">			
-			<Grid.RowDefinitions>
-				<RowDefinition Height="*"/>
-				<RowDefinition Height="*"/>
-				<RowDefinition Height="*"/>
-				<RowDefinition Height="*"/>
-			</Grid.RowDefinitions>
+        <Grid x:Name="MenuContent">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
 
-			<Image x:Name="image" gif:ImageBehavior.RepeatBehavior="Forever" gif:ImageBehavior.AnimatedSource="Resources/Pictures/welcome2.gif" Source="Resources/Pictures/welcome2.gif" HorizontalAlignment="Center" Height="155" Margin="-10,-165,-20,0" VerticalAlignment="Top" Width="445" RenderTransformOrigin="0.395,0.406">
+            <StackPanel Grid.Column="1">
 
-			</Image>
-			<Button x:Name="btnPlayAlone" Content="Joueur seul" Height="70" Margin="35,35,35,0" Width="270" VerticalAlignment="Top" Grid.Row="0" Click="btnPlayAlone_Click" />
-			<Button x:Name="btnNetworkPlay" Content="Jouer en réseau" Height="70" Margin="35,35,35,0" Width="270" VerticalAlignment="Top" Grid.Row="1" Click="btnNetworkPlay_Click"/>
-			<Button x:Name="btnCustomize" Content="Personnaliser" Height="70" Margin="35,35,35,0" Width="270" VerticalAlignment="Top" Grid.Row="2" Click="btnCustomize_Click" />
-			<Button x:Name="btnRules" Content="Règles du jeu" Height="70" Margin="35,35,35,0" Width="270" VerticalAlignment="Top" Grid.Row="3" Click="btnRules_Click" />
-		</Grid>
+                <Image x:Name="image" Height="auto" Margin="10" gif:ImageBehavior.RepeatBehavior="Forever" gif:ImageBehavior.AnimatedSource="Resources/Pictures/welcome2.gif" Source="Resources/Pictures/welcome2.gif" HorizontalAlignment="Center" RenderTransformOrigin="0.395,0.406"/>
+
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+
+                    <Button x:Name="btnPlayAlone" Content="Jouer" Height="auto" Margin="35,15"  Padding="10" VerticalAlignment="Top" Grid.Row="0" Click="btnPlayAlone_Click" />
+                    <Button x:Name="btnNetworkPlay" Content="Jouer en réseau" Height="auto" Margin="35,15"  Padding="10" VerticalAlignment="Top" Grid.Row="1" Click="btnNetworkPlay_Click"/>
+                    <Button x:Name="btnCustomize" Content="Option" Height="auto" Margin="35,15"  Padding="10" VerticalAlignment="Top" Grid.Row="2" Click="btnCustomize_Click" />
+                    <Button x:Name="btnRules" Content="Règles du jeu" Height="auto" Margin="35,15"  Padding="10" VerticalAlignment="Top" Grid.Row="3" Click="btnRules_Click" />
+                </Grid>
+            </StackPanel>
+        </Grid>
     </Grid>
 </Window>
