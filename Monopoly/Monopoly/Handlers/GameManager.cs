@@ -36,6 +36,16 @@ namespace Monopoly.Handlers
                 return instance;
             }
         }
+
+        /// <summary>
+        /// Crée un nouveau joueur
+        /// </summary>
+        /// <param name="pseudo">pseudo du joueur</param>
+        /// <param name="colorValue">couleur du joueur</param>
+        public void CreatePlayer(string pseudo, string colorValue )
+        {
+            playerHandler.CreatePlayer(pseudo, colorValue);
+        }
         #endregion
     }
 }

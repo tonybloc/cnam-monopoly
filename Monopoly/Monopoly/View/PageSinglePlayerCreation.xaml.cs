@@ -25,7 +25,7 @@ namespace Monopoly.View
         #region Variables
         private static ColorHandler colorHandler;
         private static GameManager gameManager;
-        public Player player;
+        private const string placeholder = "Your Pseudo";
         public string ColorValue;
         #endregion
 
@@ -33,12 +33,11 @@ namespace Monopoly.View
         {
             InitializeComponent();
             colorHandler = ColorHandler.Instance;
-            //gameManager = GameManager
+            gameManager = GameManager.Instance;
         }
 
         private void onGotFocus_Pseudo(object sender, RoutedEventArgs e)
         {
-            Console.WriteLine("Get Focus");
             TextBox_Pseudo.Text = "";
         }
 
@@ -46,7 +45,7 @@ namespace Monopoly.View
         {
             if (string.IsNullOrWhiteSpace(TextBox_Pseudo.Text))
             {
-                TextBox_Pseudo.Text = "Your Pseudo";
+                TextBox_Pseudo.Text = placeholder;
             }
         }
 
@@ -67,7 +66,10 @@ namespace Monopoly.View
 
         private void onClickValidate(object sender, RoutedEventArgs e)
         {
-            
+            if(this.TextBox_Pseudo.Text != placeholder)
+            {
+                gameManager.CreatePlayer(this.TextBox_Pseudo.Text, this.ColorValue);
+            }            
         }
 
         private void onClickCancel(object sender, RoutedEventArgs e)

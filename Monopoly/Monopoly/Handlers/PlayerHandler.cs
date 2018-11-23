@@ -11,6 +11,7 @@ namespace Monopoly.Handlers
     {
         #region Variables
         private static PlayerHandler instance = null;
+        private static int numberOfPlayer = 0;
         public List<Player> ListOfPlayers { get; private set; }
         
         #endregion
@@ -21,6 +22,7 @@ namespace Monopoly.Handlers
         /// </summary>
         private PlayerHandler()
         {
+            numberOfPlayer = 0;
             this.ListOfPlayers = new List<Player>();
         }
 
@@ -44,7 +46,7 @@ namespace Monopoly.Handlers
         /// <summary>
         /// Ajoute un joueur dans la liste
         /// </summary>
-        /// <param name="player"></param>
+        /// <param name="player">Joueur</param>
         public void AddPlayer(Player player)
         {
             this.ListOfPlayers.Add(player);
@@ -53,10 +55,21 @@ namespace Monopoly.Handlers
         /// <summary>
         /// Enlève un joueur dans la liste
         /// </summary>
-        /// <param name="player"></param>
+        /// <param name="player">Joueur</param>
         public void RemovePlayer(Player player)
         {
             this.ListOfPlayers.Remove(player);
+        }
+
+        /// <summary>
+        /// Ajoute un nouveau joueur dans la liste des participants
+        /// </summary>
+        /// <param name="pseudo">pseudo du joueur</param>
+        /// <param name="colorValue">couleur du pion</param>
+        public void CreatePlayer(string pseudo, string colorValue)
+        {
+            numberOfPlayer++;
+            this.AddPlayer(new Player(numberOfPlayer, pseudo, new Pawn(colorValue)));
         }
         #endregion
     }
