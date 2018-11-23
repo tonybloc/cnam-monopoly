@@ -67,8 +67,17 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Handlers\ColorHandler.cs" />
+    <Compile Include="Handlers\GameManager.cs" />
+    <Compile Include="Handlers\PlayerHandler.cs" />
+    <Compile Include="Models\Components\Pawn.cs" />
+    <Compile Include="Models\Components\Player.cs" />
+    <Compile Include="Resources\Colors\PawnColors.cs" />
     <Compile Include="View\ConfigurationInterface.xaml.cs">
       <DependentUpon>ConfigurationInterface.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\PageSinglePlayerCreation.xaml.cs">
+      <DependentUpon>PageSinglePlayerCreation.xaml</DependentUpon>
     </Compile>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -83,6 +92,10 @@
       <SubType>Code</SubType>
     </Compile>
     <Page Include="View\ConfigurationInterface.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\PageSinglePlayerCreation.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -112,7 +125,9 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config" />
+    <None Include="App.config">
+      <SubType>Designer</SubType>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Resource Include="man.ico" />

@@ -59,5 +59,12 @@ namespace Monopoly.View
         {
             
         }
+
+        private void onClickCancel(object sender, RoutedEventArgs e)
+        {
+            ((MainWindow)Window.GetWindow(this)).MainContent.Content = "";
+            ((MainWindow)Window.GetWindow(this)).MenuContent.Visibility = Visibility.Visible;
+
+        }
     }
 }
