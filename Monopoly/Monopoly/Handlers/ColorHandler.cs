@@ -40,6 +40,28 @@ namespace Monopoly.Handlers
             }
         }
         #endregion
-        
+
+        #region Methode (public)
+        /// <summary>
+        /// Retourne la prochaine couleur
+        /// </summary>
+        /// <returns></returns>
+        public string GetNextPawnColor()
+        {
+            _colorIndex = (_colorIndex + 1) % _pawnColors.Count;
+            return _pawnColors[_colorIndex];
+        }
+
+        /// <summary>
+        /// Retourne la couleur précedente
+        /// </summary>
+        /// <returns></returns>
+        public string GetPreviousPawnColor()
+        {
+            _colorIndex = _colorIndex - 1;
+            _colorIndex = (_colorIndex < 0) ? _pawnColors.Count - 1 : _colorIndex;
+            return _pawnColors[_colorIndex];
+        }
+        #endregion
     }
 }

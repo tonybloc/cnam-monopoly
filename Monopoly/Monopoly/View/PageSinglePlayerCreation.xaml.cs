@@ -32,6 +32,8 @@ namespace Monopoly.View
         public PageSinglePlayerCreation()
         {
             InitializeComponent();
+            colorHandler = ColorHandler.Instance;
+            //gameManager = GameManager
         }
 
         private void onGotFocus_Pseudo(object sender, RoutedEventArgs e)
@@ -51,12 +53,16 @@ namespace Monopoly.View
 
         private void onClickPreviousColor(object sender, RoutedEventArgs e)
         {
-            
+            BrushConverter bc = new BrushConverter();
+            ColorValue = colorHandler.GetNextPawnColor();
+            PawnIcon.Fill = (Brush)bc.ConvertFrom(ColorValue);
         }
 
         private void onClickNextColor(object sender, RoutedEventArgs e)
         {
-            
+            BrushConverter bc = new BrushConverter();
+            ColorValue = colorHandler.GetPreviousPawnColor();
+            PawnIcon.Fill = (Brush)bc.ConvertFrom(ColorValue);
         }
 
         private void onClickValidate(object sender, RoutedEventArgs e)
