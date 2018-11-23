@@ -144,5 +144,6 @@
     <Resource Include="Resources\XML\XMLChanceCard.xml" />
     <Resource Include="Resources\XML\XMLCommunityCard.xml" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
