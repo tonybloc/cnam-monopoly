@@ -36,12 +36,16 @@ namespace Monopoly.View
 
         private void onGotFocus_Pseudo(object sender, RoutedEventArgs e)
         {
-            
+            Console.WriteLine("Get Focus");
+            TextBox_Pseudo.Text = "";
         }
 
         private void onLostFocus_Pseudo(object sender, RoutedEventArgs e)
         {
-
+            if (string.IsNullOrWhiteSpace(TextBox_Pseudo.Text))
+            {
+                TextBox_Pseudo.Text = "Your Pseudo";
+            }
         }
 
 
