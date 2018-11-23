@@ -25,7 +25,7 @@ namespace Monopoly.Handlers
         /// <summary>
         /// Récupère l'instance de la classe
         /// </summary>
-        public GameManager Instance
+        public static GameManager Instance
         {
             get
             {
