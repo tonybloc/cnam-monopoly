@@ -10,18 +10,33 @@ namespace Monopoly.Handlers
     public class PlayerHandler
     {
         #region Variables
-
-        private List<Player> ListOfPlayers { get; set; }
-
+        private static PlayerHandler instance = null;
+        public List<Player> ListOfPlayers { get; private set; }
+        
         #endregion
 
         #region Constructeurs
         /// <summary>
         /// Crée une instance de la classe
         /// </summary>
-        public PlayerHandler()
+        private PlayerHandler()
         {
             this.ListOfPlayers = new List<Player>();
+        }
+
+        /// <summary>
+        /// Récupère l'unique instance de la classe
+        /// </summary>
+        public PlayerHandler Instance
+        {
+            get
+            {
+                if(instance == null)
+                {
+                    instance = new PlayerHandler();
+                }
+                return instance;
+            }
         }
         #endregion
 
