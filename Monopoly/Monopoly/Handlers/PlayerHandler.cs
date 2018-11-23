@@ -27,7 +27,7 @@ namespace Monopoly.Handlers
         /// <summary>
         /// Récupère l'unique instance de la classe
         /// </summary>
-        public PlayerHandler Instance
+        public static PlayerHandler Instance
         {
             get
             {
