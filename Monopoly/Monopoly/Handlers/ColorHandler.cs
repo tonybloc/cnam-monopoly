@@ -19,13 +19,26 @@ namespace Monopoly.Handlers
         /// <summary>
         /// Création d'une instance de la classe
         /// </summary>
-        public ColorHandler()
+        private ColorHandler()
         {
             _pawnColors = PawnColors.Colors;
             _colorIndex = 0;
         }
 
-        
+        /// <summary>
+        /// Instance de la classe
+        /// </summary>
+        public static ColorHandler Instance
+        {
+            get
+            {
+                if (_instance == null)
+                {
+                    _instance = new ColorHandler();
+                }
+                return _instance;
+            }
+        }
         #endregion
         
     }
