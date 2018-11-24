@@ -75,10 +75,11 @@
     <Compile Include="Models\Components\Cells\Cell.cs" />
     <Compile Include="Models\Components\Cells\DrawCard.cs" />
     <Compile Include="Models\Components\Cells\GoToJail.cs" />
-    <Compile Include="Models\Components\Cells\Parking.cs" />
-    <Compile Include="Models\Components\Cells\Tax.cs" />
+    <Compile Include="Models\Components\Cells\Jail.cs" />
     <Compile Include="Models\Components\Cells\Land.cs" />
     <Compile Include="Models\Components\Cells\LandGroup.cs" />
+    <Compile Include="Models\Components\Cells\Parking.cs" />
+    <Compile Include="Models\Components\Cells\Tax.cs" />
     <Compile Include="Models\Components\Cells\TrainStation.cs" />
     <Compile Include="Models\Components\Pawn.cs" />
     <Compile Include="Models\Components\Player.cs" />

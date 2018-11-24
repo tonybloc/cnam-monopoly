@@ -45,5 +45,18 @@ namespace Monopoly.Models.Components
             }
         }
         #endregion
+
+        #region Methods
+        /// <summary>
+        /// Get cell thanks to the index
+        /// </summary>
+        /// <param name="index"></param>
+        /// <returns>Cell identified</returns>
+        public Cell GetCell(int index)
+        {
+            Predicate<Cell> filtreCell = (Cell c) => { return c.Id == index; };
+            return ListCell.Find(filtreCell);
+        }
+        #endregion
     }
 }
