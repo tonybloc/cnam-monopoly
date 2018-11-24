@@ -9,8 +9,20 @@ namespace Monopoly.Handlers
     public class GameManager
     {
         #region Variables
+        /// <summary>
+        /// Game manager instance
+        /// </summary>
         private static GameManager instance = null;
+
+        /// <summary>
+        /// Player handler
+        /// </summary>
         public PlayerHandler playerHandler { get; private set; }
+        
+        /// <summary>
+        /// Board handler
+        /// </summary>
+        public BoardHandler boardHandler { get; private set; }
         #endregion
 
         #region Constructeurs
@@ -20,6 +32,7 @@ namespace Monopoly.Handlers
         private GameManager()
         {
             this.playerHandler = PlayerHandler.Instance;
+            this.boardHandler = BoardHandler.Instance;
         }
 
         /// <summary>

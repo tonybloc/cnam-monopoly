@@ -67,9 +67,19 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Handlers\BoardHandler.cs" />
     <Compile Include="Handlers\ColorHandler.cs" />
     <Compile Include="Handlers\GameManager.cs" />
     <Compile Include="Handlers\PlayerHandler.cs" />
+    <Compile Include="Models\Components\Board.cs" />
+    <Compile Include="Models\Components\Cells\Cell.cs" />
+    <Compile Include="Models\Components\Cells\DrawCard.cs" />
+    <Compile Include="Models\Components\Cells\GoToJail.cs" />
+    <Compile Include="Models\Components\Cells\Parking.cs" />
+    <Compile Include="Models\Components\Cells\Tax.cs" />
+    <Compile Include="Models\Components\Cells\Land.cs" />
+    <Compile Include="Models\Components\Cells\LandGroup.cs" />
+    <Compile Include="Models\Components\Cells\TrainStation.cs" />
     <Compile Include="Models\Components\Pawn.cs" />
     <Compile Include="Models\Components\Player.cs" />
     <Compile Include="Resources\Colors\PawnColors.cs" />
