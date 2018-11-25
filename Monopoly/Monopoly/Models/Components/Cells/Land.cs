@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Monopoly.Models.Components.Cells
 {
-    class Land : Property
+    public class Land : Property
     {
         #region Variables
         /// <summary>
@@ -38,48 +38,7 @@ namespace Monopoly.Models.Components.Cells
         {
             NbHouse = 0;
             NbHotel = 0;
-        }
-        #endregion
-
-        #region Public methods
-        /// <summary>
-        /// Build a house on the land
-        /// </summary>
-        public void BuildHouse(int nbHouse)
-        {
-            if ((this.NbHouse + nbHouse) > 4)
-            {
-                BuildHotel();
-            }
-            else
-            {
-                this.NbHouse += nbHouse;
-            }
-        }
-
-        /// <summary>
-        /// Build a hotel on the land
-        /// </summary>
-        public void BuildHotel()
-        {
-            this.NbHouse = 0;
-            this.NbHotel = 1;
-        }
-
-        /// <summary>
-        /// Return the rent price
-        /// </summary>
-        /// <returns></returns>
-        public int GetRental()
-        {
-            if (NbHotel > 0)
-            {
-                return RantalList[NbHotel + 4];
-            }
-            else
-            {
-                return RantalList[NbHouse];
-            }
+            this.RantalList = new List<int>();
         }
         #endregion
     }

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Monopoly.Models.Components.Cells
 {
-    class DrawCard : Cell
+    public class DrawCard : Cell
     {
         #region Variables
         /// <summary>

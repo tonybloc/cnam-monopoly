@@ -6,13 +6,13 @@ using System.Threading.Tasks;
 
 namespace Monopoly.Models.Components.Cells
 {
-    class GoToJail : Cell
+    public class GoToJail : Cell
     {
         #region Variables
         /// <summary>
-        /// Logo of the cell "Go to jail"
+        /// Icon of the cell "Go to jail"
         /// </summary>
-        public string Logo { get; set; }
+        public string Icon { get; set; }
         #endregion
 
         #region Constructor

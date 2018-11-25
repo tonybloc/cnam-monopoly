@@ -10,9 +10,9 @@ namespace Monopoly.Models.Components.Cells
     {
         #region Variables
         /// <summary>
-        /// Logo of the cell "Jail"
+        /// Icon of the cell "Jail"
         /// </summary>
-        public string Logo;
+        public string Icon;
         #endregion
 
         #region Constructor

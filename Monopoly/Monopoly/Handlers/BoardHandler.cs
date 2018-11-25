@@ -16,6 +16,16 @@ namespace Monopoly.Handlers
         private static BoardHandler _instance = null;
 
         /// <summary>
+        /// Instance of the board
+        /// </summary>
+        public Board Board { get; set; }
+
+        /// <summary>
+        /// Creation of the boardHandler
+        /// </summary>
+        private BoardHandler() {}
+
+        /// <summary>
         /// Return board handler instance
         /// </summary>
         public static BoardHandler Instance
@@ -29,11 +39,6 @@ namespace Monopoly.Handlers
                 return _instance;
             }
         }
-
-        /// <summary>
-        /// Instance of the board
-        /// </summary>
-        public Board Board { get; set; }
         #endregion
     }
 }
