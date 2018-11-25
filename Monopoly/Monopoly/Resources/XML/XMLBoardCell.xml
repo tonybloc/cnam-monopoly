@@ -3,6 +3,7 @@
   <Cell xsi:type="StartPoint">
     <Id>0</Id>
     <Title>DÉPART : Recevez 200€</Title>
+    <Icon></Icon>
   </Cell>
   <Cell xsi:type="Land">
     <Id>1</Id>
@@ -55,7 +56,7 @@
   <Cell xsi:type="Tax">
     <Id>4</Id>
     <Title>IMPÔTS SUR LE REVENU</Title>
-    <Logo>linkLogo</Logo>
+    <Icon>linkLogo</Icon>
     <Amount>100</Amount>
   </Cell>
   <Cell xsi:type="TrainStation">
@@ -64,7 +65,7 @@
     <PurchasePrice>200</PurchasePrice>
     <MortgagePrice>100</MortgagePrice>
     <Status>0</Status>
-    <Logo>linkLogo</Logo>
+    <Icon>linkLogo</Icon>
   </Cell>
   <Cell xsi:type="Land">
     <Id>6</Id>
@@ -138,7 +139,7 @@
   <Cell xsi:type="Jail">
     <Id>10</Id>
     <Title>EN PRISON</Title>
-    <Logo>linkLogo</Logo>
+    <Icon>linkLogo</Icon>
   </Cell>
   <Cell xsi:type="Land">
     <Id>11</Id>
@@ -167,7 +168,7 @@
     <PurchasePrice>150</PurchasePrice>
     <MortgagePrice>75</MortgagePrice>
     <Status>0</Status>
-    <Logo>linkLogo</Logo>
+    <Icon>linkLogo</Icon>
   </Cell>
   <Cell xsi:type="Land">
     <Id>13</Id>
@@ -217,7 +218,7 @@
     <PurchasePrice>200</PurchasePrice>
     <MortgagePrice>100</MortgagePrice>
     <Status>0</Status>
-    <Logo>linkLogo</Logo>
+    <Icon>linkLogo</Icon>
   </Cell>
   <Cell xsi:type="Land">
     <Id>16</Id>
@@ -291,7 +292,7 @@
   <Cell xsi:type="Parking">
     <Id>20</Id>
     <Title>PARC GRATUIT</Title>
-    <Logo>linkIcon</Logo>
+    <Icon>linkIcon</Icon>
   </Cell>
   <Cell xsi:type="Land">
     <Id>21</Id>
@@ -368,7 +369,7 @@
     <PurchasePrice>200</PurchasePrice>
     <MortgagePrice>100</MortgagePrice>
     <Status>0</Status>
-    <Logo>linkLogo</Logo>
+    <Icon>linkLogo</Icon>
   </Cell>
   <Cell xsi:type="Land">
     <Id>26</Id>
@@ -418,7 +419,7 @@
     <PurchasePrice>150</PurchasePrice>
     <MortgagePrice>75</MortgagePrice>
     <Status>0</Status>
-    <Logo>linkLogo</Logo>
+    <Icon>linkLogo</Icon>
   </Cell>
   <Cell xsi:type="Cell">
     <Id>29</Id>
@@ -444,7 +445,7 @@
   <Cell xsi:type="GoToJail">
     <Id>30</Id>
     <Title>ALLEZ EN PRISON</Title>
-    <Logo>linkLogo</Logo>
+    <Icon>linkLogo</Icon>
   </Cell>
   <Cell xsi:type="Cell">
     <Id>31</Id>
@@ -521,7 +522,7 @@
     <PurchasePrice>200</PurchasePrice>
     <MortgagePrice>100</MortgagePrice>
     <Status>0</Status>
-    <Logo>linkLogo</Logo>
+    <Icon>linkLogo</Icon>
   </Cell>
   <Cell xsi:type="DrawCard">
     <Id>36</Id>
@@ -553,7 +554,7 @@
   <Cell xsi:type="Tax">
     <Id>38</Id>
     <Title>TAXE DE LUXE</Title>
-    <Logo>linkLogo</Logo>
+    <Icon>linkLogo</Icon>
     <Amount>100</Amount>
   </Cell>
   <Cell xsi:type="Land">
