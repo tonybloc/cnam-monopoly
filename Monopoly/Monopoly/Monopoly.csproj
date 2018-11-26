@@ -79,11 +79,15 @@
     <Compile Include="Models\Components\Cells\Land.cs" />
     <Compile Include="Models\Components\Cells\LandGroup.cs" />
     <Compile Include="Models\Components\Cells\Parking.cs" />
+    <Compile Include="Models\Components\Cells\Property.cs" />
+    <Compile Include="Models\Components\Cells\PublicService.cs" />
+    <Compile Include="Models\Components\Cells\StartPoint.cs" />
     <Compile Include="Models\Components\Cells\Tax.cs" />
     <Compile Include="Models\Components\Cells\TrainStation.cs" />
     <Compile Include="Models\Components\Pawn.cs" />
     <Compile Include="Models\Components\Player.cs" />
     <Compile Include="Resources\Colors\PawnColors.cs" />
+    <Compile Include="Service\XML\XmlDataAccess.cs" />
     <Compile Include="View\ConfigurationInterface.xaml.cs">
       <DependentUpon>ConfigurationInterface.xaml</DependentUpon>
     </Compile>
