@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Monopoly.Models.Components.Cells
 {
-    class Property : Cell
+    public class Property : Cell
     {
         #region Constants
         /// <summary>

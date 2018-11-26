@@ -21,8 +21,5 @@ namespace Monopoly.Models.Components.Cells
         /// </summary>
         public PublicService() { }
         #endregion
-
-
-
     }
 }

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Monopoly.Models.Components.Cells
 {
-    class LandGroup
+    public class LandGroup
     {
         #region Variables
         /// <summary>
