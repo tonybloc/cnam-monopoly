@@ -1,9 +1,6 @@
 ﻿using Monopoly.Models.Components;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Monopoly.Service.Xml;
+using Monopoly.Settings;
 
 namespace Monopoly.Handlers
 {
@@ -23,7 +20,10 @@ namespace Monopoly.Handlers
         /// <summary>
         /// Creation of the boardHandler
         /// </summary>
-        private BoardHandler() {}
+        private BoardHandler()
+        {
+            this.Board = XmlDataAccess.XMLDeserializeObject<Board>(Config.filePath_XmlBoard);
+        }
 
         /// <summary>
         /// Return board handler instance

@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using System.Xml;
 using System.Xml.Serialization;
 
-namespace Monopoly.Service.XML
+namespace Monopoly.Service.Xml
 {
     public static class XmlDataAccess
     {
