@@ -1,17 +1,17 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Xml.Serialization;
 
 namespace Monopoly.Models.Components.Cells
 {
+    [Serializable]
+    [XmlRoot("GoToJail")]
     public class GoToJail : Cell
     {
         #region Variables
         /// <summary>
         /// Icon of the cell "Go to jail"
         /// </summary>
+        [XmlElement("Icon")]
         public string Icon { get; set; }
         #endregion
 

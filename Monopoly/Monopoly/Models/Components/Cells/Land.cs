@@ -3,30 +3,35 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Serialization;
 
 namespace Monopoly.Models.Components.Cells
 {
+    [Serializable]
+    [XmlRoot("Land")]
     public class Land : Property
     {
         #region Variables
         /// <summary>
         /// Group of lands
         /// </summary>
+        [XmlElement("LandGroup")]
         public LandGroup LandGroup { get; set; }
-
         /// <summary>
         /// List of the different rents
         /// </summary>
+        [XmlArray("RantalList")]
+        [XmlArrayItem("Rantal")]
         public List<int> RantalList { get; set; }
-
         /// <summary>
         /// Number of hotels
         /// </summary>
+        [XmlIgnore]
         public int NbHotel { get; private set; }
-
         /// <summary>
         /// Number of houses
         /// </summary>
+        [XmlIgnore]
         public int NbHouse { get; private set; }
         #endregion
 

@@ -87,7 +87,8 @@
     <Compile Include="Models\Components\Pawn.cs" />
     <Compile Include="Models\Components\Player.cs" />
     <Compile Include="Resources\Colors\PawnColors.cs" />
-    <Compile Include="Service\XML\XmlDataAccess.cs" />
+    <Compile Include="Service\Xml\XmlDataAccess.cs" />
+    <Compile Include="Settings\Config.cs" />
     <Compile Include="View\ConfigurationInterface.xaml.cs">
       <DependentUpon>ConfigurationInterface.xaml</DependentUpon>
     </Compile>

@@ -1,30 +1,32 @@
 ﻿using Monopoly.Models.Components.Cells;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Xml.Serialization;
 
 namespace Monopoly.Models.Components
 {
+    [Serializable]
+    [XmlRoot("Board")]
     public class Board
     {
         #region Variables
         /// <summary>
         /// Instance of the board
         /// </summary>
+        [XmlIgnore]
         private static Board _instance = null;
 
         /// <summary>
         /// List of cells on the board
         /// </summary>
+        [XmlElement("Cell")]
         public List<Cell> ListCell { get; set; }
-        #endregion
+#endregion
 
         #region Constructeur
         /// <summary>
         /// Creation of the board
-        /// </summary>
+        /// </summary>        
         private Board()
         {
             this.ListCell = new List<Cell>();
@@ -32,7 +34,7 @@ namespace Monopoly.Models.Components
         
         /// <summary>
         /// Return the unique instance of the class
-        /// </summary>
+        /// </summary>        
         public static Board Instance
         {
             get
@@ -44,7 +46,7 @@ namespace Monopoly.Models.Components
                 return _instance;
             }
         }
-        #endregion
+#endregion
 
         #region Methods
         /// <summary>
