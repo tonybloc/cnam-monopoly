@@ -6,7 +6,12 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:gif="http://wpfanimatedgif.codeplex.com"
         mc:Ignorable="d"
-        Title="Menu" Height="450" Width="800"
+        Height="{DynamicResource {x:Static SystemParameters.PrimaryScreenHeightKey}}"
+        Width="{DynamicResource {x:Static SystemParameters.PrimaryScreenWidthKey}}"  
+        FontFamily="{DynamicResource MaterialDesignFont}"
+        WindowState="Maximized"
+        WindowStyle="None"
+        Title="Menu"
         WindowStartupLocation="CenterScreen">
 
     
