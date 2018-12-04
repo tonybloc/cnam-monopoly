@@ -1,4 +1,5 @@
 ﻿using Monopoly.Models.Components;
+using Monopoly.Models.Components.Cells;
 using Monopoly.Service.Xml;
 using Monopoly.Settings;
 
@@ -40,5 +41,21 @@ namespace Monopoly.Handlers
             }
         }
         #endregion
+
+        /// <summary>
+        /// Returne the color of land groupe
+        /// </summary>
+        /// <param name="c">Cell</param>
+        /// <returns></returns>
+        public string getColor(Cell c)
+        {
+            if (c is Land)
+            {
+                Land terrain = (Land)c;
+                return terrain.LandGroup.Color;
+            }
+            return "#000";
+
+        }
     }
 }
