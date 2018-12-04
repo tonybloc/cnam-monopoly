@@ -69,6 +69,8 @@ namespace Monopoly.View
             if(this.TextBox_Pseudo.Text != placeholder)
             {
                 gameManager.CreatePlayer(this.TextBox_Pseudo.Text, this.ColorValue);
+                ((MainWindow)Window.GetWindow(this)).MainContent.Content = new PageBoard();
+                ((MainWindow)Window.GetWindow(this)).MenuContent.Visibility = Visibility.Hidden;
             }            
         }
 

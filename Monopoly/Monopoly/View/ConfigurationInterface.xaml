@@ -8,7 +8,6 @@
       mc:Ignorable="d"
       Height="{DynamicResource {x:Static SystemParameters.PrimaryScreenHeightKey}}"
       Width="{DynamicResource {x:Static SystemParameters.PrimaryScreenWidthKey}}"  
-      Background="{DynamicResource MaterialDesignPaper}"
       FontFamily="{DynamicResource MaterialDesignFont}"
       d:DesignHeight="450" d:DesignWidth="800"
       Title="ConfigurationInterface">
