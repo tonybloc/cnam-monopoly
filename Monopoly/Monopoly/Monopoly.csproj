@@ -86,6 +86,7 @@
     <Compile Include="Models\Components\Cells\StartPoint.cs" />
     <Compile Include="Models\Components\Cells\Tax.cs" />
     <Compile Include="Models\Components\Cells\TrainStation.cs" />
+    <Compile Include="Models\Components\Dice.cs" />
     <Compile Include="Models\Components\Pawn.cs" />
     <Compile Include="Models\Components\Player.cs" />
     <Compile Include="Resources\Colors\PawnColors.cs" />
@@ -97,6 +98,9 @@
     </Compile>
     <Compile Include="View\PageBoard.xaml.cs">
       <DependentUpon>PageBoard.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\DicesInterface.xaml.cs">
+      <DependentUpon>DicesInterface.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\PageSinglePlayerCreation.xaml.cs">
       <DependentUpon>PageSinglePlayerCreation.xaml</DependentUpon>
@@ -118,6 +122,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="View\PageBoard.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\DicesInterface.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -182,6 +190,7 @@
     <Resource Include="Resources\Pictures\welcome.jpg" />
     <Resource Include="Resources\Pictures\welcome2.gif" />
     <Resource Include="Resources\Pictures\wood.png" />
+    <Resource Include="Resources\Pictures\Dices\RollingDice.gif" />
     <Content Include="Resources\Sounds\cha_ching.wav" />
     <Resource Include="Resources\XML\XMLBoardCell.xml" />
     <Resource Include="Resources\XML\XMLChanceCard.xml" />

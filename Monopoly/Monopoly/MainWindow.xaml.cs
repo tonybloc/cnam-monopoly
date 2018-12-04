@@ -27,7 +27,8 @@ namespace Monopoly
 
         private void btnPlayAlone_Click(object sender, RoutedEventArgs e)
         {
-            MainContent.Content = new PageSinglePlayerCreation();
+            //MainContent.Content = new PageSinglePlayerCreation();
+            MainContent.Content = new DicesInterface();
             MenuContent.Visibility = Visibility.Hidden;
         }
 
