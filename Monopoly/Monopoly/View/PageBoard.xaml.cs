@@ -36,7 +36,7 @@ namespace Monopoly.View
         private const int GRIDTYPE_COLUMN = 2;
         #endregion
 
-
+        //TEST
         public PageBoard()
         {
             InitializeComponent();
