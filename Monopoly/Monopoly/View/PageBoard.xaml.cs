@@ -139,7 +139,6 @@ namespace Monopoly.View
                                     gridLayout.MouseEnter += Cells_MouseEnter;
                                     gridLayout.MouseLeave += Cells_MouseLeave;
 
-
                                     RotateTransform rotate = new RotateTransform();
                                     rotate.Angle = 45;
 

@@ -29,7 +29,7 @@ namespace Monopoly
         private void btnPlayAlone_Click(object sender, RoutedEventArgs e)
         {
             MainContent.Content = new PageSinglePlayerCreation();
-            MenuContent.Visibility = Visibility.Hidden;
+            MenuContent.Visibility = Visibility.Visible;
         }
 
         private void btnCustomize_Click(object sender, RoutedEventArgs e)
