@@ -17,7 +17,7 @@ namespace Monopoly.Models.Components
         /// </summary>
         public Dice()
         {
-            this._nbFace = 6;
+            this._nbFace = 7;
             this._value = 0;
         }
 
@@ -33,11 +33,7 @@ namespace Monopoly.Models.Components
         /// Lance le dée
         /// </summary>
         public void Rool()
-        {
-            //Random rand = new Random((int)DateTime.Now.Ticks);
-            //_value = rand.Next(1, _nbFace);
-
-            
+        {            
             _value = rand.Next(1, _nbFace);
         }
     }

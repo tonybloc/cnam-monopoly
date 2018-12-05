@@ -12,28 +12,18 @@
       Title="DicesInterface">
 
     <Grid>
-        <Grid.Background>
-            <ImageBrush ImageSource="/Monopoly;component/Resources/Pictures/wood.png"/>
-        </Grid.Background>
-        <StackPanel Background="AliceBlue" Margin="15">
+        <StackPanel Background="AliceBlue" Margin="15" VerticalAlignment="Center" HorizontalAlignment="Center">
             <StackPanel Orientation="Vertical" HorizontalAlignment="Center" Margin="10">
                 <Label HorizontalAlignment="Center" Content="Lancés des dés..." FontSize="20" FontStyle="Normal" FontWeight="Bold"/>
             </StackPanel>
-            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="10">
+            <StackPanel HorizontalAlignment="Center" Margin="10">
                 <Grid Name="Result" Height="200">
-                    <Image Name="Gif" gif:ImageBehavior.RepeatBehavior="Forever" gif:ImageBehavior.AnimatedSource="../Resources/Pictures/Dices/RollingDice.gif" Source="../Resources/Pictures/Dices/RollingDice.gif" HorizontalAlignment="Center" RenderTransformOrigin="0.395,0.406" Height="177" Width="452"/>
-
-                
+                    <Image Name="Gif" gif:ImageBehavior.RepeatBehavior="Forever" gif:ImageBehavior.AnimatedSource="../Resources/Pictures/Dices/RollingDice.gif" Source="../Resources/Pictures/Dices/RollingDice.gif" HorizontalAlignment="Center"/>
                     <StackPanel Orientation="Horizontal">
                         <Image x:Name="FirstDice"/>
                         <Image x:Name="SecondDice"/>
                     </StackPanel>
                 </Grid>
-            </StackPanel>
-            <StackPanel Orientation="Horizontal" Margin="10" HorizontalAlignment="Center">
-                <Button x:Name="btnLaunch" Margin="10" Click="onClickValidate">
-                    <MaterialDesign:PackIcon Kind="Done"/>
-                </Button>
             </StackPanel>
         </StackPanel>
 

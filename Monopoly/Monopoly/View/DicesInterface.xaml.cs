@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -23,6 +24,8 @@ namespace Monopoly.View
     {
         #region Variables
         private static GameManager gameManager;
+
+        
         #endregion
 
         #region Constructeur
@@ -30,34 +33,33 @@ namespace Monopoly.View
         {
             InitializeComponent();
             gameManager = GameManager.Instance;
+            //Thread thread = new Thread(new ThreadStart(showDices));
+            //thread.Start();
+
+            showDices();
         }
         #endregion
 
         #region Methods
-        private void onClickValidate(object sender, RoutedEventArgs e)
+
+       /* private void removeGif()
+        {        
+
+            
+        }*/
+
+        private void showDices()
         {
+            /*while (Thread.CurrentThread.IsAlive)
+            {
+                Thread.Sleep(3000);
+            }*/
+            //System.Timers.Timer timer = new System.Timers.Timer(5000);
             gameManager.RoolDice(gameManager.FirstDice, gameManager.SecondeDice);
-
-            Console.WriteLine("1:" + gameManager.FirstDice.Value);
-            Console.WriteLine("2:" + gameManager.SecondeDice.Value);
-
+            
             Result.Children.Remove(Gif);
-            //BitmapImage bi = new BitmapImage();
-            //bi.BeginInit();
-            //string s = System.IO.Path.GetFullPath("dice1.png");
-            //bi.UriSource = new Uri("../Resources/Pictures/Dices/dice1.png");
-            //bi.EndInit();
-            //FirstDice.Stretch = Stretch.Fill;
-            FirstDice.Source = new BitmapImage(new Uri(@"C:\CNAM\projets\monopoly\Monopoly\Monopoly\Resources\Pictures\Dices\dice"+gameManager.FirstDice.Value+".png"));
-            SecondDice.Source = new BitmapImage(new Uri(@"C:\CNAM\projets\monopoly\Monopoly\Monopoly\Resources\Pictures\Dices\dice" + gameManager.SecondeDice.Value + ".png"));
-
-        }
-
-
-        private string getPhotos(int value)
-        {
-
-            return null;
+            FirstDice.Source = new BitmapImage(new Uri("/Monopoly;component/Resources/Pictures/Dices/dice"+gameManager.FirstDice.Value+".png", UriKind.Relative));
+            SecondDice.Source = new BitmapImage(new Uri("/Monopoly;component/Resources/Pictures/Dices/dice"+ gameManager.SecondeDice.Value + ".png", UriKind.Relative));            
         }
         #endregion
 
