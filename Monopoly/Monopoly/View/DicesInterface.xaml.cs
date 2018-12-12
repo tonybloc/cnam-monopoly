@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Timers;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -14,6 +15,8 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Windows.Threading;
+using WpfAnimatedGif;
 
 namespace Monopoly.View
 {
@@ -24,44 +27,43 @@ namespace Monopoly.View
     {
         #region Variables
         private static GameManager gameManager;
-
-        
         #endregion
 
-        #region Constructeur
+        #region Constructor
         public DicesInterface()
         {
             InitializeComponent();
             gameManager = GameManager.Instance;
-            //Thread thread = new Thread(new ThreadStart(showDices));
-            //thread.Start();
-
             showDices();
         }
         #endregion
 
         #region Methods
-
-       /* private void removeGif()
-        {        
-
-            
-        }*/
-
+        /// <summary>
+        /// Display dices gif and the results
+        /// </summary>
         private void showDices()
         {
-            /*while (Thread.CurrentThread.IsAlive)
-            {
-                Thread.Sleep(3000);
-            }*/
-            //System.Timers.Timer timer = new System.Timers.Timer(5000);
-            gameManager.RoolDice(gameManager.FirstDice, gameManager.SecondeDice);
-            
-            Result.Children.Remove(Gif);
-            FirstDice.Source = new BitmapImage(new Uri("/Monopoly;component/Resources/Pictures/Dices/dice"+gameManager.FirstDice.Value+".png", UriKind.Relative));
-            SecondDice.Source = new BitmapImage(new Uri("/Monopoly;component/Resources/Pictures/Dices/dice"+ gameManager.SecondeDice.Value + ".png", UriKind.Relative));            
-        }
-        #endregion
+            //Initialisation of the gif
+            var image = new BitmapImage();
+            image.BeginInit();
+            image.UriSource = new Uri("/Monopoly;component/Resources/Pictures/Dices/RollingDice.gif", UriKind.Relative);
+            image.EndInit();
+            ImageBehavior.SetAnimatedSource(Gif, image);
 
+            // Execute the gif during 2 seconds and then display the result
+            var timer = new DispatcherTimer { Interval = TimeSpan.FromSeconds(2) };
+            timer.Start();
+            timer.Tick += (sender, args) =>
+            {
+                timer.Stop();
+                Result.Children.Remove(Gif);
+                gameManager.RoolDice(gameManager.FirstDice, gameManager.SecondeDice);
+                FirstDice.Source = new BitmapImage(new Uri("/Monopoly;component/Resources/Pictures/Dices/dice" + gameManager.FirstDice.Value + ".png", UriKind.Relative));
+                SecondDice.Source = new BitmapImage(new Uri("/Monopoly;component/Resources/Pictures/Dices/dice" + gameManager.SecondeDice.Value + ".png", UriKind.Relative));
+            };
+        }
     }
+    #endregion
 }
+
