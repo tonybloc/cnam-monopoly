@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Monopoly.Models.Components;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -23,6 +24,16 @@ namespace Monopoly.Handlers
         /// Board handler
         /// </summary>
         public BoardHandler boardHandler { get; private set; }
+
+        /// <summary>
+        /// First dice
+        /// </summary>
+        public Dice FirstDice;
+
+        /// <summary>
+        /// Second dice
+        /// </summary>
+        public Dice SecondeDice;
         #endregion
 
         #region Constructeurs
@@ -33,6 +44,9 @@ namespace Monopoly.Handlers
         {
             this.playerHandler = PlayerHandler.Instance;
             this.boardHandler = BoardHandler.Instance;
+
+            FirstDice = new Dice();
+            SecondeDice = new Dice();
         }
 
         /// <summary>
@@ -49,7 +63,9 @@ namespace Monopoly.Handlers
                 return instance;
             }
         }
+        #endregion
 
+        #region Methods
         /// <summary>
         /// Crée un nouveau joueur
         /// </summary>
@@ -58,6 +74,17 @@ namespace Monopoly.Handlers
         public void CreatePlayer(string pseudo, string colorValue )
         {
             playerHandler.CreatePlayer(pseudo, colorValue);
+        }
+
+        /// <summary>
+        /// Rool dices 
+        /// </summary>
+        /// <param name="Dice1">First dice</param>
+        /// <param name="Dice2">Second dice</param>
+        public void RoolDice(Dice Dice1, Dice Dice2)
+        {
+            Dice1.Rool();
+            Dice2.Rool();
         }
         #endregion
     }

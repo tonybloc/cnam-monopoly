@@ -23,6 +23,7 @@ namespace Monopoly
         public MainWindow()
         {
             InitializeComponent();
+            this.PreviewKeyDown += new KeyEventHandler(HandleEsc);
         }
 
         private void btnPlayAlone_Click(object sender, RoutedEventArgs e)
@@ -39,11 +40,30 @@ namespace Monopoly
 
         private void btnNetworkPlay_Click(object sender, RoutedEventArgs e)
         {
-            
+
         }
 
         private void btnRules_Click(object sender, RoutedEventArgs e)
         {
+
+        }
+
+        /// <summary>
+        /// Escape the game
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void HandleEsc(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Escape)
+            {
+                MessageBoxResult result = MessageBox.Show("Voulez vous quitter l'application ?", "Quitter", MessageBoxButton.YesNo, MessageBoxImage.Question);
+
+                if (result == MessageBoxResult.Yes)
+                {
+                    Close();
+                }
+            }
 
         }
     }

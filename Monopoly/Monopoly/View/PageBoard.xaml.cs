@@ -137,7 +137,7 @@ namespace Monopoly.View
                                     TransformGroup transform = new TransformGroup();
                                     transform.Children.Add(rotate);
 
-                                    Image imgJail = new Image();                                    
+                                    Image imgJail = new Image();
                                     imgJail.Source = Base64Converter.base64ToImageSource(((Jail)c).Icon);
                                     imgJail.RenderTransformOrigin = new Point(0.5, 0.5);
                                     imgJail.RenderTransform = transform;
@@ -180,7 +180,7 @@ namespace Monopoly.View
                                 }
                                 break;
                             case 4:
-                                if(c.GetType() == typeof(GoToJail))
+                                if (c.GetType() == typeof(GoToJail))
                                 {
                                     Grid gridLayout = new Grid();
                                     gridLayout.RowDefinitions.Add(new RowDefinition { Height = new GridLength(1, GridUnitType.Star) });
@@ -357,7 +357,7 @@ namespace Monopoly.View
                             }
                             else if (c.GetType() == typeof(Tax))
                             {
-                                
+
                                 Border border = new Border();
                                 border.BorderBrush = Brushes.Gray;
                                 border.BorderThickness = new Thickness(1);
@@ -425,7 +425,7 @@ namespace Monopoly.View
 
                                 Image iconDrawCard = new Image();
                                 iconDrawCard.Source = Base64Converter.base64ToImageSource(((DrawCard)c).Icon);
-                               
+
                                 Grid.SetRow(iconDrawCard, 1);
 
                                 TextBlock tbPlayerColor = new TextBlock();
@@ -699,7 +699,7 @@ namespace Monopoly.View
                                 gridLayout.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
                                 gridLayout.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(70) });
                                 gridLayout.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(15) });
-                                
+
                                 gridLayout.Tag = globalIndex;
 
 
@@ -870,7 +870,7 @@ namespace Monopoly.View
                                 tbName.Padding = new Thickness(5);
                                 Grid.SetRow(tbName, 0);
 
-                                Image iconCompany = new Image();                               
+                                Image iconCompany = new Image();
                                 iconCompany.Source = Base64Converter.base64ToImageSource(((PublicService)c).Icon); ; ;
                                 Grid.SetRow(iconCompany, 1);
 
@@ -1115,7 +1115,7 @@ namespace Monopoly.View
                                 gridLayout.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(15) });
                                 gridLayout.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(70) });
                                 gridLayout.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
-                                
+
                                 gridLayout.Tag = globalIndex;
 
 
@@ -1175,7 +1175,7 @@ namespace Monopoly.View
                                 gridLayout.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(15) });
                                 gridLayout.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(70) });
                                 gridLayout.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
-                                
+
                                 gridLayout.Tag = globalIndex;
 
 
@@ -1234,7 +1234,7 @@ namespace Monopoly.View
                                 gridLayout.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(15) });
                                 gridLayout.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(70) });
                                 gridLayout.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
-                                
+
                                 gridLayout.Tag = globalIndex;
 
 
@@ -1292,6 +1292,13 @@ namespace Monopoly.View
             {
                 Console.WriteLine("Le nombre de case est incorrect");
             }
+        }
+        #endregion
+
+        #region Dices
+        private void onClickDices(object sender, RoutedEventArgs e)
+        {
+            DicesContent.Content = new DicesInterface();
         }
         #endregion
     }
