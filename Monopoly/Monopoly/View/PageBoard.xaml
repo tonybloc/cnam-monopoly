@@ -45,7 +45,82 @@
                 <Grid Grid.Column="1" Grid.Row="0" x:Name="BoardPanelTop"></Grid>
                 <Grid Grid.Column="2" Grid.Row="0" x:Name="BoardPanelGoToJail"></Grid>
                 <Grid Grid.Column="2" Grid.Row="1" x:Name="BoardPanelRight"></Grid>
+                <Grid Grid.Column="1" Grid.Row="1" x:Name="BoardPanelCenter"></Grid>
 
+                <!--Land description-->
+                <Grid Grid.Column="1" Grid.Row="1" x:Name="Land" Width="200" Height="300" Background="White" Visibility="Hidden">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="2*"/>
+                        <RowDefinition Height="9*"/>
+                    </Grid.RowDefinitions>
+
+                    <Label x:Name="lblLandTitle" Grid.Row="0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
+
+                    <Grid Grid.Row="1" Margin="10" >
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="2*"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+
+                        <Label x:Name="lblOwner" Grid.Row="0" HorizontalAlignment="Left" Content="Propriétaire :" VerticalAlignment="Top" Foreground="Black"/>
+                        <Label x:Name="lblOwnerValue" Grid.Row="0" Grid.Column="1" HorizontalAlignment="Left"/>
+                        <Label x:Name="lblBuyingPrice" Grid.Row="1" HorizontalAlignment="Left" Content="Prix d'achat :" VerticalAlignment="Top" Foreground="Black"/>
+                        <Label x:Name="lblBuyingPriceValue" Grid.Row="1" Grid.Column="1" HorizontalAlignment="Left"/>
+                        <Label x:Name="lblRent" Grid.Row="2" HorizontalAlignment="Left" Content="Loyers :" VerticalAlignment="Top" Foreground="Black"/>
+                        <Label x:Name="lblLand" Grid.Row="3" HorizontalAlignment="Left" Content="- Terrain nu : " VerticalAlignment="Top" Foreground="Black"/>
+                        <Label x:Name="lblLandValue" Grid.Row="3" Grid.Column="1" HorizontalAlignment="Left"/>
+                        <Label x:Name="lblHouse1" Grid.Row="4" HorizontalAlignment="Left" Content="- Avec 1 maison :" VerticalAlignment="Top" Foreground="Black"/>
+                        <Label x:Name="lblHouse1Value" Grid.Row="4" Grid.Column="1" HorizontalAlignment="Left"/>
+                        <Label x:Name="lblHouse2" Grid.Row="5" HorizontalAlignment="Left" Content="- Avec 2 maisons :" VerticalAlignment="Top" Foreground="Black"/>
+                        <Label x:Name="lblHouse2Value" Grid.Row="5" Grid.Column="1" HorizontalAlignment="Left"/>
+                        <Label x:Name="lblHouse3" Grid.Row="6" HorizontalAlignment="Left" Content="- Avec 3 maisons :" VerticalAlignment="Top" Foreground="Black"/>
+                        <Label x:Name="lblHouse3Value" Grid.Row="6" Grid.Column="1" HorizontalAlignment="Left"/>
+                        <Label x:Name="lblHouse4" Grid.Row="7" HorizontalAlignment="Left" Content="- Avec 4 maisons :" VerticalAlignment="Top" Foreground="Black"/>
+                        <Label x:Name="lblHouse4Value" Grid.Row="7" Grid.Column="1" HorizontalAlignment="Left"/>
+                        <Label x:Name="lblMotel" Grid.Row="8" HorizontalAlignment="Left" Content="- Avec hôtel :" VerticalAlignment="Top" Foreground="Black"/>
+                        <Label x:Name="lblMotelValue" Grid.Row="8" Grid.Column="1" HorizontalAlignment="Left"/>
+                        <Label x:Name="lblMortgage" Grid.Row="9" HorizontalAlignment="Left" Content="Valeur hypothécaire :" VerticalAlignment="Top" Foreground="Black"/>
+                        <Label x:Name="lblMortgageValue" Grid.Row="9" Grid.Column="1" HorizontalAlignment="Left"/>
+                    
+                    </Grid>
+
+                    <Border BorderThickness="2" BorderBrush="Black" />
+                    <Border BorderThickness="2" BorderBrush="Black" Grid.ColumnSpan="2" Grid.RowSpan="2" />
+                </Grid>
+
+                <Grid Grid.Column="1" Grid.Row="1" x:Name="Card" Width="200" Height="300" Background="White" Visibility="Hidden">
+                    <Grid Margin="10">
+                        <StackPanel>
+                            <Image x:Name="CardIcon" VerticalAlignment="Center" Height="100"></Image>
+                            <Label x:Name="lblCardTitle" Grid.Row="0" HorizontalContentAlignment="Center" Foreground="Black" Margin="0,20,0,0"/>
+                            <StackPanel Orientation="Vertical" Margin="0,50,0,0">
+                                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                                    <Label x:Name="lblPurchasePrice" Content="Valeur d'achat :" Foreground="Black"/>
+                                    <Label x:Name="lblPurchasePriceValue"></Label>                             
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal"  HorizontalAlignment="Center">
+                                    <Label x:Name="lblMortgagePrice" Content="Valeur hypothécaire :" Foreground="Black"/>
+                                    <Label x:Name="lblMortgagePriceValue"></Label>
+                                </StackPanel>
+                            </StackPanel>
+                            
+                        </StackPanel>
+                        <Border BorderThickness="2" BorderBrush="Black" />
+                    </Grid>
+                    <Border BorderThickness="2" BorderBrush="Black" />
+                </Grid>
             </Grid>
         </Border>
         <Grid Grid.Column="1" Width="Auto">
@@ -60,7 +135,7 @@
             </StackPanel>
             <Frame Grid.Column="1" Grid.Row="1" x:Name="DicesContent" VerticalAlignment="Center" HorizontalAlignment="Center"/>
         </Grid>
-        
+
     </Grid>
 
 </Page>
