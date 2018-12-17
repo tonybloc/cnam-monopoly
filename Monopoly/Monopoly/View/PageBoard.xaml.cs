@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -41,6 +42,7 @@ namespace Monopoly.View
         {
             InitializeComponent();
             InitialiseBoard();
+            ShowCard();
         }
 
         #region Creation du Plateau
@@ -109,6 +111,9 @@ namespace Monopoly.View
                                     Grid gridLayout = new Grid();
                                     gridLayout.RowDefinitions.Add(new RowDefinition { Height = new GridLength(1, GridUnitType.Star) });
                                     gridLayout.RowDefinitions.Add(new RowDefinition { Height = new GridLength(15) });
+                                    gridLayout.Name = "Cell" + ((StartPoint)c).Id;
+                                    gridLayout.MouseEnter += Cells_MouseEnter;
+                                    gridLayout.MouseLeave += Cells_MouseLeave;
 
                                     Image imgStart = new Image();
                                     imgStart.Source = Base64Converter.base64ToImageSource(((StartPoint)c).Icon);
@@ -130,6 +135,10 @@ namespace Monopoly.View
                                     Grid gridLayout = new Grid();
                                     gridLayout.RowDefinitions.Add(new RowDefinition { Height = new GridLength(1, GridUnitType.Star) });
                                     gridLayout.RowDefinitions.Add(new RowDefinition { Height = new GridLength(15) });
+                                    gridLayout.Name = "Cell" + ((Jail)c).Id;
+                                    gridLayout.MouseEnter += Cells_MouseEnter;
+                                    gridLayout.MouseLeave += Cells_MouseLeave;
+
 
                                     RotateTransform rotate = new RotateTransform();
                                     rotate.Angle = 45;
@@ -160,6 +169,9 @@ namespace Monopoly.View
                                     Grid gridLayout = new Grid();
                                     gridLayout.RowDefinitions.Add(new RowDefinition { Height = new GridLength(1, GridUnitType.Star) });
                                     gridLayout.RowDefinitions.Add(new RowDefinition { Height = new GridLength(15) });
+                                    gridLayout.Name = "Cell" + ((Parking)c).Id;
+                                    gridLayout.MouseEnter += Cells_MouseEnter;
+                                    gridLayout.MouseLeave += Cells_MouseLeave;
 
                                     Image imgParking = new Image();
                                     imgParking.Source = Base64Converter.base64ToImageSource(((Parking)c).Icon);
@@ -185,6 +197,9 @@ namespace Monopoly.View
                                     Grid gridLayout = new Grid();
                                     gridLayout.RowDefinitions.Add(new RowDefinition { Height = new GridLength(1, GridUnitType.Star) });
                                     gridLayout.RowDefinitions.Add(new RowDefinition { Height = new GridLength(15) });
+                                    gridLayout.Name = "Cell" + ((GoToJail)c).Id;
+                                    gridLayout.MouseEnter += Cells_MouseEnter;
+                                    gridLayout.MouseLeave += Cells_MouseLeave;
 
                                     Image imgPolice = new Image();
                                     imgPolice.Source = Base64Converter.base64ToImageSource(((GoToJail)c).Icon);
@@ -223,7 +238,10 @@ namespace Monopoly.View
                                 gridLayout.RowDefinitions.Add(new RowDefinition { Height = new GridLength(15) });
                                 gridLayout.RowDefinitions.Add(new RowDefinition { Height = new GridLength(15) });
                                 gridLayout.RowDefinitions.Add(new RowDefinition { Height = new GridLength(1, GridUnitType.Star) });
+                                gridLayout.Name = "Cell" + ((Land)c).Id;
                                 gridLayout.Tag = globalIndex;
+                                gridLayout.MouseEnter += Cells_MouseEnter;
+                                gridLayout.MouseLeave += Cells_MouseLeave;
 
                                 Grid gridLayoutText = new Grid();
                                 gridLayoutText.RowDefinitions.Add(new RowDefinition());
@@ -271,6 +289,9 @@ namespace Monopoly.View
                                 gridLayout.RowDefinitions.Add(new RowDefinition { Height = new GridLength(70) });
                                 gridLayout.RowDefinitions.Add(new RowDefinition { Height = new GridLength(1, GridUnitType.Star) });
                                 gridLayout.Tag = globalIndex;
+                                gridLayout.Name = "Cell" + ((TrainStation)c).Id;
+                                gridLayout.MouseEnter += Cells_MouseEnter;
+                                gridLayout.MouseLeave += Cells_MouseLeave;
 
                                 TextBlock tbName = new TextBlock();
                                 tbName.VerticalAlignment = VerticalAlignment.Center;
@@ -318,7 +339,9 @@ namespace Monopoly.View
                                 gridLayout.RowDefinitions.Add(new RowDefinition { Height = new GridLength(70) });
                                 gridLayout.RowDefinitions.Add(new RowDefinition { Height = new GridLength(1, GridUnitType.Star) });
                                 gridLayout.Tag = globalIndex;
-
+                                gridLayout.Name = "Cell" + ((PublicService)c).Id; ;
+                                gridLayout.MouseEnter += Cells_MouseEnter;
+                                gridLayout.MouseLeave += Cells_MouseLeave;
 
                                 TextBlock tbName = new TextBlock();
                                 tbName.VerticalAlignment = VerticalAlignment.Center;
@@ -368,6 +391,9 @@ namespace Monopoly.View
                                 gridLayout.RowDefinitions.Add(new RowDefinition { Height = new GridLength(1, GridUnitType.Star) });
                                 gridLayout.RowDefinitions.Add(new RowDefinition { Height = new GridLength(15) });
                                 gridLayout.Tag = globalIndex;
+                                gridLayout.Name = "Cell" + ((Tax)c).Id;
+                                gridLayout.MouseEnter += Cells_MouseEnter;
+                                gridLayout.MouseLeave += Cells_MouseLeave;
 
                                 TextBlock tbName = new TextBlock();
                                 tbName.VerticalAlignment = VerticalAlignment.Center;
@@ -412,6 +438,9 @@ namespace Monopoly.View
                                 gridLayout.RowDefinitions.Add(new RowDefinition { Height = new GridLength(1, GridUnitType.Star) });
                                 gridLayout.RowDefinitions.Add(new RowDefinition { Height = new GridLength(15) });
                                 gridLayout.Tag = globalIndex;
+                                gridLayout.Name = "Cell" + ((DrawCard)c).Id;
+                                gridLayout.MouseEnter += Cells_MouseEnter;
+                                gridLayout.MouseLeave += Cells_MouseLeave;
 
                                 TextBlock tbName = new TextBlock();
                                 tbName.VerticalAlignment = VerticalAlignment.Center;
@@ -460,6 +489,9 @@ namespace Monopoly.View
                                 gridLayout.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(15) });
                                 gridLayout.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(15) });
                                 gridLayout.Tag = globalIndex;
+                                gridLayout.Name = "Cell" + ((Land)c).Id;
+                                gridLayout.MouseEnter += Cells_MouseEnter;
+                                gridLayout.MouseLeave += Cells_MouseLeave;
 
                                 Grid gridLayoutText = new Grid();
                                 gridLayoutText.ColumnDefinitions.Add(new ColumnDefinition());
@@ -522,6 +554,9 @@ namespace Monopoly.View
                                 gridLayout.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(70) });
                                 gridLayout.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(15) });
                                 gridLayout.Tag = globalIndex;
+                                gridLayout.Name = "Cell" + ((TrainStation)c).Id;
+                                gridLayout.MouseEnter += Cells_MouseEnter;
+                                gridLayout.MouseLeave += Cells_MouseLeave;
 
 
                                 RotateTransform rotate = new RotateTransform();
@@ -581,7 +616,9 @@ namespace Monopoly.View
                                 gridLayout.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(70) });
                                 gridLayout.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(15) });
                                 gridLayout.Tag = globalIndex;
-
+                                gridLayout.Name = "Cell" + ((PublicService)c).Id;
+                                gridLayout.MouseEnter += Cells_MouseEnter;
+                                gridLayout.MouseLeave += Cells_MouseLeave;
 
                                 RotateTransform rotate = new RotateTransform();
                                 rotate.Angle = 90;
@@ -640,6 +677,9 @@ namespace Monopoly.View
                                 gridLayout.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(70) });
                                 gridLayout.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(15) });
                                 gridLayout.Tag = globalIndex;
+                                gridLayout.Name = "Cell" + ((Tax)c).Id;
+                                gridLayout.MouseEnter += Cells_MouseEnter;
+                                gridLayout.MouseLeave += Cells_MouseLeave;
 
 
                                 RotateTransform rotate = new RotateTransform();
@@ -701,6 +741,9 @@ namespace Monopoly.View
                                 gridLayout.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(15) });
 
                                 gridLayout.Tag = globalIndex;
+                                gridLayout.Name = "Cell" + ((DrawCard)c).Id;
+                                gridLayout.MouseEnter += Cells_MouseEnter;
+                                gridLayout.MouseLeave += Cells_MouseLeave;
 
 
                                 RotateTransform rotate = new RotateTransform();
@@ -762,6 +805,9 @@ namespace Monopoly.View
                                 gridLayout.RowDefinitions.Add(new RowDefinition { Height = new GridLength(15) });
                                 gridLayout.RowDefinitions.Add(new RowDefinition { Height = new GridLength(15) });
                                 gridLayout.Tag = globalIndex;
+                                gridLayout.Name = "Cell" + ((Land)c).Id;
+                                gridLayout.MouseEnter += Cells_MouseEnter;
+                                gridLayout.MouseLeave += Cells_MouseLeave;
 
                                 Grid gridLayoutText = new Grid();
                                 gridLayoutText.RowDefinitions.Add(new RowDefinition());
@@ -815,6 +861,9 @@ namespace Monopoly.View
                                 gridLayout.RowDefinitions.Add(new RowDefinition { Height = new GridLength(1, GridUnitType.Star) });
                                 gridLayout.RowDefinitions.Add(new RowDefinition { Height = new GridLength(15) });
                                 gridLayout.Tag = globalIndex;
+                                gridLayout.Name = "Cell" + ((TrainStation)c).Id;
+                                gridLayout.MouseEnter += Cells_MouseEnter;
+                                gridLayout.MouseLeave += Cells_MouseLeave;
 
                                 TextBlock tbName = new TextBlock();
                                 tbName.VerticalAlignment = VerticalAlignment.Center;
@@ -859,6 +908,9 @@ namespace Monopoly.View
                                 gridLayout.RowDefinitions.Add(new RowDefinition { Height = new GridLength(1, GridUnitType.Star) });
                                 gridLayout.RowDefinitions.Add(new RowDefinition { Height = new GridLength(15) });
                                 gridLayout.Tag = globalIndex;
+                                gridLayout.Name = "Cell" + ((PublicService)c).Id;
+                                gridLayout.MouseEnter += Cells_MouseEnter;
+                                gridLayout.MouseLeave += Cells_MouseLeave;
 
                                 TextBlock tbName = new TextBlock();
                                 tbName.VerticalAlignment = VerticalAlignment.Center;
@@ -905,6 +957,9 @@ namespace Monopoly.View
                                 gridLayout.RowDefinitions.Add(new RowDefinition { Height = new GridLength(1, GridUnitType.Star) });
                                 gridLayout.RowDefinitions.Add(new RowDefinition { Height = new GridLength(15) });
                                 gridLayout.Tag = globalIndex;
+                                gridLayout.Name = "Cell" + ((Tax)c).Id;
+                                gridLayout.MouseEnter += Cells_MouseEnter;
+                                gridLayout.MouseLeave += Cells_MouseLeave;
 
                                 TextBlock tbName = new TextBlock();
                                 tbName.VerticalAlignment = VerticalAlignment.Center;
@@ -949,6 +1004,9 @@ namespace Monopoly.View
                                 gridLayout.RowDefinitions.Add(new RowDefinition { Height = new GridLength(1, GridUnitType.Star) });
                                 gridLayout.RowDefinitions.Add(new RowDefinition { Height = new GridLength(15) });
                                 gridLayout.Tag = globalIndex;
+                                gridLayout.Name = "Cell" + ((DrawCard)c).Id;
+                                gridLayout.MouseEnter += Cells_MouseEnter;
+                                gridLayout.MouseLeave += Cells_MouseLeave;
 
 
                                 TextBlock tbName = new TextBlock();
@@ -998,6 +1056,9 @@ namespace Monopoly.View
                                 gridLayout.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(15) });
                                 gridLayout.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
                                 gridLayout.Tag = globalIndex;
+                                gridLayout.Name = "Cell" + ((Land)c).Id;
+                                gridLayout.MouseEnter += Cells_MouseEnter;
+                                gridLayout.MouseLeave += Cells_MouseLeave;
 
                                 Grid gridLayoutText = new Grid();
                                 gridLayoutText.ColumnDefinitions.Add(new ColumnDefinition());
@@ -1059,6 +1120,9 @@ namespace Monopoly.View
                                 gridLayout.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(70) });
                                 gridLayout.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
                                 gridLayout.Tag = globalIndex;
+                                gridLayout.Name = "Cell" + ((TrainStation)c).Id;
+                                gridLayout.MouseEnter += Cells_MouseEnter;
+                                gridLayout.MouseLeave += Cells_MouseLeave;
 
                                 RotateTransform rotate = new RotateTransform();
                                 rotate.Angle = 270;
@@ -1117,6 +1181,9 @@ namespace Monopoly.View
                                 gridLayout.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
 
                                 gridLayout.Tag = globalIndex;
+                                gridLayout.Name = "Cell" + ((PublicService)c).Id;
+                                gridLayout.MouseEnter += Cells_MouseEnter;
+                                gridLayout.MouseLeave += Cells_MouseLeave;
 
 
                                 RotateTransform rotate = new RotateTransform();
@@ -1177,6 +1244,9 @@ namespace Monopoly.View
                                 gridLayout.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
 
                                 gridLayout.Tag = globalIndex;
+                                gridLayout.Name = "Cell" + ((Tax)c).Id;
+                                gridLayout.MouseEnter += Cells_MouseEnter;
+                                gridLayout.MouseLeave += Cells_MouseLeave;
 
 
                                 RotateTransform rotate = new RotateTransform();
@@ -1236,6 +1306,9 @@ namespace Monopoly.View
                                 gridLayout.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
 
                                 gridLayout.Tag = globalIndex;
+                                gridLayout.Name = "Cell" + ((DrawCard)c).Id;
+                                gridLayout.MouseEnter += Cells_MouseEnter;
+                                gridLayout.MouseLeave += Cells_MouseLeave;
 
 
                                 RotateTransform rotate = new RotateTransform();
@@ -1295,10 +1368,80 @@ namespace Monopoly.View
         }
         #endregion
 
+        #region Show cards
+        private void ShowCard()
+        {
+            //TrainStationIcon.Source = Base64Converter.base64ToImageSource(((TrainStation)c).Icon);
+
+
+        }
+        #endregion
+
         #region Dices
         private void onClickDices(object sender, RoutedEventArgs e)
         {
             DicesContent.Content = new DicesInterface();
+        }
+        #endregion
+
+        #region Events
+        private void Cells_MouseEnter(object sender, MouseEventArgs e)
+        {
+            //get cell's name
+            string name = ((Grid)sender).Name;
+            string number = Regex.Replace(name, "Cell", string.Empty);
+
+            // cell's id
+            int id = Convert.ToInt32(number);
+
+            //get cell's informations
+            Cell c = GameManager.Instance.boardHandler.Board.GetCell(id);
+            BrushConverter bc = new BrushConverter();
+
+            if (c is TrainStation)
+            {
+                TrainStation t = (TrainStation)GameManager.Instance.boardHandler.Board.ListCell.ElementAt(id);
+
+                Card.Visibility = Visibility.Visible;
+                CardIcon.Source = Base64Converter.base64ToImageSource(((TrainStation)c).Icon);
+                lblCardTitle.Content = c.Title;
+                lblPurchasePriceValue.Content = t.PurchasePrice + " €";
+                lblMortgagePriceValue.Content = t.MortgagePrice + " €";
+            }
+            else if (c is Land)
+            {
+                Land.Visibility = Visibility.Visible;
+                lblLandTitle.Content = c.Title;
+                lblLandTitle.Background = (Brush)bc.ConvertFrom(GameManager.Instance.boardHandler.getColor(c));
+
+                Land l = (Land)GameManager.Instance.boardHandler.Board.ListCell.ElementAt(id);
+                lblBuyingPriceValue.Content = l.PurchasePrice + " €";
+                lblLandValue.Content = l.RantalList[0] + " €";
+                lblHouse1Value.Content = l.RantalList[1] + " €";
+                lblHouse2Value.Content = l.RantalList[2] + " €";
+                lblHouse3Value.Content = l.RantalList[3] + " €";
+                lblHouse4Value.Content = l.RantalList[4] + " €";
+                lblMotelValue.Content = l.RantalList[5] + " €";
+                lblMortgageValue.Content = l.MortgagePrice + " €";
+            }
+            else if (c is PublicService)
+            {
+                PublicService p = (PublicService)GameManager.Instance.boardHandler.Board.ListCell.ElementAt(id);
+
+                Card.Visibility = Visibility.Visible;
+                CardIcon.Source = Base64Converter.base64ToImageSource(((PublicService)c).Icon);
+                lblCardTitle.Content = p.Title;
+                lblPurchasePriceValue.Content = p.PurchasePrice + " €";
+                lblMortgagePriceValue.Content = p.MortgagePrice + " €";
+            }
+        }
+
+        private void Cells_MouseLeave(object sender, MouseEventArgs e)
+        {
+            if (Card.Visibility == Visibility.Visible)
+                Card.Visibility = Visibility.Hidden;
+            else if (Land.Visibility == Visibility.Visible)            
+                Land.Visibility = Visibility.Hidden;            
         }
         #endregion
     }
