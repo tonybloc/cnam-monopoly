@@ -515,7 +515,10 @@ namespace Monopoly.View
                     break;
             }
 
+            BrushConverter bc = new BrushConverter();
+
             Grid GridMain = new Grid();
+            GridMain.Background = Brushes.Transparent;
             GridMain.Name = "Cell" + land.Id;
             GridMain.Tag = tag;
             GridMain.MouseEnter += Cells_MouseEnter;
@@ -687,7 +690,7 @@ namespace Monopoly.View
                     break;
             }
 
-
+            
             Grid GridPlayerPosition = new Grid();
             GridPlayerPosition.RowDefinitions.Add(new RowDefinition());
             GridPlayerPosition.RowDefinitions.Add(new RowDefinition());
@@ -713,7 +716,8 @@ namespace Monopoly.View
                 default:
                     break;
             }
-
+            
+            
             GridPlayerPosition.Children.Add(CreateElipse("#FF0000", 0, 0));
             GridPlayerPosition.Children.Add(CreateElipse("#00FF00", 0, 1));
             GridPlayerPosition.Children.Add(CreateElipse("#0000FF", 0, 2));
@@ -723,6 +727,7 @@ namespace Monopoly.View
             GridPlayerPosition.Children.Add(CreateElipse("#FF0000", 2, 0));
             GridPlayerPosition.Children.Add(CreateElipse("#00FF00", 2, 1));
             GridPlayerPosition.Children.Add(CreateElipse("#0000FF", 2, 2));
+            
 
             GridContent.Children.Add(tbName);
             GridMain.Children.Add(tbColorGroup);
@@ -782,6 +787,7 @@ namespace Monopoly.View
             }
             
             Grid GridMain = new Grid();
+            GridMain.Background = Brushes.Transparent;
             GridMain.Tag = tag;
             GridMain.Name = "Cell" + trainStation.Id;
             GridMain.MouseEnter += Cells_MouseEnter;
@@ -1045,6 +1051,7 @@ namespace Monopoly.View
             }
 
             Grid GridMain = new Grid();
+            GridMain.Background = Brushes.Transparent;
             GridMain.Tag = tag;
             GridMain.Name = "Cell" + publicService.Id;
             GridMain.MouseEnter += Cells_MouseEnter;
@@ -1312,6 +1319,7 @@ namespace Monopoly.View
             }
 
             Grid GridMain = new Grid();
+            GridMain.Background = Brushes.Transparent;
             GridMain.Tag = tag;
             GridMain.Name = "Cell" + tax.Id;
             GridMain.MouseEnter += Cells_MouseEnter;
@@ -1559,6 +1567,7 @@ namespace Monopoly.View
             }
 
             Grid GridMain = new Grid();
+            GridMain.Background = Brushes.Transparent;
             GridMain.Tag = tag;
             GridMain.Name = "Cell" + drawCard.Id;
             GridMain.MouseEnter += Cells_MouseEnter;
