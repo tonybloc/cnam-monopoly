@@ -5,18 +5,15 @@ using Monopoly.Service;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Windows.Threading;
 
 namespace Monopoly.View
 {
@@ -27,7 +24,8 @@ namespace Monopoly.View
     {
 
         #region Variables
-        public List<Player> players;
+        private GameManager gameManager = GameManager.Instance;
+        
         private enum CellOrientation : int { BOTTUM=0, LEFT=1, TOP=2, RIGHT=3 };
        
         private const int ORIENTATION_TOP = 1;
@@ -37,14 +35,18 @@ namespace Monopoly.View
 
         private const int GRIDTYPE_ROW = 1;
         private const int GRIDTYPE_COLUMN = 2;
+
+        private const int sizeofElipse = 20;
+        private const string START_POSITION = "playerPosition0";
         #endregion
 
-        //TEST
         public PageBoard()
         {
             InitializeComponent();
+
+            gameManager.StartGame();
             InitialiseBoard();
-            ShowCard();
+            GeneratePlayer();
         }
 
         #region Creation du Plateau
@@ -117,8 +119,9 @@ namespace Monopoly.View
                                     gridLayout.RowDefinitions.Add(new RowDefinition { Height = new GridLength(20) });
                                     gridLayout.RowDefinitions.Add(new RowDefinition { Height = new GridLength(1, GridUnitType.Star) });
                                     gridLayout.RowDefinitions.Add(new RowDefinition { Height = new GridLength(20) });
-
                                     gridLayout.Name = "Cell" + ((StartPoint)c).Id;
+                                    NameScope.GetNameScope(this).RegisterName("Cell" + ((StartPoint)c).Id, gridLayout);
+
                                     gridLayout.MouseEnter += Cells_MouseEnter;
                                     gridLayout.MouseLeave += Cells_MouseLeave;
 
@@ -134,21 +137,17 @@ namespace Monopoly.View
                                     GridPlayerPosition.ColumnDefinitions.Add(new ColumnDefinition());
                                     GridPlayerPosition.ColumnDefinitions.Add(new ColumnDefinition());
                                     GridPlayerPosition.ColumnDefinitions.Add(new ColumnDefinition());
-                                    GridPlayerPosition.Tag = "playerPosition";
+                                    NameScope.GetNameScope(this).RegisterName("playerPosition" + ((StartPoint)c).Id, GridPlayerPosition);
                                     Grid.SetRow(GridPlayerPosition, 1);
                                     Grid.SetColumn(GridPlayerPosition, 1);
 
+                                    GeneratePlayerElipse(GridPlayerPosition);
 
-                                    GridPlayerPosition.Children.Add(CreateElipse("#FF0000", 0, 0));
-                                    GridPlayerPosition.Children.Add(CreateElipse("#00FF00", 0, 1));
-                                    GridPlayerPosition.Children.Add(CreateElipse("#0000FF", 0, 2));
-                                    GridPlayerPosition.Children.Add(CreateElipse("#FF0000", 1, 0));
-                                    GridPlayerPosition.Children.Add(CreateElipse("#00FF00", 1, 1));
-                                    GridPlayerPosition.Children.Add(CreateElipse("#0000FF", 1, 2));
-                                    GridPlayerPosition.Children.Add(CreateElipse("#FF0000", 2, 0));
-                                    GridPlayerPosition.Children.Add(CreateElipse("#00FF00", 2, 1));
-                                    GridPlayerPosition.Children.Add(CreateElipse("#0000FF", 2, 2));
-
+                                    foreach(Player p in gameManager.playerHandler.ListOfPlayers)
+                                    {
+                                        
+                                        GridPlayerPosition.Children.Add(CreateElipse(p.Pawn.ColorValue, p.Pawn.X, p.Pawn.Y));
+                                    }
 
                                     gridLayout.Children.Add(imgStart);
                                     gridLayout.Children.Add(GridPlayerPosition);
@@ -166,6 +165,7 @@ namespace Monopoly.View
                                     gridLayout.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
                                     gridLayout.RowDefinitions.Add(new RowDefinition { Height = new GridLength(1, GridUnitType.Star) });
                                     gridLayout.RowDefinitions.Add(new RowDefinition { Height = new GridLength(30) });
+                                    NameScope.GetNameScope(this).RegisterName("Cell" + ((Jail)c).Id, gridLayout);
                                     gridLayout.Name = "Cell" + ((Jail)c).Id;
                                     gridLayout.MouseEnter += Cells_MouseEnter;
                                     gridLayout.MouseLeave += Cells_MouseLeave;
@@ -190,7 +190,10 @@ namespace Monopoly.View
                                     GridPlayerPositionJail.ColumnDefinitions.Add(new ColumnDefinition());
                                     GridPlayerPositionJail.ColumnDefinitions.Add(new ColumnDefinition());
                                     GridPlayerPositionJail.ColumnDefinitions.Add(new ColumnDefinition());
-                                    GridPlayerPositionJail.Tag = "JailPosition";
+                                    NameScope.GetNameScope(this).RegisterName("playerPosition" + ((Jail)c).Id, GridPlayerPositionJail);
+
+                                    GeneratePlayerElipse(GridPlayerPositionJail);
+
                                     GridPlayerPositionJail.VerticalAlignment = VerticalAlignment.Center;
                                     GridPlayerPositionJail.HorizontalAlignment = HorizontalAlignment.Center;
 
@@ -202,7 +205,7 @@ namespace Monopoly.View
                                     GridPlayerPositionVisiteLeft.RowDefinitions.Add(new RowDefinition());
                                     GridPlayerPositionVisiteLeft.RowDefinitions.Add(new RowDefinition());
                                     GridPlayerPositionVisiteLeft.RowDefinitions.Add(new RowDefinition());
-                                    GridPlayerPositionVisiteLeft.Tag = "VisitePositionLeft";
+                                    NameScope.GetNameScope(this).RegisterName("VisitePositionLeft" + ((Jail)c).Id, GridPlayerPositionVisiteLeft);
                                     Grid.SetRow(GridPlayerPositionVisiteLeft, 0);
                                     Grid.SetColumn(GridPlayerPositionVisiteLeft, 0);
 
@@ -211,29 +214,9 @@ namespace Monopoly.View
                                     GridPlayerPositionVisiteButtom.ColumnDefinitions.Add(new ColumnDefinition());
                                     GridPlayerPositionVisiteButtom.ColumnDefinitions.Add(new ColumnDefinition());
                                     GridPlayerPositionVisiteButtom.ColumnDefinitions.Add(new ColumnDefinition());
-                                    GridPlayerPositionVisiteButtom.Tag = "VisitePositionLeft";
+                                    NameScope.GetNameScope(this).RegisterName("VisitePositionButtom" + ((Jail)c).Id, GridPlayerPositionVisiteButtom);
                                     Grid.SetRow(GridPlayerPositionVisiteButtom, 1);
-                                    Grid.SetColumn(GridPlayerPositionVisiteButtom, 1);
-
-
-                                    GridPlayerPositionJail.Children.Add(CreateElipse("#FF0000", 0, 0));
-                                    GridPlayerPositionJail.Children.Add(CreateElipse("#00FF00", 0, 1));
-                                    GridPlayerPositionJail.Children.Add(CreateElipse("#0000FF", 0, 2));
-                                    GridPlayerPositionJail.Children.Add(CreateElipse("#FF0000", 1, 0));
-                                    GridPlayerPositionJail.Children.Add(CreateElipse("#00FF00", 1, 1));
-                                    GridPlayerPositionJail.Children.Add(CreateElipse("#0000FF", 1, 2));
-                                    GridPlayerPositionJail.Children.Add(CreateElipse("#FF0000", 2, 0));
-                                    GridPlayerPositionJail.Children.Add(CreateElipse("#00FF00", 2, 1));
-                                    GridPlayerPositionJail.Children.Add(CreateElipse("#0000FF", 2, 2));
-
-                                    GridPlayerPositionVisiteButtom.Children.Add(CreateElipse("#FF0000", 0, 0));
-                                    GridPlayerPositionVisiteButtom.Children.Add(CreateElipse("#00FF00", 0, 1));
-                                    GridPlayerPositionVisiteButtom.Children.Add(CreateElipse("#0000FF", 0, 2));
-                                    GridPlayerPositionVisiteButtom.Children.Add(CreateElipse("#FF0000", 0, 3));
-                                    GridPlayerPositionVisiteLeft.Children.Add(CreateElipse("#00FF00", 0, 0));
-                                    GridPlayerPositionVisiteLeft.Children.Add(CreateElipse("#0000FF", 1, 0));
-                                    GridPlayerPositionVisiteLeft.Children.Add(CreateElipse("#FF0000", 2, 0));
-                                    GridPlayerPositionVisiteLeft.Children.Add(CreateElipse("#00FF00", 3, 0));
+                                    Grid.SetColumn(GridPlayerPositionVisiteButtom, 1);                                   
 
                                     gridLayout.Children.Add(imgJail);
                                     gridLayout.Children.Add(GridPlayerPositionJail);
@@ -254,7 +237,7 @@ namespace Monopoly.View
                                     gridLayout.RowDefinitions.Add(new RowDefinition { Height = new GridLength(20) });
                                     gridLayout.RowDefinitions.Add(new RowDefinition { Height = new GridLength(1, GridUnitType.Star) });
                                     gridLayout.RowDefinitions.Add(new RowDefinition { Height = new GridLength(20) });
-
+                                    NameScope.GetNameScope(this).RegisterName("Cell" + ((Parking)c).Id, gridLayout);
                                     gridLayout.Name = "Cell" + ((Parking)c).Id;
                                     gridLayout.MouseEnter += Cells_MouseEnter;
                                     gridLayout.MouseLeave += Cells_MouseLeave;
@@ -275,19 +258,11 @@ namespace Monopoly.View
                                     GridPlayerPosition.ColumnDefinitions.Add(new ColumnDefinition());
                                     GridPlayerPosition.ColumnDefinitions.Add(new ColumnDefinition());
                                     GridPlayerPosition.ColumnDefinitions.Add(new ColumnDefinition());
-                                    GridPlayerPosition.Tag = "playerPosition";
-                                    Grid.SetRow(GridPlayerPosition, 1);
-                                    Grid.SetColumn(GridPlayerPosition, 1);
+                                    NameScope.GetNameScope(this).RegisterName("playerPosition" + ((Parking)c).Id, GridPlayerPosition);
+                                    GeneratePlayerElipse(GridPlayerPosition);
 
-                                    GridPlayerPosition.Children.Add(CreateElipse("#FF0000", 0, 0));
-                                    GridPlayerPosition.Children.Add(CreateElipse("#00FF00", 0, 1));
-                                    GridPlayerPosition.Children.Add(CreateElipse("#0000FF", 0, 2));
-                                    GridPlayerPosition.Children.Add(CreateElipse("#FF0000", 1, 0));
-                                    GridPlayerPosition.Children.Add(CreateElipse("#00FF00", 1, 1));
-                                    GridPlayerPosition.Children.Add(CreateElipse("#0000FF", 1, 2));
-                                    GridPlayerPosition.Children.Add(CreateElipse("#FF0000", 2, 0));
-                                    GridPlayerPosition.Children.Add(CreateElipse("#00FF00", 2, 1));
-                                    GridPlayerPosition.Children.Add(CreateElipse("#0000FF", 2, 2));
+                                    Grid.SetRow(GridPlayerPosition, 1);
+                                    Grid.SetColumn(GridPlayerPosition, 1);                                    
 
                                     gridLayout.Children.Add(imgParking);
                                     gridLayout.Children.Add(GridPlayerPosition);
@@ -307,6 +282,8 @@ namespace Monopoly.View
                                     gridLayout.RowDefinitions.Add(new RowDefinition { Height = new GridLength(1, GridUnitType.Star) });
                                     gridLayout.RowDefinitions.Add(new RowDefinition { Height = new GridLength(20) });
                                     gridLayout.Name = "Cell" + ((GoToJail)c).Id;
+                                    NameScope.GetNameScope(this).RegisterName("Cell" + ((GoToJail)c).Id, gridLayout);
+
                                     gridLayout.MouseEnter += Cells_MouseEnter;
                                     gridLayout.MouseLeave += Cells_MouseLeave;
 
@@ -327,21 +304,12 @@ namespace Monopoly.View
                                     GridPlayerPosition.ColumnDefinitions.Add(new ColumnDefinition());
                                     GridPlayerPosition.ColumnDefinitions.Add(new ColumnDefinition());
                                     GridPlayerPosition.ColumnDefinitions.Add(new ColumnDefinition());
-                                    GridPlayerPosition.Tag = "playerPosition";
+                                    NameScope.GetNameScope(this).RegisterName("playerPosition" + ((GoToJail)c).Id, GridPlayerPosition);
                                     Grid.SetRow(GridPlayerPosition, 1);
                                     Grid.SetColumn(GridPlayerPosition, 1);
 
-
-                                    GridPlayerPosition.Children.Add(CreateElipse("#FF0000", 0, 0));
-                                    GridPlayerPosition.Children.Add(CreateElipse("#00FF00", 0, 1));
-                                    GridPlayerPosition.Children.Add(CreateElipse("#0000FF", 0, 2));
-                                    GridPlayerPosition.Children.Add(CreateElipse("#FF0000", 1, 0));
-                                    GridPlayerPosition.Children.Add(CreateElipse("#00FF00", 1, 1));
-                                    GridPlayerPosition.Children.Add(CreateElipse("#0000FF", 1, 2));
-                                    GridPlayerPosition.Children.Add(CreateElipse("#FF0000", 2, 0));
-                                    GridPlayerPosition.Children.Add(CreateElipse("#00FF00", 2, 1));
-                                    GridPlayerPosition.Children.Add(CreateElipse("#0000FF", 2, 2));
-
+                                    GeneratePlayerElipse(GridPlayerPosition);
+                                    
                                     gridLayout.Children.Add(imgPolice);
                                     gridLayout.Children.Add(GridPlayerPosition);
 
@@ -354,8 +322,7 @@ namespace Monopoly.View
                     }
 
                     switch (index)
-                    {
-                        
+                    {                        
                         case 1:
                             if (c.GetType() == typeof(Land))
                             {
@@ -499,7 +466,7 @@ namespace Monopoly.View
             border.BorderThickness = new Thickness(1);
             switch (orientation)
             {
-                case CellOrientation.BOTTUM:
+                case CellOrientation.BOTTUM:                    
                     Grid.SetColumn(border, position);
                     break;
                 case CellOrientation.LEFT:
@@ -519,8 +486,10 @@ namespace Monopoly.View
 
             Grid GridMain = new Grid();
             GridMain.Background = Brushes.Transparent;
-            GridMain.Name = "Cell" + land.Id;
             GridMain.Tag = tag;
+            GridMain.Name = "Cell" + land.Id;
+            NameScope.GetNameScope(this).RegisterName("Cell" + land.Id, GridMain);
+
             GridMain.MouseEnter += Cells_MouseEnter;
             GridMain.MouseLeave += Cells_MouseLeave;
             switch (orientation)
@@ -698,7 +667,7 @@ namespace Monopoly.View
             GridPlayerPosition.ColumnDefinitions.Add(new ColumnDefinition());
             GridPlayerPosition.ColumnDefinitions.Add(new ColumnDefinition());
             GridPlayerPosition.ColumnDefinitions.Add(new ColumnDefinition());
-            GridPlayerPosition.Tag = "playerPosition";
+            NameScope.GetNameScope(this).RegisterName("playerPosition" + land.Id, GridPlayerPosition);
             switch (orientation)
             {
                 case CellOrientation.BOTTUM:
@@ -716,18 +685,7 @@ namespace Monopoly.View
                 default:
                     break;
             }
-            
-            
-            GridPlayerPosition.Children.Add(CreateElipse("#FF0000", 0, 0));
-            GridPlayerPosition.Children.Add(CreateElipse("#00FF00", 0, 1));
-            GridPlayerPosition.Children.Add(CreateElipse("#0000FF", 0, 2));
-            GridPlayerPosition.Children.Add(CreateElipse("#FF0000", 1, 0));
-            GridPlayerPosition.Children.Add(CreateElipse("#00FF00", 1, 1));
-            GridPlayerPosition.Children.Add(CreateElipse("#0000FF", 1, 2));
-            GridPlayerPosition.Children.Add(CreateElipse("#FF0000", 2, 0));
-            GridPlayerPosition.Children.Add(CreateElipse("#00FF00", 2, 1));
-            GridPlayerPosition.Children.Add(CreateElipse("#0000FF", 2, 2));
-            
+            GeneratePlayerElipse(GridPlayerPosition);
 
             GridContent.Children.Add(tbName);
             GridMain.Children.Add(tbColorGroup);
@@ -790,6 +748,9 @@ namespace Monopoly.View
             GridMain.Background = Brushes.Transparent;
             GridMain.Tag = tag;
             GridMain.Name = "Cell" + trainStation.Id;
+            NameScope.GetNameScope(this).RegisterName("Cell" + trainStation.Id, GridMain);
+
+            //border.Name = "Cell" + trainStation.Id;
             GridMain.MouseEnter += Cells_MouseEnter;
             GridMain.MouseLeave += Cells_MouseLeave;
             switch (orientation)
@@ -975,7 +936,7 @@ namespace Monopoly.View
             GridPlayerPosition.ColumnDefinitions.Add(new ColumnDefinition());
             GridPlayerPosition.ColumnDefinitions.Add(new ColumnDefinition());
             GridPlayerPosition.ColumnDefinitions.Add(new ColumnDefinition());
-            GridPlayerPosition.Tag = "playerPosition";
+            NameScope.GetNameScope(this).RegisterName("playerPosition" + trainStation.Id, GridPlayerPosition);
             switch (orientation)
             {
                 case CellOrientation.BOTTUM:
@@ -993,6 +954,7 @@ namespace Monopoly.View
                 default:
                     break;
             }
+            GeneratePlayerElipse(GridPlayerPosition);
 
             GridContent.Children.Add(tbName);
             GridContent.Children.Add(iconTrainStation);
@@ -1053,6 +1015,8 @@ namespace Monopoly.View
             Grid GridMain = new Grid();
             GridMain.Background = Brushes.Transparent;
             GridMain.Tag = tag;
+
+            NameScope.GetNameScope(this).RegisterName("Cell" + publicService.Id, GridMain);
             GridMain.Name = "Cell" + publicService.Id;
             GridMain.MouseEnter += Cells_MouseEnter;
             GridMain.MouseLeave += Cells_MouseLeave;
@@ -1243,7 +1207,7 @@ namespace Monopoly.View
             GridPlayerPosition.ColumnDefinitions.Add(new ColumnDefinition());
             GridPlayerPosition.ColumnDefinitions.Add(new ColumnDefinition());
             GridPlayerPosition.ColumnDefinitions.Add(new ColumnDefinition());
-            GridPlayerPosition.Tag = "playerPosition";
+            NameScope.GetNameScope(this).RegisterName("playerPosition" + publicService.Id, GridPlayerPosition);
             switch (orientation)
             {
                 case CellOrientation.BOTTUM:
@@ -1261,6 +1225,7 @@ namespace Monopoly.View
                 default:
                     break;
             }
+            GeneratePlayerElipse(GridPlayerPosition);
 
             GridContent.Children.Add(tbName);
             GridContent.Children.Add(iconPublicService);
@@ -1322,6 +1287,8 @@ namespace Monopoly.View
             GridMain.Background = Brushes.Transparent;
             GridMain.Tag = tag;
             GridMain.Name = "Cell" + tax.Id;
+            NameScope.GetNameScope(this).RegisterName("Cell" + tax.Id, GridMain);
+
             GridMain.MouseEnter += Cells_MouseEnter;
             GridMain.MouseLeave += Cells_MouseLeave;
             switch (orientation)
@@ -1490,7 +1457,7 @@ namespace Monopoly.View
             GridPlayerPosition.ColumnDefinitions.Add(new ColumnDefinition());
             GridPlayerPosition.ColumnDefinitions.Add(new ColumnDefinition());
             GridPlayerPosition.ColumnDefinitions.Add(new ColumnDefinition());
-            GridPlayerPosition.Tag = "playerPosition";
+            NameScope.GetNameScope(this).RegisterName("playerPosition" + tax.Id, GridPlayerPosition);
             switch (orientation)
             {
                 case CellOrientation.BOTTUM:
@@ -1508,7 +1475,7 @@ namespace Monopoly.View
                 default:
                     break;
             }
-
+            GeneratePlayerElipse(GridPlayerPosition);
 
             GridContent.Children.Add(tbName);
             GridContent.Children.Add(iconTax);
@@ -1570,6 +1537,8 @@ namespace Monopoly.View
             GridMain.Background = Brushes.Transparent;
             GridMain.Tag = tag;
             GridMain.Name = "Cell" + drawCard.Id;
+            NameScope.GetNameScope(this).RegisterName("Cell" + drawCard.Id, GridMain);
+
             GridMain.MouseEnter += Cells_MouseEnter;
             GridMain.MouseLeave += Cells_MouseLeave;
             switch (orientation)
@@ -1703,7 +1672,7 @@ namespace Monopoly.View
             GridPlayerPosition.ColumnDefinitions.Add(new ColumnDefinition());
             GridPlayerPosition.ColumnDefinitions.Add(new ColumnDefinition());
             GridPlayerPosition.ColumnDefinitions.Add(new ColumnDefinition());
-            GridPlayerPosition.Tag = "playerPosition";
+            NameScope.GetNameScope(this).RegisterName("playerPosition" + drawCard.Id, GridPlayerPosition);
             switch (orientation)
             {
                 case CellOrientation.BOTTUM:
@@ -1721,7 +1690,9 @@ namespace Monopoly.View
                 default:
                     break;
             }
-            
+
+            GeneratePlayerElipse(GridPlayerPosition);
+
             GridContent.Children.Add(tbName);
             GridContent.Children.Add(iconDrawCard);
             GridMain.Children.Add(GridContent);
@@ -1757,31 +1728,96 @@ namespace Monopoly.View
         private Ellipse CreateElipse(string color, int rowPosition, int colPosition)
         {
             Ellipse ellipse = new Ellipse();
-            ellipse.Height = 20;
-            ellipse.Width = 20;            
+            ellipse.Height = sizeofElipse;
+            ellipse.Width = sizeofElipse;            
             SolidColorBrush playerColor = new SolidColorBrush();
             playerColor.Color = (Color)ColorConverter.ConvertFromString(color);
             ellipse.Fill = playerColor;
+            ellipse.Visibility = Visibility.Hidden;
+
             Grid.SetRow(ellipse, rowPosition);
             Grid.SetColumn(ellipse, colPosition);
             return ellipse;
         }
 
-        #endregion
-
-        #region Show cards
-        private void ShowCard()
-        {
-            //TrainStationIcon.Source = Base64Converter.base64ToImageSource(((TrainStation)c).Icon);
-
-
+        /// <summary>
+        /// Initialise the player position's in board
+        /// </summary>
+        /// <param name="c">cellule spécifique</param>
+        private void GeneratePlayerElipse(Grid gridPlayerPosition)
+        {            
+            foreach (Player p in gameManager.playerHandler.ListOfPlayers)
+            {
+                gridPlayerPosition.Children.Add(CreateElipse(p.Pawn.ColorValue, p.Pawn.X, p.Pawn.Y));
+            }
         }
         #endregion
 
+        
         #region Dices
+        /// <summary>
+        /// Click rools dices
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void onClickDices(object sender, RoutedEventArgs e)
         {
-            DicesContent.Content = new DicesInterface();
+            DicesInterface dicesInterface = new DicesInterface();
+            DicesContent.Content = dicesInterface;
+            //Thread thread = new Thread(() => Move(gameManager.playerHandler.GetCurrentPlayer(), gameManager.FirstDice, gameManager.SecondeDice));
+            //thread.Start();
+            Move(gameManager.playerHandler.GetCurrentPlayer(), gameManager.FirstDice, gameManager.SecondeDice);
+            
+        }
+        #endregion
+
+        #region Players
+        private void GeneratePlayer()
+        {        
+            
+            int index = 0;
+            foreach(Player p in gameManager.playerHandler.ListOfPlayers)
+            {
+                index++;
+                StackPanel stackPanel = new StackPanel();
+                stackPanel.Orientation = Orientation.Horizontal;
+                stackPanel.Margin = new Thickness(5);
+
+                BrushConverter bc = new BrushConverter();
+                Ellipse playerEllipse = new Ellipse();
+                playerEllipse.Margin = new Thickness(0, 0, 10, 0);
+                playerEllipse.Fill = (Brush)bc.ConvertFrom(p.Pawn.ColorValue);
+                playerEllipse.Width = sizeofElipse;
+                playerEllipse.Height = sizeofElipse;
+
+                TextBlock tbPlayerNumber = new TextBlock();
+                tbPlayerNumber.VerticalAlignment = VerticalAlignment.Center;
+                tbPlayerNumber.Text = string.Format("Player {0} : {1}  = ", index, p.Name);
+
+                TextBlock tbPlayerAmount = new TextBlock();
+                tbPlayerAmount.VerticalAlignment = VerticalAlignment.Center;
+                tbPlayerAmount.Text = string.Format("CACHING € or $");
+            
+                stackPanel.Children.Add(playerEllipse);
+                stackPanel.Children.Add(tbPlayerNumber);
+                stackPanel.Children.Add(tbPlayerAmount);
+                this.StackPanel_ListOfPlayer.Children.Add(stackPanel);
+
+                object cell = MonopolyBoard.FindName(START_POSITION);
+                if (cell is Grid)
+                {
+                    Grid start = (Grid)cell; 
+                    start.Background = Brushes.Red;
+                    int i = 0;
+                    int j = -1;
+                    foreach (UIElement child in start.Children)
+                    {
+                        child.Visibility = Visibility.Visible;
+                    }
+                }
+                
+            }
+            
         }
         #endregion
 
@@ -1845,5 +1881,57 @@ namespace Monopoly.View
                 Land.Visibility = Visibility.Hidden;            
         }
         #endregion
+
+        #region Methods
+        void Move(Player p, Dice first, Dice second)
+        {            
+            int currentPosition = p.Position;
+            int nextPosition = gameManager.NextPosition(p, first, second);
+            
+            //lbDiceValue.Content = string.Format("{0}", first.Value + second.Value);
+            //lbPawnPosition.Content = string.Format("{0}", currentPosition);
+            //lbNextPosition.Content = string.Format("{0}", nextPosition);
+
+
+            Grid currentPlayerPosition = (Grid)this.FindName("playerPosition" + currentPosition);
+            Ellipse currentEllipse = (Ellipse)GetChildren(currentPlayerPosition, p.Pawn.X, p.Pawn.Y);
+
+            Grid nextPlayerPosition = (Grid)this.FindName("playerPosition" + nextPosition);
+            Ellipse nextEllipse = (Ellipse)GetChildren(nextPlayerPosition, p.Pawn.X, p.Pawn.Y);
+
+            int index = 0;
+            while (currentPosition != nextPosition)
+            {
+                index++;
+                currentEllipse.Visibility = Visibility.Hidden;
+
+                currentPosition = (currentPosition + 1) % gameManager.boardHandler.Board.ListCell.Count;
+                currentPlayerPosition = (Grid)this.FindName("playerPosition" + currentPosition);
+                currentEllipse = (Ellipse)GetChildren(currentPlayerPosition, p.Pawn.X, p.Pawn.Y);
+                currentEllipse.Visibility = Visibility.Visible;
+                gameManager.MovePlayerTo(p, currentPosition);
+                if (index > 20)
+                {
+                    break;
+                }
+            }
+            
+
+
+        }
+
+        private static UIElement GetChildren(Grid grid, int row, int column)
+        {
+            foreach(UIElement child in grid.Children)
+            {
+                if( (Grid.GetRow(child) == row) && (Grid.GetColumn(child) == column) )
+                {
+                    return child;
+                }
+            }
+            return null;
+        }
+        #endregion
+
     }
 }

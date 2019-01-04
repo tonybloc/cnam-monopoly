@@ -19,12 +19,12 @@
         <!--Window-->
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="Auto"/>
-            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
 
         <Border Grid.Column="0" BorderBrush="Black" BorderThickness="2" Margin="5" Width="{DynamicResource {x:Static SystemParameters.PrimaryScreenHeightKey}}" >
             <!-- Board (left side)-->
-            <Grid ShowGridLines="True" Name="Board" Background="Beige" >
+            <Grid ShowGridLines="True" Name="MonopolyBoard" Background="Beige" >
 
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="2*"/>
@@ -45,7 +45,6 @@
                 <Grid Grid.Column="1" Grid.Row="0" x:Name="BoardPanelTop"></Grid>
                 <Grid Grid.Column="2" Grid.Row="0" x:Name="BoardPanelGoToJail"></Grid>
                 <Grid Grid.Column="2" Grid.Row="1" x:Name="BoardPanelRight"></Grid>
-                <Grid Grid.Column="1" Grid.Row="1" x:Name="BoardPanelCenter"></Grid>
 
                 <!--Land description-->
                 <Grid Grid.Column="1" Grid.Row="1" x:Name="Land" Width="200" Height="300" Background="White" Visibility="Hidden">
@@ -93,7 +92,7 @@
                         <Label x:Name="lblMotelValue" Grid.Row="8" Grid.Column="1" HorizontalAlignment="Left"/>
                         <Label x:Name="lblMortgage" Grid.Row="9" HorizontalAlignment="Left" Content="Valeur hypothécaire :" VerticalAlignment="Top" Foreground="Black"/>
                         <Label x:Name="lblMortgageValue" Grid.Row="9" Grid.Column="1" HorizontalAlignment="Left"/>
-                    
+
                     </Grid>
 
                     <Border BorderThickness="2" BorderBrush="Black" />
@@ -108,31 +107,76 @@
                             <StackPanel Orientation="Vertical" Margin="0,50,0,0">
                                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
                                     <Label x:Name="lblPurchasePrice" Content="Valeur d'achat :" Foreground="Black"/>
-                                    <Label x:Name="lblPurchasePriceValue"></Label>                             
+                                    <Label x:Name="lblPurchasePriceValue"></Label>
                                 </StackPanel>
                                 <StackPanel Orientation="Horizontal"  HorizontalAlignment="Center">
                                     <Label x:Name="lblMortgagePrice" Content="Valeur hypothécaire :" Foreground="Black"/>
                                     <Label x:Name="lblMortgagePriceValue"></Label>
                                 </StackPanel>
                             </StackPanel>
-                            
+
                         </StackPanel>
                         <Border BorderThickness="2" BorderBrush="Black" />
                     </Grid>
                     <Border BorderThickness="2" BorderBrush="Black" />
                 </Grid>
+                <Label x:Name="lbDiceValue" Content="Label" Grid.Column="1" HorizontalAlignment="Left" Margin="562,610,0,0" Grid.Row="1" VerticalAlignment="Top" Width="124"/>
+                <Label x:Name="lbPawnPosition" Content="Label" Grid.Column="1" HorizontalAlignment="Left" Margin="562,639,0,0" Grid.Row="1" VerticalAlignment="Top" Width="124"/>
+                <Label x:Name="lbNextPosition" Content="Label" Grid.Column="1" HorizontalAlignment="Left" Margin="562,668,0,0" Grid.Row="1" VerticalAlignment="Top" Width="124"/>
             </Grid>
         </Border>
-        <Grid Grid.Column="1" Width="Auto">
+        <Grid Grid.Column="1" Width="Auto" Margin="7">
+            <!-- Board (right side)-->
             <Grid.RowDefinitions>
-                <RowDefinition/>
-                <RowDefinition/>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
-            <StackPanel Grid.Column="1" Grid.Row="0" Orientation="Horizontal" >
-                <Button x:Name="btnDice" ToolTip="Lancer les dés" Click="onClickDices" HorizontalAlignment="Center">
-                    <Image Source="../Resources/Pictures/dices.png"/>
+
+            <Grid Grid.Row="0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <!-- Monopoly Man Icons -->
+                <Image Grid.Column="0" x:Name="image" Height="290" Margin="10"  Source="/Monopoly;component/Resources/Pictures/MonopolyManIcon.png"></Image>
+
+                <!-- Timer and Number of turn -->
+                <Border Grid.Column="1" Padding="20" Margin="20" Background="White">
+                    <StackPanel Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center">
+                        <StackPanel  Orientation="Horizontal" HorizontalAlignment="Center">
+                            <TextBlock FontSize="30" >Timer :</TextBlock>
+                            <TextBlock FontSize="30">03:02</TextBlock>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                            <TextBlock FontSize="30" >Turn :</TextBlock>
+                            <TextBlock FontSize="30">1</TextBlock>
+                        </StackPanel>
+                    </StackPanel>
+                </Border>
+
+                <!-- List of player-->
+                <Border  Grid.Column="2" Padding="20" Margin="20" Background="White">
+                    <StackPanel x:Name="StackPanel_ListOfPlayer" Orientation="Vertical" HorizontalAlignment="Center"></StackPanel>
+                </Border>
+
+            </Grid>
+            <!-- Actions -->
+            <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Center" >
+                <Button x:Name="btnDice" Margin="10" Width="100" Height="50" ToolTip="Lancer les dés" Click="onClickDices" HorizontalAlignment="Center">
+                    <Image Source="/Monopoly;component/Resources/Pictures/dices.png"/>
                 </Button>
+                <Button Margin="10" Width="100" Height="50"></Button>
+                <Button Margin="10" Width="100" Height="50"></Button>
+                <Button Margin="10" Width="100" Height="50"></Button>
+                <Button Margin="10" Width="100" Height="50"></Button>
+                <Button Margin="10" Width="100" Height="50"></Button>
             </StackPanel>
+
+            <!-- Notification -->
             <Frame Grid.Column="1" Grid.Row="1" x:Name="DicesContent" VerticalAlignment="Center" HorizontalAlignment="Center"/>
         </Grid>
 

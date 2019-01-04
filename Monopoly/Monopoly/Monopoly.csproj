@@ -221,8 +221,12 @@
     <Resource Include="Resources\Pictures\welcome2.gif" />
     <Resource Include="Resources\Pictures\wood.png" />
     <Resource Include="Resources\Pictures\Dices\RollingDice.gif" />
+    <Resource Include="Resources\Pictures\MonopolyManIcon.png" />
+    <Resource Include="Resources\Pictures\Monopoly.png" />
     <Content Include="Resources\Sounds\cha_ching.wav" />
-    <Resource Include="Resources\XML\XMLBoardCell.xml" />
+    <Resource Include="Resources\XML\XMLBoardCell.xml">
+      <SubType>Designer</SubType>
+    </Resource>
     <Resource Include="Resources\XML\XMLChanceCard.xml" />
     <Resource Include="Resources\XML\XMLCommunityCard.xml" />
   </ItemGroup>
