@@ -25,19 +25,12 @@ namespace Monopoly.View
 
         #region Variables
         private GameManager gameManager = GameManager.Instance;
-        
         private enum CellOrientation : int { BOTTUM=0, LEFT=1, TOP=2, RIGHT=3 };
-       
-        private const int ORIENTATION_TOP = 1;
-        private const int ORIENTATION_RIGHT = 2;
-        private const int ORIENTATION_BOTTOM = 3;
-        private const int ORIENTATION_LEFT = 4;
-
-        private const int GRIDTYPE_ROW = 1;
-        private const int GRIDTYPE_COLUMN = 2;
-
+        private enum GridType : int { GRIDTYPE_ROW=1, GRIDTYPE_COLUMN=2 };
         private const int sizeofElipse = 20;
         private const string START_POSITION = "playerPosition0";
+
+        //threads
         #endregion
 
         public PageBoard()
@@ -61,7 +54,7 @@ namespace Monopoly.View
         {
             switch (type)
             {
-                case GRIDTYPE_COLUMN:
+                case (int)GridType.GRIDTYPE_COLUMN:
                     int nbCol = 0;
                     while (nbCol < numOfDefinition)
                     {
@@ -70,7 +63,7 @@ namespace Monopoly.View
                         nbCol++;
                     }
                     break;
-                case GRIDTYPE_ROW:
+                case (int)GridType.GRIDTYPE_ROW:
                     int nbRow = 0;
                     while (nbRow < numOfDefinition)
                     {
@@ -93,10 +86,10 @@ namespace Monopoly.View
             if ((BoardCells.Count >= 8) && (BoardCells.Count % 4 == 0))
             {
                 int numberOfCellsToInsertInPanel = (int)((BoardCells.Count - 4) / 4);
-                InitialisePanel(BoardPanelTop, numberOfCellsToInsertInPanel, GRIDTYPE_COLUMN);
-                InitialisePanel(BoardPanelRight, numberOfCellsToInsertInPanel, GRIDTYPE_ROW);
-                InitialisePanel(BoardPanelLeft, numberOfCellsToInsertInPanel, GRIDTYPE_ROW);
-                InitialisePanel(BoardPanelBottom, numberOfCellsToInsertInPanel, GRIDTYPE_COLUMN);
+                InitialisePanel(BoardPanelTop, numberOfCellsToInsertInPanel, (int)GridType.GRIDTYPE_COLUMN);
+                InitialisePanel(BoardPanelRight, numberOfCellsToInsertInPanel, (int)GridType.GRIDTYPE_ROW);
+                InitialisePanel(BoardPanelLeft, numberOfCellsToInsertInPanel, (int)GridType.GRIDTYPE_ROW);
+                InitialisePanel(BoardPanelBottom, numberOfCellsToInsertInPanel, (int)GridType.GRIDTYPE_COLUMN);
 
                 int indexOfNumberOfCellInPanel = 0;
                 int globalIndex = 0;
@@ -143,11 +136,6 @@ namespace Monopoly.View
 
                                     GeneratePlayerElipse(GridPlayerPosition);
 
-                                    foreach(Player p in gameManager.playerHandler.ListOfPlayers)
-                                    {
-                                        
-                                        GridPlayerPosition.Children.Add(CreateElipse(p.Pawn.ColorValue, p.Pawn.X, p.Pawn.Y));
-                                    }
 
                                     gridLayout.Children.Add(imgStart);
                                     gridLayout.Children.Add(GridPlayerPosition);
@@ -1764,14 +1752,15 @@ namespace Monopoly.View
         {
             DicesInterface dicesInterface = new DicesInterface();
             DicesContent.Content = dicesInterface;
-            //Thread thread = new Thread(() => Move(gameManager.playerHandler.GetCurrentPlayer(), gameManager.FirstDice, gameManager.SecondeDice));
-            //thread.Start();
             Move(gameManager.playerHandler.GetCurrentPlayer(), gameManager.FirstDice, gameManager.SecondeDice);
             
         }
         #endregion
 
         #region Players
+        /// <summary>
+        /// Generate the liste of player in right of frame
+        /// </summary>
         private void GeneratePlayer()
         {        
             
@@ -1818,6 +1807,43 @@ namespace Monopoly.View
                 
             }
             
+        }
+        /// <summary>
+        /// Move the player to next cell
+        /// </summary>
+        /// <param name="p">player</param>
+        /// <param name="first">first dice</param>
+        /// <param name="second">second dice</param>
+        void Move(Player p, Dice first, Dice second)
+        {
+            int currentPosition = p.Position;
+            int nextPosition = gameManager.NextPosition(p, first, second);
+
+            Grid currentPlayerPosition = (Grid)this.FindName("playerPosition" + currentPosition);
+            Ellipse currentEllipse = (Ellipse)GetChildren(currentPlayerPosition, p.Pawn.X, p.Pawn.Y);
+
+            Grid nextPlayerPosition = (Grid)this.FindName("playerPosition" + nextPosition);
+            Ellipse nextEllipse = (Ellipse)GetChildren(nextPlayerPosition, p.Pawn.X, p.Pawn.Y);
+
+            int index = 0;
+            while (currentPosition != nextPosition)
+            {
+                index++;
+                currentEllipse.Visibility = Visibility.Hidden;
+
+                currentPosition = (currentPosition + 1) % gameManager.boardHandler.Board.ListCell.Count;
+                currentPlayerPosition = (Grid)this.FindName("playerPosition" + currentPosition);
+                currentEllipse = (Ellipse)GetChildren(currentPlayerPosition, p.Pawn.X, p.Pawn.Y);
+                currentEllipse.Visibility = Visibility.Visible;
+
+                gameManager.MovePlayerTo(p, currentPosition);
+                if (index > 20)
+                {
+                    break;
+                }
+            }
+
+            DoCellAction();
         }
         #endregion
 
@@ -1880,46 +1906,67 @@ namespace Monopoly.View
             else if (Land.Visibility == Visibility.Visible)            
                 Land.Visibility = Visibility.Hidden;            
         }
+
+        /// <summary>
+        /// Execute the action on cell
+        /// </summary>
+        private void DoCellAction()
+        {
+            Cell c = gameManager.boardHandler.Board.GetCell(gameManager.playerHandler.GetCurrentPlayer().Position);
+            if (c.GetType() == typeof(Land))
+            {
+                MessageBoxResult mb = MessageBox.Show("Vous etes sur une propriété !");
+                
+            }
+            else if (c.GetType() == typeof(PublicService))
+            {
+                MessageBoxResult mb = MessageBox.Show("Vous etes sur une propriété !");
+
+            }
+            else if (c.GetType() == typeof(TrainStation))
+            {
+                MessageBoxResult mb = MessageBox.Show("Vous etes sur une propriété !");
+
+            }
+            else if (c.GetType() == typeof(Tax))
+            {
+                MessageBoxResult mb = MessageBox.Show("Vous devez payer la tax !");
+            }
+            else if (c.GetType() == typeof(DrawCard))
+            {
+                MessageBoxResult mb = MessageBox.Show("Vous piochez une carte !");
+            }
+            else if (c.GetType() == typeof(StartPoint))
+            {
+                MessageBoxResult mb = MessageBox.Show("Vous etes sur la case départ !");
+            }
+            else if (c.GetType() == typeof(Jail))
+            {
+                MessageBoxResult mb = MessageBox.Show("Vous etes en visite !");
+            }
+            else if (c.GetType() == typeof(GoToJail))
+            {
+                MessageBoxResult mb = MessageBox.Show("Vous etes en prison !");
+            }
+            else if (c.GetType() == typeof(Parking))
+            {
+                MessageBoxResult mb = MessageBox.Show("Vous recevez toute la MONEY !");
+            }
+            else
+            {
+                MessageBoxResult mb = MessageBox.Show("Non definie !");
+            }
+        }
         #endregion
 
         #region Methods
-        void Move(Player p, Dice first, Dice second)
-        {            
-            int currentPosition = p.Position;
-            int nextPosition = gameManager.NextPosition(p, first, second);
-            
-            //lbDiceValue.Content = string.Format("{0}", first.Value + second.Value);
-            //lbPawnPosition.Content = string.Format("{0}", currentPosition);
-            //lbNextPosition.Content = string.Format("{0}", nextPosition);
-
-
-            Grid currentPlayerPosition = (Grid)this.FindName("playerPosition" + currentPosition);
-            Ellipse currentEllipse = (Ellipse)GetChildren(currentPlayerPosition, p.Pawn.X, p.Pawn.Y);
-
-            Grid nextPlayerPosition = (Grid)this.FindName("playerPosition" + nextPosition);
-            Ellipse nextEllipse = (Ellipse)GetChildren(nextPlayerPosition, p.Pawn.X, p.Pawn.Y);
-
-            int index = 0;
-            while (currentPosition != nextPosition)
-            {
-                index++;
-                currentEllipse.Visibility = Visibility.Hidden;
-
-                currentPosition = (currentPosition + 1) % gameManager.boardHandler.Board.ListCell.Count;
-                currentPlayerPosition = (Grid)this.FindName("playerPosition" + currentPosition);
-                currentEllipse = (Ellipse)GetChildren(currentPlayerPosition, p.Pawn.X, p.Pawn.Y);
-                currentEllipse.Visibility = Visibility.Visible;
-                gameManager.MovePlayerTo(p, currentPosition);
-                if (index > 20)
-                {
-                    break;
-                }
-            }
-            
-
-
-        }
-
+        /// <summary>
+        /// Get the children element of Gird at row and column position
+        /// </summary>
+        /// <param name="grid"></param>
+        /// <param name="row"></param>
+        /// <param name="column"></param>
+        /// <returns></returns>
         private static UIElement GetChildren(Grid grid, int row, int column)
         {
             foreach(UIElement child in grid.Children)

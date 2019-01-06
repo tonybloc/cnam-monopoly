@@ -25,7 +25,7 @@ namespace Monopoly.Models.Components
         /// </summary>
         public Pawn()
         {
-            this.ColorValue = "#000";
+            this.ColorValue = "#000000";
         }
 
         /// <summary>
