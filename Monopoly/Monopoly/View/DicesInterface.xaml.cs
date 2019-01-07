@@ -27,6 +27,9 @@ namespace Monopoly.View
     {
         #region Variables
         private static GameManager gameManager;
+
+        DispatcherTimer timer = new DispatcherTimer { Interval = TimeSpan.FromSeconds(2) };
+        DispatcherTimer secondTimer = new DispatcherTimer { Interval = TimeSpan.FromSeconds(2) };
         #endregion
 
         #region Constructor
@@ -50,18 +53,29 @@ namespace Monopoly.View
             image.UriSource = new Uri("/Monopoly;component/Resources/Pictures/Dices/RollingDice.gif", UriKind.Relative);
             image.EndInit();
             ImageBehavior.SetAnimatedSource(Gif, image);
+            gameManager.RoolDice(gameManager.FirstDice, gameManager.SecondeDice);
 
-            // Execute the gif during 2 seconds and then display the result
-            var timer = new DispatcherTimer { Interval = TimeSpan.FromSeconds(2) };
             timer.Start();
-            timer.Tick += (sender, args) =>
-            {
-                timer.Stop();
-                Result.Children.Remove(Gif);
-                gameManager.RoolDice(gameManager.FirstDice, gameManager.SecondeDice);
-                FirstDice.Source = new BitmapImage(new Uri("/Monopoly;component/Resources/Pictures/Dices/dice" + gameManager.FirstDice.Value + ".png", UriKind.Relative));
-                SecondDice.Source = new BitmapImage(new Uri("/Monopoly;component/Resources/Pictures/Dices/dice" + gameManager.SecondeDice.Value + ".png", UriKind.Relative));
-            };
+            timer.Tick += Timer_Tick;
+            
+        }
+
+        private void Timer_Tick(object sender, EventArgs e)
+        {
+            timer.Stop();
+            Result.Children.Remove(Gif);
+            //gameManager.RoolDice(gameManager.FirstDice, gameManager.SecondeDice);
+            FirstDice.Source = new BitmapImage(new Uri("/Monopoly;component/Resources/Pictures/Dices/dice" + gameManager.FirstDice.Value + ".png", UriKind.Relative));
+            SecondDice.Source = new BitmapImage(new Uri("/Monopoly;component/Resources/Pictures/Dices/dice" + gameManager.SecondeDice.Value + ".png", UriKind.Relative));
+            //secondTimer.Start();
+            //secondTimer.Tick += SecondTime_Tick;
+        }
+
+        private void SecondTime_Tick(object sender, EventArgs e)
+        {
+            secondTimer.Stop();
+            MessageBox.Show("Test");
+            
         }
     }
     #endregion

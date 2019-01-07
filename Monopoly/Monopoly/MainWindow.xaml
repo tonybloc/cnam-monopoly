@@ -21,7 +21,7 @@
     </Window.Background>
     <Grid HorizontalAlignment="Center"  VerticalAlignment="Center">
 	
-		<Frame x:Name="MainContent" Margin="0" NavigationUIVisibility="Hidden"/>
+		
         <Grid x:Name="MenuContent">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition/>
@@ -48,5 +48,6 @@
                 </Grid>
             </StackPanel>
         </Grid>
+        <Frame x:Name="MainContent" Margin="0" NavigationUIVisibility="Hidden"/>
     </Grid>
 </Window>

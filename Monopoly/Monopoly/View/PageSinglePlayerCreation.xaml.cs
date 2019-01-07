@@ -25,7 +25,7 @@ namespace Monopoly.View
         #region Variables
         private static ColorHandler colorHandler;
         private static GameManager gameManager;
-        private const string placeholder = "Your Pseudo";
+        private const string placeholder = "Your Pseudo...";
         public string ColorValue;
         #endregion
 

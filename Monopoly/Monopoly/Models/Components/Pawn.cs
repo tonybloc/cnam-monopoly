@@ -14,6 +14,9 @@ namespace Monopoly.Models.Components
         /// Couleur du pion
         /// </summary>
         public string ColorValue { get; set; }
+        public int X;
+        public int Y;
+        
         #endregion
 
         #region Constructeurs
@@ -22,7 +25,7 @@ namespace Monopoly.Models.Components
         /// </summary>
         public Pawn()
         {
-            this.ColorValue = "#000";
+            this.ColorValue = "#000000";
         }
 
         /// <summary>
