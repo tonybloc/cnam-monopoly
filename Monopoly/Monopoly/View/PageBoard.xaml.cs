@@ -1,4 +1,5 @@
-﻿using Monopoly.Handlers;
+﻿using MaterialDesignThemes.Wpf;
+using Monopoly.Handlers;
 using Monopoly.Models.Components;
 using Monopoly.Models.Components.Cells;
 using Monopoly.Service;
@@ -317,6 +318,32 @@ namespace Monopoly.View
                                 int position = (numberOfCellsToInsertInPanel - indexOfNumberOfCellInPanel - 1);
                                 GenerateLand(((Land)c), CellOrientation.BOTTUM, position, globalIndex);
                                 indexOfNumberOfCellInPanel++;
+
+                                /*StackPanel stackProperties = new StackPanel();
+                                PackIcon house = new PackIcon { Kind = PackIconKind.House };
+                                PackIcon motel = new PackIcon { Kind = PackIconKind.HouseModern };
+
+                                for (int i = 0; i < 4; i++)
+                                {
+                                     Label l = new Label();
+                                     l.Content = house;
+                                     stackProperties.Children.Add(l);
+
+                                    PackIcon house = new PackIcon { Kind = PackIconKind.House };
+
+                                    stackProperties.Children.Add(motel);
+                                }
+
+                                stackProperties.Children.Add(motel);
+                                Grid.SetRow(stackProperties, 1);
+
+                                MaterialDesignThemes.Wpf.Icon icon = 
+
+                                PackIcon house = new PackIcon { Kind = PackIconKind.House };                                
+                                PackIcon motel = new PackIcon { Kind = PackIconKind.HouseModern };
+                                gridProperties.Children.Add(house);
+                                gridProperties.Children.Add(motel);*/
+
                             }
                             else if (c.GetType() == typeof(TrainStation))
                             {
@@ -1733,10 +1760,24 @@ namespace Monopoly.View
         /// </summary>
         /// <param name="c">cellule spécifique</param>
         private void GeneratePlayerElipse(Grid gridPlayerPosition)
-        {            
+        {
             foreach (Player p in gameManager.playerHandler.ListOfPlayers)
             {
                 gridPlayerPosition.Children.Add(CreateElipse(p.Pawn.ColorValue, p.Pawn.X, p.Pawn.Y));
+            }
+        }
+        #endregion
+
+        #region Buy property
+        private void BuyProperty(Property p)
+        {
+            MessageBoxResult result = MessageBox.Show("Voulez vous acheter cette propriété ?", "Achat", MessageBoxButton.YesNo, MessageBoxImage.Question);
+
+            if (result == MessageBoxResult.Yes)
+            {
+                if (PlayerHandler.Instance.BuyProperty(gameManager.playerHandler.GetCurrentPlayer(), p))
+                    MessageBox.Show("Propriété achetée !");
+                    //tbPlayerColor
             }
         }
         #endregion
@@ -1847,6 +1888,13 @@ namespace Monopoly.View
         }
         #endregion
 
+        #region Next player
+        public void onClickNext(object sender, RoutedEventArgs e)
+        {
+            //PlayerHandler.Instance.GetCurrentPlayer
+        }
+        #endregion
+
         #region Events
         private void Cells_MouseEnter(object sender, MouseEventArgs e)
         {
@@ -1867,9 +1915,10 @@ namespace Monopoly.View
 
                 Card.Visibility = Visibility.Visible;
                 CardIcon.Source = Base64Converter.base64ToImageSource(((TrainStation)c).Icon);
-                lblCardTitle.Content = c.Title;
+                lblCardTitle.Text = c.Title;
                 lblPurchasePriceValue.Content = t.PurchasePrice + " €";
                 lblMortgagePriceValue.Content = t.MortgagePrice + " €";
+                BuyProperty(t);
             }
             else if (c is Land)
             {
@@ -1886,6 +1935,7 @@ namespace Monopoly.View
                 lblHouse4Value.Content = l.RantalList[4] + " €";
                 lblMotelValue.Content = l.RantalList[5] + " €";
                 lblMortgageValue.Content = l.MortgagePrice + " €";
+                BuyProperty(l);
             }
             else if (c is PublicService)
             {
@@ -1893,9 +1943,10 @@ namespace Monopoly.View
 
                 Card.Visibility = Visibility.Visible;
                 CardIcon.Source = Base64Converter.base64ToImageSource(((PublicService)c).Icon);
-                lblCardTitle.Content = p.Title;
+                lblCardTitle.Text = p.Title;
                 lblPurchasePriceValue.Content = p.PurchasePrice + " €";
                 lblMortgagePriceValue.Content = p.MortgagePrice + " €";
+                BuyProperty(p);
             }
         }
 
@@ -1903,8 +1954,8 @@ namespace Monopoly.View
         {
             if (Card.Visibility == Visibility.Visible)
                 Card.Visibility = Visibility.Hidden;
-            else if (Land.Visibility == Visibility.Visible)            
-                Land.Visibility = Visibility.Hidden;            
+            else if (Land.Visibility == Visibility.Visible)
+                Land.Visibility = Visibility.Hidden;
         }
 
         /// <summary>

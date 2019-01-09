@@ -46,5 +46,17 @@ namespace Monopoly.Models.Components.Cells
             this.RantalList = new List<int>();
         }
         #endregion
+
+        #region Public methods
+        public void AddBuilding()
+        {
+            if (NbHouse < 4)
+                this.NbHouse++;
+            else if (NbHouse == 4 && NbHouse == 0)
+                this.NbHotel++;
+        }
+        #endregion
+
+
     }
 }

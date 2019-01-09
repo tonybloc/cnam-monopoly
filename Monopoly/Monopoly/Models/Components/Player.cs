@@ -12,15 +12,18 @@ namespace Monopoly.Models.Components
         #region Constantes
         public const int WAITING = 0;
         public const int PLAYING = 1;
+        public const int BUILD_HOTEL = 1;
+        public const int BUILD_HOUSE = 2;
         #endregion
 
         #region Variables
         public int Id { get; set; }
         public string Name { get; set; }
+        public int Status { get; set; }
         public Pawn Pawn { get; set; }
         public int Position { get; set; }
-        public int Status { get; set; }
-        #endregion
+        public List<Property> ListOfProperties { get; private set; }
+        #endregion  
 
         #region Constructeurs
         /// <summary>
@@ -33,6 +36,7 @@ namespace Monopoly.Models.Components
             this.Pawn = new Pawn();
             this.Position = 0;
             this.Status = WAITING;
+            this.ListOfProperties = new List<Property>();
         }
 
         /// <summary>
@@ -48,6 +52,7 @@ namespace Monopoly.Models.Components
             this.Pawn = pawn;
             this.Position = 0;
             this.Status = WAITING;
+            this.ListOfProperties = new List<Property>();
         }
 
         /// <summary>
@@ -65,7 +70,27 @@ namespace Monopoly.Models.Components
         /// <param name="cell">Case du plateau</param>
         public void MoveTo(Cell cell)
         {
-            this.Position = cell.Id;
+            this.Position = cell.Id;      
+        }
+        #endregion
+
+        #region Methodes publique
+        /// <summary>
+        /// Ajoute une propriété à sa liste de biens
+        /// </summary>
+        /// <param name="property">Porpriete</param>
+        public void AddPorperty(Property p)
+        {
+            this.ListOfProperties.Add(p);
+        }
+
+        /// <summary>
+        /// Enlève une propriété à sa la liste de bien
+        /// </summary>
+        /// <param name="p">Propriété</param>
+        public void RemoveProperty(Property p)
+        {
+            this.ListOfProperties.Remove(p);
         }
         #endregion
     }

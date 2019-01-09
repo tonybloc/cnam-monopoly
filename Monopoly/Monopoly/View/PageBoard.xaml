@@ -47,7 +47,7 @@
                 <Grid Grid.Column="2" Grid.Row="1" x:Name="BoardPanelRight"></Grid>
 
                 <!--Land description-->
-                <Grid Grid.Column="1" Grid.Row="1" x:Name="Land" Width="200" Height="300" Background="White" Visibility="Hidden">
+                <Grid Grid.Column="1" Grid.Row="1" x:Name="Land" Width="230" Height="350" Background="White" Visibility="Hidden">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="2*"/>
                         <RowDefinition Height="9*"/>
@@ -99,11 +99,11 @@
                     <Border BorderThickness="2" BorderBrush="Black" Grid.ColumnSpan="2" Grid.RowSpan="2" />
                 </Grid>
 
-                <Grid Grid.Column="1" Grid.Row="1" x:Name="Card" Width="200" Height="300" Background="White" Visibility="Hidden">
+                <Grid Grid.Column="1" Grid.Row="1" x:Name="Card" Width="230" Height="350" Background="White" Visibility="Hidden">
                     <Grid Margin="10">
                         <StackPanel>
                             <Image x:Name="CardIcon" VerticalAlignment="Center" Height="100"></Image>
-                            <Label x:Name="lblCardTitle" Grid.Row="0" HorizontalContentAlignment="Center" Foreground="Black" Margin="0,20,0,0"/>
+                            <TextBlock x:Name="lblCardTitle" TextAlignment="Center" VerticalAlignment="Center" TextWrapping="WrapWithOverflow" Foreground="Black" Margin="10,15,10,0" ></TextBlock>
                             <StackPanel Orientation="Vertical" Margin="0,50,0,0">
                                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
                                     <Label x:Name="lblPurchasePrice" Content="Valeur d'achat :" Foreground="Black"/>
@@ -169,7 +169,9 @@
                 <Button x:Name="btnDice" Margin="10" Width="100" Height="50" ToolTip="Lancer les dés" Click="onClickDices" HorizontalAlignment="Center">
                     <Image Source="/Monopoly;component/Resources/Pictures/dices.png"/>
                 </Button>
-                <Button Margin="10" Width="100" Height="50"></Button>
+                <Button x:Name="btnNExt" Margin="10" Width="100" Height="50" ToolTip="Au suivant..." Click="onClickNext" HorizontalAlignment="Center">
+                    <Image Source="../Resources/Pictures/next.png"/>
+                </Button>
                 <Button Margin="10" Width="100" Height="50"></Button>
                 <Button Margin="10" Width="100" Height="50"></Button>
                 <Button Margin="10" Width="100" Height="50"></Button>
