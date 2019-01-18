@@ -25,8 +25,8 @@ namespace Monopoly.View
         #region Variables
         private static ColorHandler colorHandler;
         private static GameManager gameManager;
-        private const string placeholder = "Your Pseudo...";
-        public string ColorValue;
+        private const string placeholder = "Enter your pseudo...";
+        public string ColorValue = "#FFFFFF";
         #endregion
 
         public PageSinglePlayerCreation()
@@ -76,7 +76,7 @@ namespace Monopoly.View
 
         private void onClickCancel(object sender, RoutedEventArgs e)
         {
-            ((MainWindow)Window.GetWindow(this)).MainContent.Content = "";
+            ((MainWindow)Window.GetWindow(this)).MainContent.Content = null;
             ((MainWindow)Window.GetWindow(this)).MenuContent.Visibility = Visibility.Visible;
 
         }
