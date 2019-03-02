@@ -1,4 +1,5 @@
-﻿using Monopoly.Handlers;
+﻿using MaterialDesignThemes.Wpf;
+using Monopoly.Handlers;
 using Monopoly.Models.Components;
 using Monopoly.Models.Components.Cells;
 using Monopoly.Service;
@@ -12,6 +13,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
+using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using System.Windows.Threading;
 
@@ -25,10 +27,11 @@ namespace Monopoly.View
 
         #region Variables
         private GameManager gameManager = GameManager.Instance;
-        private enum CellOrientation : int { BOTTUM=0, LEFT=1, TOP=2, RIGHT=3 };
-        private enum GridType : int { GRIDTYPE_ROW=1, GRIDTYPE_COLUMN=2 };
+        private enum CellOrientation : int { BOTTUM = 0, LEFT = 1, TOP = 2, RIGHT = 3 };
+        private enum GridType : int { GRIDTYPE_ROW = 1, GRIDTYPE_COLUMN = 2 };
         private const int sizeofElipse = 20;
         private const string START_POSITION = "playerPosition0";
+        private Player currentPlayer;
 
         //threads
         #endregion
@@ -40,6 +43,7 @@ namespace Monopoly.View
             gameManager.StartGame();
             InitialiseBoard();
             GeneratePlayer();
+            currentPlayer = gameManager.playerHandler.GetCurrentPlayer();
         }
 
         #region Creation du Plateau
@@ -102,7 +106,7 @@ namespace Monopoly.View
                         indexOfNumberOfCellInPanel = 0;
                         switch (index)
                         {
-                            case 1:                                
+                            case 1:
                                 if (c.GetType() == typeof(StartPoint))
                                 {
                                     Grid gridLayout = new Grid();
@@ -142,9 +146,9 @@ namespace Monopoly.View
 
                                     BoardPanelStart.Children.Add(gridLayout);
                                     break;
-                                }                                
+                                }
                                 break;
-                            case 2:                                
+                            case 2:
                                 if (c.GetType() == typeof(Jail))
                                 {
                                     Grid gridLayout = new Grid();
@@ -204,7 +208,7 @@ namespace Monopoly.View
                                     GridPlayerPositionVisiteButtom.ColumnDefinitions.Add(new ColumnDefinition());
                                     NameScope.GetNameScope(this).RegisterName("VisitePositionButtom" + ((Jail)c).Id, GridPlayerPositionVisiteButtom);
                                     Grid.SetRow(GridPlayerPositionVisiteButtom, 1);
-                                    Grid.SetColumn(GridPlayerPositionVisiteButtom, 1);                                   
+                                    Grid.SetColumn(GridPlayerPositionVisiteButtom, 1);
 
                                     gridLayout.Children.Add(imgJail);
                                     gridLayout.Children.Add(GridPlayerPositionJail);
@@ -213,7 +217,7 @@ namespace Monopoly.View
 
                                     BoardPanelJail.Children.Add(gridLayout);
                                     break;
-                                }                                
+                                }
                                 break;
                             case 3:
                                 if (c.GetType() == typeof(Parking))
@@ -250,7 +254,7 @@ namespace Monopoly.View
                                     GeneratePlayerElipse(GridPlayerPosition);
 
                                     Grid.SetRow(GridPlayerPosition, 1);
-                                    Grid.SetColumn(GridPlayerPosition, 1);                                    
+                                    Grid.SetColumn(GridPlayerPosition, 1);
 
                                     gridLayout.Children.Add(imgParking);
                                     gridLayout.Children.Add(GridPlayerPosition);
@@ -297,7 +301,7 @@ namespace Monopoly.View
                                     Grid.SetColumn(GridPlayerPosition, 1);
 
                                     GeneratePlayerElipse(GridPlayerPosition);
-                                    
+
                                     gridLayout.Children.Add(imgPolice);
                                     gridLayout.Children.Add(GridPlayerPosition);
 
@@ -310,13 +314,39 @@ namespace Monopoly.View
                     }
 
                     switch (index)
-                    {                        
+                    {
                         case 1:
                             if (c.GetType() == typeof(Land))
                             {
                                 int position = (numberOfCellsToInsertInPanel - indexOfNumberOfCellInPanel - 1);
                                 GenerateLand(((Land)c), CellOrientation.BOTTUM, position, globalIndex);
                                 indexOfNumberOfCellInPanel++;
+
+                                /*StackPanel stackProperties = new StackPanel();
+                                PackIcon house = new PackIcon { Kind = PackIconKind.House };
+                                PackIcon motel = new PackIcon { Kind = PackIconKind.HouseModern };
+
+                                for (int i = 0; i < 4; i++)
+                                {
+                                     Label l = new Label();
+                                     l.Content = house;
+                                     stackProperties.Children.Add(l);
+
+                                    PackIcon house = new PackIcon { Kind = PackIconKind.House };
+
+                                    stackProperties.Children.Add(motel);
+                                }
+
+                                stackProperties.Children.Add(motel);
+                                Grid.SetRow(stackProperties, 1);
+
+                                MaterialDesignThemes.Wpf.Icon icon = 
+
+                                PackIcon house = new PackIcon { Kind = PackIconKind.House };                                
+                                PackIcon motel = new PackIcon { Kind = PackIconKind.HouseModern };
+                                gridProperties.Children.Add(house);
+                                gridProperties.Children.Add(motel);*/
+
                             }
                             else if (c.GetType() == typeof(TrainStation))
                             {
@@ -343,7 +373,7 @@ namespace Monopoly.View
                                 indexOfNumberOfCellInPanel++;
                             }
                             break;
-                        
+
                         case 2:
                             if (c.GetType() == typeof(Land))
                             {
@@ -373,7 +403,7 @@ namespace Monopoly.View
                             {
                                 int position = (numberOfCellsToInsertInPanel - (indexOfNumberOfCellInPanel % numberOfCellsToInsertInPanel) - 1);
                                 GenerateDrawCard(((DrawCard)c), CellOrientation.LEFT, position, globalIndex);
-                                indexOfNumberOfCellInPanel++;                                
+                                indexOfNumberOfCellInPanel++;
                             }
                             break;
                         case 3:
@@ -384,7 +414,7 @@ namespace Monopoly.View
                             }
                             else if (c.GetType() == typeof(TrainStation))
                             {
-                                GenerateTrainStation(((TrainStation)c), CellOrientation.TOP, indexOfNumberOfCellInPanel, globalIndex);                               
+                                GenerateTrainStation(((TrainStation)c), CellOrientation.TOP, indexOfNumberOfCellInPanel, globalIndex);
                                 indexOfNumberOfCellInPanel++;
                             }
                             else if (c.GetType() == typeof(PublicService))
@@ -439,7 +469,7 @@ namespace Monopoly.View
                 Console.WriteLine("Le nombre de case est incorrect");
             }
         }
-        
+
         /// <summary>
         /// Create Land
         /// </summary>
@@ -454,7 +484,7 @@ namespace Monopoly.View
             border.BorderThickness = new Thickness(1);
             switch (orientation)
             {
-                case CellOrientation.BOTTUM:                    
+                case CellOrientation.BOTTUM:
                     Grid.SetColumn(border, position);
                     break;
                 case CellOrientation.LEFT:
@@ -592,21 +622,25 @@ namespace Monopoly.View
                 default:
                     break;
             }
-            
-            TextBlock tbPlayerColor = new TextBlock();
+
+            StackPanel tbPlayerColor = new StackPanel();
+            tbPlayerColor.Name = "PlayerColor";
+            NameScope.GetNameScope(this).RegisterName("PlayerColor" + land.Id, tbPlayerColor);
             switch (orientation)
             {
                 case CellOrientation.BOTTUM:
                     Grid.SetRow(tbPlayerColor, 0);
+                    tbPlayerColor.Orientation = Orientation.Horizontal;
                     break;
                 case CellOrientation.LEFT:
                     Grid.SetColumn(tbPlayerColor, 3);
                     break;
                 case CellOrientation.TOP:
                     Grid.SetRow(tbPlayerColor, 3);
+                    tbPlayerColor.Orientation = Orientation.Horizontal;
                     break;
                 case CellOrientation.RIGHT:
-                    Grid.SetColumn(tbPlayerColor, 3);
+                    Grid.SetColumn(tbPlayerColor, 0);
                     break;
                 default:
                     break;
@@ -647,7 +681,7 @@ namespace Monopoly.View
                     break;
             }
 
-            
+
             Grid GridPlayerPosition = new Grid();
             GridPlayerPosition.RowDefinitions.Add(new RowDefinition());
             GridPlayerPosition.RowDefinitions.Add(new RowDefinition());
@@ -731,7 +765,7 @@ namespace Monopoly.View
                 default:
                     break;
             }
-            
+
             Grid GridMain = new Grid();
             GridMain.Background = Brushes.Transparent;
             GridMain.Tag = tag;
@@ -771,17 +805,21 @@ namespace Monopoly.View
                     break;
             }
 
-            TextBlock tbPlayerColor = new TextBlock();
+            StackPanel tbPlayerColor = new StackPanel();
+            tbPlayerColor.Name = "PlayerColor";
+            NameScope.GetNameScope(this).RegisterName("PlayerColor" + trainStation.Id, tbPlayerColor);
             switch (orientation)
             {
                 case CellOrientation.BOTTUM:
                     Grid.SetRow(tbPlayerColor, 0);
+                    tbPlayerColor.Orientation = Orientation.Horizontal;
                     break;
                 case CellOrientation.LEFT:
                     Grid.SetColumn(tbPlayerColor, 3);
                     break;
                 case CellOrientation.TOP:
                     Grid.SetRow(tbPlayerColor, 3);
+                    tbPlayerColor.Orientation = Orientation.Horizontal;
                     break;
                 case CellOrientation.RIGHT:
                     Grid.SetColumn(tbPlayerColor, 0);
@@ -851,7 +889,7 @@ namespace Monopoly.View
                 default:
                     break;
             }
-            
+
             Image iconTrainStation = new Image();
             iconTrainStation.Source = Base64Converter.base64ToImageSource(trainStation.Icon);
             switch (orientation)
@@ -949,7 +987,7 @@ namespace Monopoly.View
             GridMain.Children.Add(tbPlayerColor);
             GridMain.Children.Add(GridContent);
             GridMain.Children.Add(GridPlayerPosition);
-            
+
             border.Child = GridMain;
             switch (orientation)
             {
@@ -969,7 +1007,7 @@ namespace Monopoly.View
                     break;
             }
         }
-        
+
         /// <summary>
         /// Create Public Service Cell
         /// </summary>
@@ -1038,17 +1076,21 @@ namespace Monopoly.View
                     break;
             }
 
-            TextBlock tbPlayerColor = new TextBlock();
+            StackPanel tbPlayerColor = new StackPanel();
+            tbPlayerColor.Name = "PlayerColor";
+            NameScope.GetNameScope(this).RegisterName("PlayerColor" + publicService.Id, tbPlayerColor);
             switch (orientation)
             {
                 case CellOrientation.BOTTUM:
                     Grid.SetRow(tbPlayerColor, 0);
+                    tbPlayerColor.Orientation = Orientation.Horizontal;
                     break;
                 case CellOrientation.LEFT:
                     Grid.SetColumn(tbPlayerColor, 3);
                     break;
                 case CellOrientation.TOP:
                     Grid.SetRow(tbPlayerColor, 3);
+                    tbPlayerColor.Orientation = Orientation.Horizontal;
                     break;
                 case CellOrientation.RIGHT:
                     Grid.SetColumn(tbPlayerColor, 0);
@@ -1057,7 +1099,7 @@ namespace Monopoly.View
                     break;
             }
 
-            
+
             Grid GridContent = new Grid();
             switch (orientation)
             {
@@ -1240,7 +1282,7 @@ namespace Monopoly.View
                     break;
             }
         }
-        
+
         /// <summary>
         /// Create Tax Cell
         /// </summary>
@@ -1309,7 +1351,7 @@ namespace Monopoly.View
                     break;
             }
 
-            
+
             Grid GridContent = new Grid();
             switch (orientation)
             {
@@ -1490,7 +1532,7 @@ namespace Monopoly.View
                     break;
             }
         }
-        
+
         /// <summary>
         /// Create Draw Card cell
         /// </summary>
@@ -1559,7 +1601,7 @@ namespace Monopoly.View
                     break;
             }
 
-            
+
             Grid GridContent = new Grid();
             switch (orientation)
             {
@@ -1717,7 +1759,7 @@ namespace Monopoly.View
         {
             Ellipse ellipse = new Ellipse();
             ellipse.Height = sizeofElipse;
-            ellipse.Width = sizeofElipse;            
+            ellipse.Width = sizeofElipse;
             SolidColorBrush playerColor = new SolidColorBrush();
             playerColor.Color = (Color)ColorConverter.ConvertFromString(color);
             ellipse.Fill = playerColor;
@@ -1733,7 +1775,7 @@ namespace Monopoly.View
         /// </summary>
         /// <param name="c">cellule spécifique</param>
         private void GeneratePlayerElipse(Grid gridPlayerPosition)
-        {            
+        {
             foreach (Player p in gameManager.playerHandler.ListOfPlayers)
             {
                 gridPlayerPosition.Children.Add(CreateElipse(p.Pawn.ColorValue, p.Pawn.X, p.Pawn.Y));
@@ -1741,7 +1783,42 @@ namespace Monopoly.View
         }
         #endregion
 
-        
+        #region Buy property
+        private void BuyProperty(Property p)
+        {
+            MessageBoxResult result = MessageBox.Show("Voulez vous acheter ce terrain à " + p.PurchasePrice + " € ?", "Achat", MessageBoxButton.YesNo, MessageBoxImage.Question);
+
+            if (result == MessageBoxResult.Yes)
+            {
+                PlayerHandler.Instance.BuyProperty(p);
+                PropertyBought(currentPlayer);
+
+            }
+        }
+        #endregion
+
+        #region Buy building
+        private void BuyBuilding(Land l)
+        {
+            if (PlayerHandler.Instance.CheckIfPlayerOwnAllLandInLandGroup(currentPlayer, l.LandGroup))
+            {
+                MessageBoxResult result = MessageBox.Show("Voulez vous acheter une maison ?", "Achat d'une maison", MessageBoxButton.YesNo, MessageBoxImage.Question);
+
+                if (result == MessageBoxResult.Yes)
+                {
+                    PlayerHandler.Instance.BuildOnLand(currentPlayer, l);
+                    //PropertiesListInterface propertiesListInterface = new PropertiesListInterface();
+                    //PropertiesListContent.Content = propertiesListInterface;
+
+
+                    MessageBox.Show("Maison achetée !");
+                    BuildingBought(l);
+                }
+            }
+        }
+        #endregion
+
+
         #region Dices
         /// <summary>
         /// Click rools dices
@@ -1752,8 +1829,9 @@ namespace Monopoly.View
         {
             DicesInterface dicesInterface = new DicesInterface();
             DicesContent.Content = dicesInterface;
-            Move(gameManager.playerHandler.GetCurrentPlayer(), gameManager.FirstDice, gameManager.SecondeDice);
-            
+
+            Move(currentPlayer, gameManager.FirstDice, gameManager.SecondeDice);
+
         }
         #endregion
 
@@ -1762,10 +1840,10 @@ namespace Monopoly.View
         /// Generate the liste of player in right of frame
         /// </summary>
         private void GeneratePlayer()
-        {        
-            
+        {
+
             int index = 0;
-            foreach(Player p in gameManager.playerHandler.ListOfPlayers)
+            foreach (Player p in gameManager.playerHandler.ListOfPlayers)
             {
                 index++;
                 StackPanel stackPanel = new StackPanel();
@@ -1786,7 +1864,7 @@ namespace Monopoly.View
                 TextBlock tbPlayerAmount = new TextBlock();
                 tbPlayerAmount.VerticalAlignment = VerticalAlignment.Center;
                 tbPlayerAmount.Text = string.Format("CACHING € or $");
-            
+
                 stackPanel.Children.Add(playerEllipse);
                 stackPanel.Children.Add(tbPlayerNumber);
                 stackPanel.Children.Add(tbPlayerAmount);
@@ -1795,7 +1873,7 @@ namespace Monopoly.View
                 object cell = MonopolyBoard.FindName(START_POSITION);
                 if (cell is Grid)
                 {
-                    Grid start = (Grid)cell; 
+                    Grid start = (Grid)cell;
                     start.Background = Brushes.Red;
                     int i = 0;
                     int j = -1;
@@ -1804,9 +1882,9 @@ namespace Monopoly.View
                         child.Visibility = Visibility.Visible;
                     }
                 }
-                
+
             }
-            
+
         }
         /// <summary>
         /// Move the player to next cell
@@ -1817,6 +1895,7 @@ namespace Monopoly.View
         void Move(Player p, Dice first, Dice second)
         {
             int currentPosition = p.Position;
+            int previousCurrentPosition = currentPosition;
             int nextPosition = gameManager.NextPosition(p, first, second);
 
             Grid currentPlayerPosition = (Grid)this.FindName("playerPosition" + currentPosition);
@@ -1843,7 +1922,45 @@ namespace Monopoly.View
                 }
             }
 
+            if (previousCurrentPosition > nextPosition)
+            {
+                gameManager.playerHandler.GetGratification(currentPlayer);
+
+                MessageBox.Show("200 € de gagné !");
+            }
+
             DoCellAction();
+        }
+
+        void PropertyBought(Player p)
+        {
+            int currentPosition = p.Position;
+            StackPanel child = (StackPanel)this.FindName("PlayerColor" + currentPosition);
+            BrushConverter bc = new BrushConverter();
+            child.Background = (Brush)bc.ConvertFrom(p.Pawn.ColorValue);
+        }
+
+        void BuildingBought(Land l)
+        {
+            int position = l.Id;
+            StackPanel child = (StackPanel)this.FindName("PlayerColor" + position);
+            child.Children.Clear();
+            for (int i = 0; i < l.NbHouse; i++)
+            {
+                child.Children.Add(new PackIcon { Kind = PackIconKind.House });
+            }
+
+            for (int i = 0; i < l.NbHotel; i++)
+            {
+                child.Children.Add(new PackIcon { Kind = PackIconKind.HouseModern });
+            }
+        }
+        #endregion
+
+        #region Next player
+        public void onClickNext(object sender, RoutedEventArgs e)
+        {
+            //PlayerHandler.Instance.GetCurrentPlayer
         }
         #endregion
 
@@ -1861,23 +1978,32 @@ namespace Monopoly.View
             Cell c = GameManager.Instance.boardHandler.Board.GetCell(id);
             BrushConverter bc = new BrushConverter();
 
+            if (Card.Visibility == Visibility.Visible || Land.Visibility == Visibility.Visible)
+            {
+                Card.Visibility = Visibility.Hidden;
+                Land.Visibility = Visibility.Hidden;
+            }
+
             if (c is TrainStation)
             {
                 TrainStation t = (TrainStation)GameManager.Instance.boardHandler.Board.ListCell.ElementAt(id);
 
                 Card.Visibility = Visibility.Visible;
                 CardIcon.Source = Base64Converter.base64ToImageSource(((TrainStation)c).Icon);
-                lblCardTitle.Content = c.Title;
+                lblCardTitle.Text = c.Title;
                 lblPurchasePriceValue.Content = t.PurchasePrice + " €";
                 lblMortgagePriceValue.Content = t.MortgagePrice + " €";
+                lblOwnerCardValue.Content = t.OwnerName;
             }
             else if (c is Land)
             {
+                Buildings.Children.Clear();
                 Land.Visibility = Visibility.Visible;
                 lblLandTitle.Content = c.Title;
                 lblLandTitle.Background = (Brush)bc.ConvertFrom(GameManager.Instance.boardHandler.getColor(c));
 
                 Land l = (Land)GameManager.Instance.boardHandler.Board.ListCell.ElementAt(id);
+                lblOwnerValue.Content = l.OwnerName;
                 lblBuyingPriceValue.Content = l.PurchasePrice + " €";
                 lblLandValue.Content = l.RantalList[0] + " €";
                 lblHouse1Value.Content = l.RantalList[1] + " €";
@@ -1886,14 +2012,28 @@ namespace Monopoly.View
                 lblHouse4Value.Content = l.RantalList[4] + " €";
                 lblMotelValue.Content = l.RantalList[5] + " €";
                 lblMortgageValue.Content = l.MortgagePrice + " €";
+
+                for (int i = 0; i < l.NbHouse; i++)
+                {
+                    Image image = new Image();
+                    image.Source = new BitmapImage(new Uri("/Monopoly;component/Resources/Pictures/house2.png", UriKind.Relative));
+                    Buildings.Children.Add(image);
+                }
+
+                for (int i = 0; i < l.NbHotel; i++)
+                {
+                    Image image = new Image();
+                    image.Source = new BitmapImage(new Uri("/Monopoly;component/Resources/Pictures/motel2.png", UriKind.Relative));
+                    Buildings.Children.Add(image);
+                }
             }
             else if (c is PublicService)
             {
                 PublicService p = (PublicService)GameManager.Instance.boardHandler.Board.ListCell.ElementAt(id);
-
                 Card.Visibility = Visibility.Visible;
+
                 CardIcon.Source = Base64Converter.base64ToImageSource(((PublicService)c).Icon);
-                lblCardTitle.Content = p.Title;
+                lblCardTitle.Text = p.Title;
                 lblPurchasePriceValue.Content = p.PurchasePrice + " €";
                 lblMortgagePriceValue.Content = p.MortgagePrice + " €";
             }
@@ -1901,10 +2041,7 @@ namespace Monopoly.View
 
         private void Cells_MouseLeave(object sender, MouseEventArgs e)
         {
-            if (Card.Visibility == Visibility.Visible)
-                Card.Visibility = Visibility.Hidden;
-            else if (Land.Visibility == Visibility.Visible)            
-                Land.Visibility = Visibility.Hidden;            
+
         }
 
         /// <summary>
@@ -1912,25 +2049,34 @@ namespace Monopoly.View
         /// </summary>
         private void DoCellAction()
         {
-            Cell c = gameManager.boardHandler.Board.GetCell(gameManager.playerHandler.GetCurrentPlayer().Position);
-            if (c.GetType() == typeof(Land))
-            {
-                MessageBoxResult mb = MessageBox.Show("Vous etes sur une propriété !");
-                
-            }
-            else if (c.GetType() == typeof(PublicService))
-            {
-                MessageBoxResult mb = MessageBox.Show("Vous etes sur une propriété !");
+            Cell c = gameManager.boardHandler.Board.GetCell(currentPlayer.Position);
 
-            }
-            else if (c.GetType() == typeof(TrainStation))
+            if (c is Property)
             {
-                MessageBoxResult mb = MessageBox.Show("Vous etes sur une propriété !");
+                Property p = (Property)c;
 
+                if (p.status == Property.AVAILABLE_ON_SALE)
+                {
+                    BuyProperty(p);
+                }
+                else if (p.status == Property.NOT_AVAILABLE_ON_SALE)
+                {
+                    if (PlayerHandler.Instance.CheckIfPlayerOwnThisProperty(p))
+                    {
+                        if (p is Land)
+                        {                          
+
+                            BuyBuilding((Land)p);
+                        }
+                            
+                    }
+                    else
+                        PlayerHandler.Instance.PayTheRent(p, gameManager.FirstDice.Value + gameManager.SecondeDice.Value);
+                }
             }
             else if (c.GetType() == typeof(Tax))
             {
-                MessageBoxResult mb = MessageBox.Show("Vous devez payer la tax !");
+                MessageBoxResult mb = MessageBox.Show("Vous devez payer la taxe !");
             }
             else if (c.GetType() == typeof(DrawCard))
             {
@@ -1969,9 +2115,9 @@ namespace Monopoly.View
         /// <returns></returns>
         private static UIElement GetChildren(Grid grid, int row, int column)
         {
-            foreach(UIElement child in grid.Children)
+            foreach (UIElement child in grid.Children)
             {
-                if( (Grid.GetRow(child) == row) && (Grid.GetColumn(child) == column) )
+                if ((Grid.GetRow(child) == row) && (Grid.GetColumn(child) == column))
                 {
                     return child;
                 }

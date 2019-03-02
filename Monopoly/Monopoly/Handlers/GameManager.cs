@@ -1,4 +1,5 @@
-﻿using Monopoly.Models.Components;
+﻿using Monopoly.Models.Bank;
+using Monopoly.Models.Components;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -41,9 +42,9 @@ namespace Monopoly.Handlers
         /// Crée une instance de la classe
         /// </summary>
         private GameManager()
-        {
-            this.playerHandler = PlayerHandler.Instance;
+        {            
             this.boardHandler = BoardHandler.Instance;
+            this.playerHandler = PlayerHandler.Instance;
 
             FirstDice = new Dice();
             SecondeDice = new Dice();
@@ -87,7 +88,7 @@ namespace Monopoly.Handlers
         /// <param name="colorValue">couleur du joueur</param>
         public void CreatePlayer(string pseudo, string colorValue )
         {
-            playerHandler.CreatePlayer(pseudo, colorValue);
+            playerHandler.CreatePlayer(pseudo, colorValue);            
         }
 
         /// <summary>

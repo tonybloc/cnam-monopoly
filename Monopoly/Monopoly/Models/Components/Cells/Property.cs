@@ -19,12 +19,17 @@ namespace Monopoly.Models.Components.Cells
         /// Constant to show if the property can be sold 
         /// </summary>
         [XmlIgnore]
-        public const int AVAILABLE_ON_SALE = 1;
+        public const int AVAILABLE_ON_SALE = 0;
         /// <summary>
         /// Constant to show that the property has been sold
         /// </summary>
         [XmlIgnore]
-        public const int NOT_AVAILABLE_ON_SALE = 2;
+        public const int NOT_AVAILABLE_ON_SALE = 1;
+        /// <summary>
+        /// Constant to show that the propery has been mortgaged
+        /// </summary>
+        [XmlIgnore]
+        public const int MORTGAGED = 2;
         #endregion
 
         #region Variables
@@ -43,6 +48,11 @@ namespace Monopoly.Models.Components.Cells
         /// </summary>
         [XmlElement("MortgagePrice")]
         public int MortgagePrice { get; set; }
+        /// <summary>
+        /// Name of the owner
+        /// </summary>
+        [XmlIgnore]
+        public string OwnerName { get; set; }
         #endregion
 
         #region Constructor
