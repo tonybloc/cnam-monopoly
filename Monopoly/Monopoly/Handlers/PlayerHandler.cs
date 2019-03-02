@@ -30,7 +30,7 @@ namespace Monopoly.Handlers
         /// List  of players
         /// </summary>
         public List<Player> ListOfPlayers { get; private set; }
-        
+
         #endregion
 
         #region Constructeurs
@@ -50,7 +50,7 @@ namespace Monopoly.Handlers
         {
             get
             {
-                if(instance == null)
+                if (instance == null)
                 {
                     instance = new PlayerHandler();
                 }
@@ -105,7 +105,7 @@ namespace Monopoly.Handlers
         /// </summary>
         public void DefineTheNextPlayer()
         {
-            if(this.ListOfPlayers.Count > 0)
+            if (this.ListOfPlayers.Count > 0)
             {
                 Player current = GetCurrentPlayer();
                 if (current != default(Player))
@@ -152,21 +152,21 @@ namespace Monopoly.Handlers
         internal void InitialisePawnPosition()
         {
             int j = -1;
-            for(int i=0; i<this.ListOfPlayers.Count; i++)
+            for (int i = 0; i < this.ListOfPlayers.Count; i++)
             {
-                if( (i%3) == 0)
+                if ((i % 3) == 0)
                 {
                     j = (j + 1) % 3;
                 }
 
-                ListOfPlayers[i].Pawn.X = i%3;
-                ListOfPlayers[i].Pawn.Y = j%3;
+                ListOfPlayers[i].Pawn.X = i % 3;
+                ListOfPlayers[i].Pawn.Y = j % 3;
             }
         }
         internal void Shuffle(List<Player> list)
         {
             // Only one shuffle !
-            if(!alreadyShuffle)
+            if (!alreadyShuffle)
             {
                 Random rand = new Random();
                 int nbMotion = list.Count;
@@ -178,7 +178,7 @@ namespace Monopoly.Handlers
                     list[randomIndex] = list[nbMotion];
                     list[nbMotion] = player;
                 }
-            }            
+            }
         }
         #endregion
 
@@ -209,7 +209,7 @@ namespace Monopoly.Handlers
         #endregion
 
         #region Methodes publiques
-       
+
         /// <summary>
         /// Retrieve the current player
         /// </summary>
@@ -219,24 +219,28 @@ namespace Monopoly.Handlers
             Predicate<Player> filtrePlayer = (Player p) => { return p.Status == Player.PLAYING; };
             return ListOfPlayers.Find(filtrePlayer);
         }
-               
+
+        /*public Property GetProperty(int idProperty)
+        {
+
+            return BoardHandler.Instance.Board.ListCell.Where(l => l is Property).Cast<Property>().ToList().Where(p => p.Id.Equals(idProperty));
+
+
+        }*/
+
         /// <summary>
         /// Buy a specific property at the bank
         /// </summary>
         /// <param name="property">Propriété</param>
-        public bool BuyProperty(Player player, Property property)
+        public void BuyProperty(Property property)
         {
-            if (property.status == Property.AVAILABLE_ON_SALE)
-            {
-                BankAccount account = bankInstance.GetBankAccount(player);
-                account.BankTransfer(Bank.Instance.GetBankAccount(), property.PurchasePrice);
-                player.AddPorperty(property);
-                property.status = Property.NOT_AVAILABLE_ON_SALE;
+            Player player = GetCurrentPlayer();
+            BankAccount account = bankInstance.GetBankAccount(player);
+            account.BankTransfer(bankInstance.GetBankAccount(), property.PurchasePrice);
+            player.AddPorperty(property);
+            property.status = Property.NOT_AVAILABLE_ON_SALE;
+            property.OwnerName = player.Name;
 
-                return true;
-            }
-            //Property not available
-            return false;
         }
 
         /// <summary>
@@ -268,36 +272,109 @@ namespace Monopoly.Handlers
         /// <param name="groupe"></param>
         private int CountTheNumberOfLandInLandGroup(LandGroup groupe)
         {
-            int compteur = 0;
-
-            Player p = GetCurrentPlayer();
-            compteur = p.ListOfProperties.Count();
-                //Where(i => i.Id == groupe.IdGroup).LongCount;
-            /*
-            if(property.GetType() == typeof(Land))
-            {
-                ((Land)property).LandGroup.IdGroup
-            }
-            */
-            return compteur;
+            return BoardHandler.Instance.Board.ListCell.Where(l => l is Land).Cast<Land>().ToList().Where(land => land.LandGroup.IdGroup.Equals(groupe.IdGroup)).Count();
         }
-        public bool CheckIfPlayerOwnAllLandInLandGroup(Player player, Property property)
-        {
-            /*
 
-            Func<Property, bool> filter = CountTheNumberOfLandInLandGroup();
-            bank.find
+        private int CountTheNumberOfTrainStation()
+        {
+            return BoardHandler.Instance.Board.ListCell.Where(l => l is TrainStation).Count();
+        }
+
+        private int CountTheNumberOfPublicSercices()
+        {
+            return BoardHandler.Instance.Board.ListCell.Where(l => l is PublicService).Count();
+        }
+
+
+
+        public bool CheckIfPlayerOwnAllLandInLandGroup(Player player, LandGroup groupe)
+        {
+            int nbLandPlayer = player.ListOfProperties.Where(l => l is Land).Cast<Land>().ToList().Where(land => land.LandGroup.IdGroup.Equals(groupe.IdGroup)).Count();
+
+            int nbLandBoard = CountTheNumberOfLandInLandGroup(groupe);
+
+            if (nbLandPlayer == nbLandBoard)
+                return true;
+            
             return false;
-            */
-            return false;
+        }
+
+        public bool CheckIfPlayerOwnThisProperty(Property property)
+        {
+            return GetCurrentPlayer().ListOfProperties.Any(p => p.Id.Equals(property.Id));
+        }
+
+        private Player WhoOwnThisProperty(Property property)
+        {
+            return ListOfPlayers.Find(player => player.ListOfProperties.Contains(property));
         }
 
         public void BuildOnLand(Player player, Land land)
         {
-            //BankAccount account = Bank.Instance.GetBankAccount(player);
-            //int LandRantal = ((land.NbHouse > 0) &&()) ? land.GetRental();
-            //account.BankTransfer(Bank.Instance.GetBankAccount(), land.GetRental();
+            bankInstance.SellHouse(player, land);
+        }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// //Le loyer pour un terrain nu (sans bâtiments) est indiqué sur le titre de propriété 
+        /// //correspondant. Ce loyer est doublé si le propriétaire possède tous les terrains (non hypothéqués) d’un même groupe de couleur.
+        public void PayTheRent(Property p, int dicesValue)
+        {
+            int rentValue = 0;
+
+            if (p is Land)
+            {
+                Land l = (Land)p;
+
+                if (CheckIfPlayerOwnAllLandInLandGroup(WhoOwnThisProperty(p), l.LandGroup))
+                {
+                    if (l.NbHouse == 0 && l.NbHotel == 0)
+                        rentValue = 2 * l.GetRent(0);
+                    else if (l.NbHouse <= 4 && l.NbHotel == 0)
+                        rentValue = l.GetRent(l.NbHouse);
+                    else if (l.NbHouse == 0 && l.NbHotel != 0)
+                        rentValue = l.GetRent(4 + l.NbHotel);
+                }
+                else
+                    rentValue = l.GetRent(l.NbHouse);
+
+            }
+            else if (p is PublicService)
+            {
+                if (CountTheNumberOfPublicSercices() == 1)
+                    rentValue = 4 * dicesValue;
+                else if (CountTheNumberOfPublicSercices() == 2)
+                    rentValue = 10 * dicesValue;
+            }
+
+            BankAccount accountPlayer = bankInstance.GetBankAccount(GetCurrentPlayer());
+            BankAccount accountToPlayer = bankInstance.GetBankAccount(WhoOwnThisProperty(p));
+            accountPlayer.BankTransfer(accountToPlayer, rentValue);
+        }
+
+        public void PayThePublicServiceRent(Property p, int dicesValue)
+        {
+            int rentValue = 0;
+
+            if (CountTheNumberOfPublicSercices() == 1)
+                rentValue = 4 * dicesValue;
+            else if (CountTheNumberOfPublicSercices() == 2)
+                rentValue = 10 * dicesValue;
+
+            BankAccount accountPlayer = bankInstance.GetBankAccount(GetCurrentPlayer());
+            BankAccount accountToPlayer = bankInstance.GetBankAccount(WhoOwnThisProperty(p));
+            accountPlayer.BankTransfer(accountToPlayer, rentValue);
+
+        }
+
+        /// <summary>
+        /// When the user player pass or stay on the start point, he received a gratification
+        /// </summary>
+        /// <param name="p">Player</param>
+        public void GetGratification(Player p)
+        {
+            bankInstance.PaymentGratification(p);
         }
         #endregion
     }

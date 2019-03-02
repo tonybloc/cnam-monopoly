@@ -31,7 +31,7 @@ namespace Monopoly.Models.Components
         /// </summary>
         public Player()
         {
-            this.Id = 1;
+            this.Id = 2;
             this.Name = "";
             this.Pawn = new Pawn();
             this.Position = 0;

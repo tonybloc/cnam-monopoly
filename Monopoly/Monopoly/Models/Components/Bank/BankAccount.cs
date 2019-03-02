@@ -60,7 +60,7 @@ namespace Monopoly.Models.Bank
         /// <returns>Boolean : is there enougth or not</returns>
         private bool CheckIfBankBalanceIsEnougth(int amount)
         {
-            if ((this._amount - amount) > 0)
+            if ((this._amount - amount) >= 0)
             {
                 return true;
             }

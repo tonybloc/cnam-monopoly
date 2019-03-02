@@ -16,6 +16,7 @@ namespace Monopoly.Models.Bank
     {
         #region Constantes
         public static int GLOBAL_BANK_ACCOUNT = 0;
+        public static int PARKING_BANK_ACCOUNT = 1;
         #endregion
 
         #region Variables
@@ -28,13 +29,7 @@ namespace Monopoly.Models.Bank
         /// Players bank account
         /// </summary>
         private Dictionary<int, BankAccount> DictionayOfBankAcount;
-
-        /// <summary>
-        /// List of properties
-        /// </summary>
-        /// <returns></returns>
-        public List<Property> ListOfProperties{ get; private set; }
-
+        
         /// <summary>
         /// Number of houses
         /// </summary>
@@ -55,8 +50,8 @@ namespace Monopoly.Models.Bank
             NbHotel = Config.NUMBER_MAX_OF_HOUSE;
             NbHouse = Config.NUMBER_MAX_OF_HOTEL;
             DictionayOfBankAcount = new Dictionary<int, BankAccount>();
-            ListOfProperties = Board.Instance.ListCell.Where(i => i is Property).Cast<Property>().ToList();
             DictionayOfBankAcount.Add(GLOBAL_BANK_ACCOUNT, new BankAccount(Config.INITIAL_BANK_BALANCE));
+            DictionayOfBankAcount.Add(PARKING_BANK_ACCOUNT, new BankAccount(Config.INITIAL_PARKING_BALANCE));
         }
 
         /// <summary>
@@ -103,7 +98,7 @@ namespace Monopoly.Models.Bank
         {
             if (!this.DictionayOfBankAcount.ContainsKey(p.Id))
             {
-                this.DictionayOfBankAcount.Add(p.Id, new BankAccount(Config.INITIAL_BANK_BALANCE));
+                this.DictionayOfBankAcount.Add(p.Id, new BankAccount(Config.INITIAL_PLAYER_BANK_BALANCE));
             }
             else
             {
@@ -113,15 +108,45 @@ namespace Monopoly.Models.Bank
         }
 
         /// <summary>
-        /// Payment of the wage
+        /// Payment of the gratification when the user stay or pass on the start point
         /// </summary>
         /// <param name="p">Player at the start point </param>
-        public void PaymentOfWage(Player p)
+        public void PaymentGratification(Player p)
         {
             BankAccount bankAccount = GetBankAccount();
             BankAccount playerAccount = GetBankAccount(p);
-            bankAccount.BankTransfer(playerAccount, Config.WAGE);
+            bankAccount.BankTransfer(playerAccount, Config.GRATIFICATION);
         }
+
+        public void SellHouse(Player p , Land l)
+        {
+            if (NbHouse > 0)
+            {
+                NbHouse--;
+                l.AddHouse();
+
+                BankAccount bankAccount = GetBankAccount();
+                BankAccount playerAccount = GetBankAccount(p);
+                playerAccount.BankTransfer(bankAccount, l.LandGroup.HousePrice);
+            }
+            else
+                throw new Exception();
+        }
+
+
+        public void SellHotel(Player p, Land l)
+        {
+            if (NbHotel > 0)
+            {
+                NbHotel--;
+                l.AddHotel();
+
+                BankAccount bankAccount = GetBankAccount();
+                BankAccount playerAccount = GetBankAccount(p);
+                playerAccount.BankTransfer(bankAccount, l.LandGroup.HotelPrice);
+            }
+        }
+
         #endregion
 
 

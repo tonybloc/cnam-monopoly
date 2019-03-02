@@ -48,13 +48,35 @@ namespace Monopoly.Models.Components.Cells
         #endregion
 
         #region Public methods
-        public void AddBuilding()
+        public void AddHouse()
         {
             if (NbHouse < 4)
                 this.NbHouse++;
-            else if (NbHouse == 4 && NbHouse == 0)
+        }
+
+        public void RemoveHouse()
+        {
+            if (NbHouse > 0)
+                this.NbHouse--;
+        }
+
+        public void AddHotel()
+        {
+            if (NbHouse == 4 && NbHotel < 1 )
                 this.NbHotel++;
         }
+
+        public void RemoveHotel()
+        {
+            if (NbHouse == 4 && NbHotel > 0)
+                this.NbHotel--;
+        }
+
+        public int GetRent(int nb)
+        {
+            return RantalList[nb];
+        }
+
         #endregion
 
 

@@ -48,6 +48,11 @@ namespace Monopoly.Models.Components.Cells
         /// </summary>
         [XmlElement("MortgagePrice")]
         public int MortgagePrice { get; set; }
+        /// <summary>
+        /// Name of the owner
+        /// </summary>
+        [XmlIgnore]
+        public string OwnerName { get; set; }
         #endregion
 
         #region Constructor
