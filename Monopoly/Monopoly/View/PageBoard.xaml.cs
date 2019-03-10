@@ -1880,7 +1880,6 @@ namespace Monopoly.View
                 if (cell is Grid)
                 {
                     Grid start = (Grid)cell;
-                    start.Background = Brushes.Red;
                     int i = 0;
                     int j = -1;
                     foreach (UIElement child in start.Children)

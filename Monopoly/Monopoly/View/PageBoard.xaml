@@ -132,9 +132,6 @@
                     </Grid>
                     <Border BorderThickness="2" BorderBrush="Black" />
                 </Grid>
-                <Label x:Name="lbDiceValue" Content="Label" Grid.Column="1" HorizontalAlignment="Left" Margin="562,610,0,0" Grid.Row="1" VerticalAlignment="Top" Width="124"/>
-                <Label x:Name="lbPawnPosition" Content="Label" Grid.Column="1" HorizontalAlignment="Left" Margin="562,639,0,0" Grid.Row="1" VerticalAlignment="Top" Width="124"/>
-                <Label x:Name="lbNextPosition" Content="Label" Grid.Column="1" HorizontalAlignment="Left" Margin="562,668,0,0" Grid.Row="1" VerticalAlignment="Top" Width="124"/>
             </Grid>
         </Border>
         <Grid Grid.Column="1" Width="Auto" Margin="7" x:Name="Right">
