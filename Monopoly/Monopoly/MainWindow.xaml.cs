@@ -12,6 +12,8 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using Monopoly.Handlers;
+using Monopoly.Models.Components;
 using Monopoly.View;
 namespace Monopoly
 {
@@ -20,17 +22,19 @@ namespace Monopoly
     /// </summary>
     public partial class MainWindow : Window
     {
+        
+        private GameManager _GameManager;
+
+        
         public MainWindow()
-        {
+        {          
+
             InitializeComponent();
+
+            _GameManager = GameManager.Instance;
             this.PreviewKeyDown += new KeyEventHandler(HandleEsc);
         }
-
-        private void btnPlayAlone_Click(object sender, RoutedEventArgs e)
-        {
-            MainContent.Content = new PageSinglePlayerCreation();
-            MenuContent.Visibility = Visibility.Visible;
-        }
+        
 
         private void btnCustomize_Click(object sender, RoutedEventArgs e)
         {
@@ -38,9 +42,19 @@ namespace Monopoly
             MenuContent.Visibility = Visibility.Hidden;
         }
 
-        private void btnNetworkPlay_Click(object sender, RoutedEventArgs e)
+        private void btnPlayAlone_Click(object sender, RoutedEventArgs e)
+        {
+            _GameManager.SetType(GameManager.GameType.SINGLEPLAYER);
+            MainContent.Content = new PageSinglePlayerCreation();
+            MenuContent.Visibility = Visibility.Visible;
+        }
+
+        private void btnLocalMultiplayer_Click(object sender, RoutedEventArgs e)
         {
 
+            MainContent.Content = new PageMultiplePlayerCreation();
+            MenuContent.Visibility = Visibility.Visible;
+            _GameManager.SetType(GameManager.GameType.LOCAL_MUTLIPLAYER);
         }
 
         private void btnRules_Click(object sender, RoutedEventArgs e)

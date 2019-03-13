@@ -26,7 +26,9 @@ namespace Monopoly.View
     public partial class DicesInterface : Page
     {
         #region Variables
-        private static GameManager gameManager;
+        private GameManager _GameManager;
+        private DicesHandler _DicesHandler;
+        private PlayerHandler _PlayerHandler;
 
         DispatcherTimer timer = new DispatcherTimer { Interval = TimeSpan.FromSeconds(2) };
         DispatcherTimer secondTimer = new DispatcherTimer { Interval = TimeSpan.FromSeconds(2) };
@@ -36,8 +38,12 @@ namespace Monopoly.View
         public DicesInterface()
         {
             InitializeComponent();
-            gameManager = GameManager.Instance;
-            showDices();
+
+            _GameManager = GameManager.Instance;
+            _DicesHandler = DicesHandler.Instance;
+            _PlayerHandler = PlayerHandler.Instance;
+
+            ShowDices();
         }
         #endregion
 
@@ -45,15 +51,17 @@ namespace Monopoly.View
         /// <summary>
         /// Display dices gif and the results
         /// </summary>
-        private void showDices()
+        private void ShowDices()
         {
             //Initialisation of the gif
             var image = new BitmapImage();
             image.BeginInit();
             image.UriSource = new Uri("/Monopoly;component/Resources/Pictures/Dices/RollingDice.gif", UriKind.Relative);
             image.EndInit();
+
             ImageBehavior.SetAnimatedSource(Gif, image);
-            gameManager.RoolDice(gameManager.FirstDice, gameManager.SecondeDice);
+
+            _DicesHandler.RoolDices(_PlayerHandler.GetCurrentPlayer());
 
             timer.Start();
             timer.Tick += Timer_Tick;
@@ -64,9 +72,8 @@ namespace Monopoly.View
         {
             timer.Stop();
             Result.Children.Remove(Gif);
-            //gameManager.RoolDice(gameManager.FirstDice, gameManager.SecondeDice);
-            FirstDice.Source = new BitmapImage(new Uri("/Monopoly;component/Resources/Pictures/Dices/dice" + gameManager.FirstDice.Value + ".png", UriKind.Relative));
-            SecondDice.Source = new BitmapImage(new Uri("/Monopoly;component/Resources/Pictures/Dices/dice" + gameManager.SecondeDice.Value + ".png", UriKind.Relative));
+            FirstDice.Source = new BitmapImage(new Uri("/Monopoly;component/Resources/Pictures/Dices/dice" + _DicesHandler.FirstDice.Value + ".png", UriKind.Relative));
+            SecondDice.Source = new BitmapImage(new Uri("/Monopoly;component/Resources/Pictures/Dices/dice" + _DicesHandler.SecondDice.Value + ".png", UriKind.Relative));
             //secondTimer.Start();
             //secondTimer.Tick += SecondTime_Tick;
         }

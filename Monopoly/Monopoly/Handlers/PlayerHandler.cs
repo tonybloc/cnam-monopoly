@@ -1,6 +1,8 @@
 ﻿using Monopoly.Models.Bank;
 using Monopoly.Models.Components;
 using Monopoly.Models.Components.Cells;
+using Monopoly.Models.Components.Exceptions;
+using Monopoly.Resources.Colors;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,9 +18,10 @@ namespace Monopoly.Handlers
         /// Instance of the player handler
         /// </summary>
         private static PlayerHandler instance = null;
-
-        private static bool alreadyShuffle = false;
-
+        
+        /// <summary>
+        /// Instance of the bank
+        /// </summary>
         private Bank bankInstance = null;
 
         /// <summary>
@@ -30,6 +33,9 @@ namespace Monopoly.Handlers
         /// List  of players
         /// </summary>
         public List<Player> ListOfPlayers { get; private set; }
+
+        public Player currentPlayer { get; private set; }
+
 
         #endregion
 
@@ -62,11 +68,34 @@ namespace Monopoly.Handlers
         #endregion
 
         #region Methodes (public)
+
+
+        public void Initialize()
+        {
+            InitialisePawnPosition();
+            DefineTheNextPlayer();
+        }
+
         /// <summary>
-        /// Récupère le nombre de joeur dans la liste
+        /// Get the liste of colors that was not used by players (for the generation of bots)
         /// </summary>
         /// <returns></returns>
-        internal int GetNumberOfPlayer()
+        public List<string> GetAvailablePawnColors()
+        {
+            
+            List<string> colors = new List<string>(PawnColors.Colors);  // Create a copy of the colors list
+
+            foreach (Player p in ListOfPlayers)
+                colors.Remove(p.Pawn.ColorValue);
+            
+            return colors;
+        }
+
+        /// <summary>
+        /// Récupère le nombre de joueur dans la liste
+        /// </summary>
+        /// <returns></returns>
+        public int GetNumberOfPlayer()
         {
             return this.ListOfPlayers.Count;
         }
@@ -76,7 +105,15 @@ namespace Monopoly.Handlers
         /// <param name="player">Joueur</param>
         public void AddPlayer(Player player)
         {
-            this.ListOfPlayers.Add(player);
+            if (ListOfPlayers.Exists(x => x.Pawn.ColorValue == player.Pawn.ColorValue))
+            {
+                throw new ColorAlreadyAssigned();
+            }
+            else
+            {
+                this.ListOfPlayers.Add(player);
+            }
+            
         }
 
         /// <summary>
@@ -94,8 +131,7 @@ namespace Monopoly.Handlers
         /// <param name="pseudo">Pseudo of the player</param>
         /// <param name="colorValue">Color of the pawn</param>
         public void CreatePlayer(string pseudo, string colorValue)
-        {
-            //this.AddPlayer(new Player(ListOfPlayers.Count, pseudo, new Pawn(colorValue)));
+        {   
             numberOfPlayer++;
             Player p = new Player(numberOfPlayer, pseudo, new Pawn(colorValue));
             this.AddPlayer(p);
@@ -116,6 +152,7 @@ namespace Monopoly.Handlers
                     Player next = this.ListOfPlayers[(currentIndex + 1) % this.ListOfPlayers.Count];
                     current.Status = Player.WAITING;
                     next.Status = Player.PLAYING;
+                    
                 }
                 else
                 {
@@ -151,7 +188,7 @@ namespace Monopoly.Handlers
         /// <summary>
         /// Initialise la position des pion (des joueurs)
         /// </summary>
-        internal void InitialisePawnPosition()
+        public void InitialisePawnPosition()
         {
             int j = -1;
             for (int i = 0; i < this.ListOfPlayers.Count; i++)
@@ -165,23 +202,7 @@ namespace Monopoly.Handlers
                 ListOfPlayers[i].Pawn.Y = j % 3;
             }
         }
-        internal void Shuffle(List<Player> list)
-        {
-            // Only one shuffle !
-            if (!alreadyShuffle)
-            {
-                Random rand = new Random();
-                int nbMotion = list.Count;
-                while (nbMotion > 1)
-                {
-                    nbMotion--;
-                    int randomIndex = rand.Next(nbMotion + 1);
-                    Player player = list[randomIndex];
-                    list[randomIndex] = list[nbMotion];
-                    list[nbMotion] = player;
-                }
-            }
-        }
+        
         #endregion
 
         #region Methodes privées
@@ -218,8 +239,10 @@ namespace Monopoly.Handlers
         /// <returns>The player who is playing</returns>
         public Player GetCurrentPlayer()
         {
+            
             Predicate<Player> filtrePlayer = (Player p) => { return p.Status == Player.PLAYING; };
             return ListOfPlayers.Find(filtrePlayer);
+            
         }
 
         /// <summary>

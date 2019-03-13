@@ -42,6 +42,7 @@ namespace Monopoly.Handlers
         }
         #endregion
 
+       
         /// <summary>
         /// Returne the color of land groupe
         /// </summary>

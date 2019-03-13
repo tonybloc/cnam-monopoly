@@ -10,6 +10,10 @@ namespace Monopoly.Models.Components
     public class Player
     {
         #region Constantes
+
+        public enum TypeOfPlayer : int {USER = 0,BOT = 1}
+
+        
         public const int WAITING = 0;
         public const int PLAYING = 1;
         public const int BUILD_HOTEL = 1;
@@ -22,6 +26,7 @@ namespace Monopoly.Models.Components
         public int Status { get; set; }
         public Pawn Pawn { get; set; }
         public int Position { get; set; }
+        public TypeOfPlayer PlayerType { get; private set; }
         public List<Property> ListOfProperties { get; private set; }
         public List<Land> ListOfLands { get; private set; }
         #endregion  
@@ -37,6 +42,7 @@ namespace Monopoly.Models.Components
             this.Pawn = new Pawn();
             this.Position = 0;
             this.Status = WAITING;
+            this.PlayerType = TypeOfPlayer.USER;
             this.ListOfProperties = new List<Property>();
             this.ListOfLands = new List<Land>();
         }
@@ -54,7 +60,17 @@ namespace Monopoly.Models.Components
             this.Pawn = pawn;
             this.Position = 0;
             this.Status = WAITING;
+            this.PlayerType = TypeOfPlayer.USER;
             this.ListOfProperties = new List<Property>();
+        }
+
+        /// <summary>
+        /// Update the type of player
+        /// </summary>
+        /// <param name="t">player type</param>
+        public void SetPlayerType(TypeOfPlayer t)
+        {
+            this.PlayerType = t;
         }
 
         /// <summary>

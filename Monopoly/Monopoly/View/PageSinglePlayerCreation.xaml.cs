@@ -23,8 +23,9 @@ namespace Monopoly.View
     public partial class PageSinglePlayerCreation : Page
     {
         #region Variables
-        private static ColorHandler colorHandler;
-        private static GameManager gameManager;
+        private static ColorHandler _ColorHandler;
+        private static GameManager _GameManager;
+
         private const string placeholder = "Enter your pseudo...";
         public string ColorValue = "#FFFFFF";
         #endregion
@@ -32,15 +33,17 @@ namespace Monopoly.View
         public PageSinglePlayerCreation()
         {
             InitializeComponent();
-            colorHandler = ColorHandler.Instance;
-            gameManager = GameManager.Instance;
+            
+            _ColorHandler = ColorHandler.Instance;
+            _GameManager = GameManager.Instance;
         }
 
+        #region Events        
         private void onGotFocus_Pseudo(object sender, RoutedEventArgs e)
         {
             TextBox_Pseudo.Text = "";
         }
-
+        
         private void onLostFocus_Pseudo(object sender, RoutedEventArgs e)
         {
             if (string.IsNullOrWhiteSpace(TextBox_Pseudo.Text))
@@ -49,18 +52,17 @@ namespace Monopoly.View
             }
         }
 
-
         private void onClickPreviousColor(object sender, RoutedEventArgs e)
         {
             BrushConverter bc = new BrushConverter();
-            ColorValue = colorHandler.GetNextPawnColor();
+            ColorValue = _ColorHandler.GetNextPawnColor();
             PawnIcon.Fill = (Brush)bc.ConvertFrom(ColorValue);
         }
 
         private void onClickNextColor(object sender, RoutedEventArgs e)
         {
             BrushConverter bc = new BrushConverter();
-            ColorValue = colorHandler.GetPreviousPawnColor();
+            ColorValue = _ColorHandler.GetPreviousPawnColor();
             PawnIcon.Fill = (Brush)bc.ConvertFrom(ColorValue);
         }
 
@@ -68,7 +70,7 @@ namespace Monopoly.View
         {
             if(this.TextBox_Pseudo.Text != placeholder)
             {
-                gameManager.CreatePlayer(this.TextBox_Pseudo.Text, this.ColorValue);
+                _GameManager.CreatePlayer(this.TextBox_Pseudo.Text, this.ColorValue);
                 ((MainWindow)Window.GetWindow(this)).MainContent.Content = new PageBoard();
                 ((MainWindow)Window.GetWindow(this)).MenuContent.Visibility = Visibility.Hidden;
             }            
@@ -78,7 +80,7 @@ namespace Monopoly.View
         {
             ((MainWindow)Window.GetWindow(this)).MainContent.Content = null;
             ((MainWindow)Window.GetWindow(this)).MenuContent.Visibility = Visibility.Visible;
-
         }
+        #endregion
     }
 }

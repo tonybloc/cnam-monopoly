@@ -42,7 +42,7 @@
                     </Grid.RowDefinitions>
 
                     <Button x:Name="btnPlayAlone" Content="Jouer" Height="auto" Margin="35,15"  Padding="10" VerticalAlignment="Top" Grid.Row="0" Click="btnPlayAlone_Click" />
-                    <Button x:Name="btnNetworkPlay" Content="Jouer en réseau" Height="auto" Margin="35,15"  Padding="10" VerticalAlignment="Top" Grid.Row="1" Click="btnNetworkPlay_Click"/>
+                    <Button x:Name="btnLocalMultiplayer" Content="Multijoueur" Height="auto" Margin="35,15"  Padding="10" VerticalAlignment="Top" Grid.Row="1" Click="btnLocalMultiplayer_Click"/>
                     <Button x:Name="btnCustomize" Content="Option" Height="auto" Margin="35,15"  Padding="10" VerticalAlignment="Top" Grid.Row="2" Click="btnCustomize_Click" />
                     <Button x:Name="btnRules" Content="Règles du jeu" Height="auto" Margin="35,15"  Padding="10" VerticalAlignment="Top" Grid.Row="3" Click="btnRules_Click" />
                 </Grid>

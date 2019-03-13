@@ -21,7 +21,7 @@ namespace Monopoly.Models.Components
         /// </summary>
         [XmlElement("Cell")]
         public List<Cell> ListCell { get; set; }
-#endregion
+        #endregion
 
         #region Constructeur
         /// <summary>
@@ -46,7 +46,7 @@ namespace Monopoly.Models.Components
                 return _instance;
             }
         }
-#endregion
+        #endregion
 
         #region Methods
         /// <summary>
