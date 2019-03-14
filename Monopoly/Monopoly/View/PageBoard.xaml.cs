@@ -16,6 +16,9 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using System.Windows.Threading;
+using Monopoly.View.Notifications.Dialog;
+using System.Windows.Media.Effects;
+using Monopoly.Models.Components.Exceptions;
 
 namespace Monopoly.View
 {
@@ -33,6 +36,14 @@ namespace Monopoly.View
         private PlayerHandler _PlayerHandler;
         private GameManager _GameManager;
 
+        private enum CellOrientation : int { BOTTUM = 0, LEFT = 1, TOP = 2, RIGHT = 3 };
+        private enum GridType : int { GRIDTYPE_ROW = 1, GRIDTYPE_COLUMN = 2 };
+
+        private const int SizeofElipse = 20;
+        private const string START_POSITION = "playerPosition0";
+
+
+        #region Binding Variables
         private int _numberOfTurn;
         public int NumberOfTurn
         {
@@ -49,7 +60,7 @@ namespace Monopoly.View
                 }
             }
         }
-
+        
         private Player _currentPlayer;
         public Player CurrentPlayer
         {
@@ -62,16 +73,46 @@ namespace Monopoly.View
                 if (_currentPlayer != value)
                 {
                     _currentPlayer = value;
+                    NameOfPlayer = _currentPlayer.Name;
+                    ColorOfPlayer = _currentPlayer.Pawn.ColorValue;
                     OnPropertyChanged();
                 }
             }
         }
 
-        private enum CellOrientation : int { BOTTUM = 0, LEFT = 1, TOP = 2, RIGHT = 3 };
-        private enum GridType : int { GRIDTYPE_ROW = 1, GRIDTYPE_COLUMN = 2 };
+        private string _colorOfPlayer;
+        public string ColorOfPlayer
+        {
+            get
+            {
+                return _colorOfPlayer;
+            }
+            set
+            {
+                if(_colorOfPlayer != value)
+                {
+                    _colorOfPlayer = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
 
-        private const int sizeofElipse = 20;
-        private const string START_POSITION = "playerPosition0";
+        private string _nameOfPlayer;
+        public string NameOfPlayer
+        {
+            get
+            {
+                return _nameOfPlayer;
+            }
+            set
+            {
+                if (_nameOfPlayer != value)
+                {
+                    _nameOfPlayer = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
 
         public Player currentPlayer;
         public string NamePlayer { get { return currentPlayer.Name; } }
@@ -79,7 +120,7 @@ namespace Monopoly.View
 
 
         public event PropertyChangedEventHandler PropertyChanged;
-
+        #endregion
 
         #endregion
 
@@ -90,11 +131,8 @@ namespace Monopoly.View
 
             this.DataContext = this;
 
-
             // Initialise Game
             _GameManager = GameManager.Instance;
-            _GameManager.IntialiseGame();
-
             _DicesHandler = DicesHandler.Instance;
             _PlayerHandler = PlayerHandler.Instance;
 
@@ -102,17 +140,24 @@ namespace Monopoly.View
             // Initialise Chronometer
             InitialiseChronometer();
 
-           // Initialise Board 
+            // Initialise Board 
             InitialiseBoard();
+
             
+            // Generate the player
             GeneratePlayer();
+
             CurrentPlayer = _GameManager.PlayerHandler.GetCurrentPlayer();
+
             PropertiesListInterface.buildingBought += BuildingBought;
             SellPropertiesListInterface.buildingBought += BuildingBought;
 
-            StartGame();
+            
+            NumberOfTurn = _GameManager.NumberOfTurn;
+            
+            
 
-            TextBox_NumberOfTurn.Text = _GameManager.NumberOfTurn.ToString();
+            StartGame();
 
 
         }
@@ -1874,15 +1919,15 @@ namespace Monopoly.View
         private Ellipse CreateElipse(string color, int rowPosition, int colPosition)
         {
             Ellipse ellipse = new Ellipse();
-            ellipse.Height = sizeofElipse;
-            ellipse.Width = sizeofElipse;
-            SolidColorBrush blackBrush = new SolidColorBrush();
-            blackBrush.Color = Colors.Black;
-            ellipse.Stroke = blackBrush;
+            ellipse.Height = SizeofElipse;
+            ellipse.Width = SizeofElipse;
+            DropShadowEffect shadowEffect = new DropShadowEffect();
+            shadowEffect.ShadowDepth = 1;
+            ellipse.Effect = shadowEffect;
             SolidColorBrush playerColor = new SolidColorBrush();
             playerColor.Color = (Color)ColorConverter.ConvertFromString(color);
             ellipse.Fill = playerColor;
-            ellipse.Visibility = Visibility.Hidden;
+            ellipse.Visibility = Visibility.Hidden;            
 
             Grid.SetRow(ellipse, rowPosition);
             Grid.SetColumn(ellipse, colPosition);
@@ -1943,13 +1988,21 @@ namespace Monopoly.View
         /// <param name="e"></param>
         private void onClickDices(object sender, RoutedEventArgs e)
         {
-            DicesInterface dicesInterface = new DicesInterface();
-            DicesContent.Content = dicesInterface;
-            DicesContent.Visibility = Visibility.Visible;
-            PropertiesListContent.Visibility = Visibility.Hidden;
-            //Move(currentPlayer, gameManager.FirstDice, gameManager.SecondeDice);
+            try
+            {
+                DicesInterface dicesInterface = new DicesInterface();
+                DicesContent.Content = dicesInterface;
+                DicesContent.Visibility = Visibility.Visible;
+                PropertiesListContent.Visibility = Visibility.Hidden;
 
-            Move(CurrentPlayer, _DicesHandler.GetValue());
+                Move(CurrentPlayer, _DicesHandler.GetValue());
+            }
+            catch(Exception exp)
+            {
+                NotificationsPanel.Visibility = Visibility.Visible;
+                NotificationsPanel.Content = new ExceptionDialog(exp);
+            }
+           
 
         }
         #endregion
@@ -1973,8 +2026,12 @@ namespace Monopoly.View
                 Ellipse playerEllipse = new Ellipse();
                 playerEllipse.Margin = new Thickness(0, 0, 10, 0);
                 playerEllipse.Fill = (Brush)bc.ConvertFrom(p.Pawn.ColorValue);
-                playerEllipse.Width = sizeofElipse;
-                playerEllipse.Height = sizeofElipse;
+                playerEllipse.Width = SizeofElipse;
+                playerEllipse.Height = SizeofElipse;
+
+                DropShadowEffect shadowEffect = new DropShadowEffect();
+                shadowEffect.ShadowDepth = 1;
+                playerEllipse.Effect = shadowEffect;
 
                 TextBlock tbPlayerNumber = new TextBlock();
                 tbPlayerNumber.VerticalAlignment = VerticalAlignment.Center;
@@ -1993,8 +2050,6 @@ namespace Monopoly.View
                 if (cell is Grid)
                 {
                     Grid start = (Grid)cell;
-                    //int i = 0;
-                    //int j = -1;
                     foreach (UIElement child in start.Children)
                     {
                         child.Visibility = Visibility.Visible;
@@ -2078,9 +2133,26 @@ namespace Monopoly.View
         #region Next player
         public void onClickNext(object sender, RoutedEventArgs e)
         {
-            _GameManager.NextTurn();
-            CurrentPlayer = _GameManager.PlayerHandler.GetCurrentPlayer();
-            TextBox_NumberOfTurn.Text = _GameManager.NumberOfTurn.ToString();
+            try
+            {
+               if (_DicesHandler.PlayerCanBeRaise)
+               {
+                    throw new UserAsMissingToLaunchDicesException();
+               }
+               else
+               {
+                    _GameManager.NextTurn();
+                    _DicesHandler.PlayerCanBeRaise = true;
+                    CurrentPlayer = _GameManager.PlayerHandler.GetCurrentPlayer();
+                    NumberOfTurn = _GameManager.NumberOfTurn;
+               }
+            }
+            catch (Exception exp)
+            {
+                NotificationsPanel.Visibility = Visibility.Visible;
+                NotificationsPanel.Content = new ExceptionDialog(exp);
+            }
+            
 
         }
         #endregion

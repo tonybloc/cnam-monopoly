@@ -19,35 +19,50 @@
     <Window.Background>
         <ImageBrush ImageSource="Resources/Pictures/menu.jpg"/>
     </Window.Background>
-    <Grid HorizontalAlignment="Center"  VerticalAlignment="Center">
-	
-		
-        <Grid x:Name="MenuContent">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition/>
-                <ColumnDefinition/>
-                <ColumnDefinition/>
-            </Grid.ColumnDefinitions>
 
-            <StackPanel Grid.Column="1">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"></RowDefinition>
+        </Grid.RowDefinitions>
 
-                <Image x:Name="image" Height="auto" Margin="10" gif:ImageBehavior.RepeatBehavior="Forever" gif:ImageBehavior.AnimatedSource="Resources/Pictures/welcome2.gif" Source="Resources/Pictures/welcome2.gif" HorizontalAlignment="Center" RenderTransformOrigin="0.395,0.406"/>
 
-                <Grid>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="*"/>
-                        <RowDefinition Height="*"/>
-                        <RowDefinition Height="*"/>
-                        <RowDefinition Height="*"/>
-                    </Grid.RowDefinitions>
+        <Grid Grid.Column="0" Grid.Row="0" HorizontalAlignment="Center"  VerticalAlignment="Center">
 
-                    <Button x:Name="btnPlayAlone" Content="Jouer" Height="auto" Margin="35,15"  Padding="10" VerticalAlignment="Top" Grid.Row="0" Click="btnPlayAlone_Click" />
-                    <Button x:Name="btnLocalMultiplayer" Content="Multijoueur" Height="auto" Margin="35,15"  Padding="10" VerticalAlignment="Top" Grid.Row="1" Click="btnLocalMultiplayer_Click"/>
-                    <Button x:Name="btnCustomize" Content="Option" Height="auto" Margin="35,15"  Padding="10" VerticalAlignment="Top" Grid.Row="2" Click="btnCustomize_Click" />
-                    <Button x:Name="btnRules" Content="Règles du jeu" Height="auto" Margin="35,15"  Padding="10" VerticalAlignment="Top" Grid.Row="3" Click="btnRules_Click" />
-                </Grid>
-            </StackPanel>
+            <Grid x:Name="MenuContent">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+
+                <StackPanel Grid.Column="1">
+
+                    <Image x:Name="image" Height="auto" Margin="10" gif:ImageBehavior.RepeatBehavior="Forever" gif:ImageBehavior.AnimatedSource="Resources/Pictures/welcome2.gif" Source="Resources/Pictures/welcome2.gif" HorizontalAlignment="Center" RenderTransformOrigin="0.395,0.406"/>
+
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+
+                        <Button x:Name="btnPlayAlone" Content="Jouer" Height="50" Width="350" Margin="35,15" FontSize="16" Padding="10" VerticalAlignment="Top" Grid.Row="0" Click="btnPlayAlone_Click" />
+                        <Button x:Name="btnLocalMultiplayer" Content="Multijoueur" Height="50" Width="350" Margin="35,15" FontSize="16" Padding="10" VerticalAlignment="Top" Grid.Row="1" Click="btnLocalMultiplayer_Click"/>
+                        <Button x:Name="btnCustomize" Content="Option" Height="50" Width="350" Margin="35,15"   FontSize="16" Padding="10" VerticalAlignment="Top" Grid.Row="2" Click="btnCustomize_Click" />
+                        <Button x:Name="btnRules" Content="Règles du jeu" Height="50" Width="350" Margin="35,15" FontSize="16" Padding="10" VerticalAlignment="Top" Grid.Row="3" Click="btnRules_Click" />
+                    </Grid>
+                </StackPanel>
+            </Grid>
+            <Frame x:Name="MainContent" Margin="0" NavigationUIVisibility="Hidden"/>
         </Grid>
-        <Frame x:Name="MainContent" Margin="0" NavigationUIVisibility="Hidden"/>
+
+        <!-- Notification -->
+        <ContentControl Grid.Column="0" Grid.Row="0" x:Name="NotificationsPanel"></ContentControl>
     </Grid>
+    
+   
 </Window>

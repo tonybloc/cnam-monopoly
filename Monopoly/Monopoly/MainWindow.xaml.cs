@@ -15,6 +15,8 @@ using System.Windows.Shapes;
 using Monopoly.Handlers;
 using Monopoly.Models.Components;
 using Monopoly.View;
+using Monopoly.View.Notifications.Dialog;
+
 namespace Monopoly
 {
     /// <summary>
@@ -71,12 +73,8 @@ namespace Monopoly
         {
             if (e.Key == Key.Escape)
             {
-                MessageBoxResult result = MessageBox.Show("Voulez vous quitter l'application ?", "Quitter", MessageBoxButton.YesNo, MessageBoxImage.Question);
-
-                if (result == MessageBoxResult.Yes)
-                {
-                    Close();
-                }
+                NotificationsPanel.Visibility = Visibility.Visible;
+                NotificationsPanel.Content = new SubMenuOfGame();
             }
 
         }

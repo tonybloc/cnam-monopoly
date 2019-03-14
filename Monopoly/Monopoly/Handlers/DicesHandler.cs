@@ -18,7 +18,7 @@ namespace Monopoly.Handlers
         public Dice SecondDice { get; private set; }
         private Player CurrentLauncher { get; set; }
         private int NumberOfRool { get; set; }
-        private bool CanBeRaise { get; set; } 
+        public bool PlayerCanBeRaise { get; set; } 
 
         private DicesHandler()
         {
@@ -26,7 +26,7 @@ namespace Monopoly.Handlers
             SecondDice = new Dice();
             this.CurrentLauncher = new Player();
             this.NumberOfRool = 0;
-            this.CanBeRaise = true;
+            this.PlayerCanBeRaise = true;
         }
 
         public static DicesHandler Instance
@@ -52,16 +52,16 @@ namespace Monopoly.Handlers
             {
                 this.CurrentLauncher = launcher;
                 this.NumberOfRool = 0;
-                this.CanBeRaise = true;
+                this.PlayerCanBeRaise = true;
             }
 
-            if (!CanBeRaise)
+            if (!PlayerCanBeRaise)
                 throw new YouCanNotRoolDicesException();
             
             this.NumberOfRool++;
             FirstDice.Rool();
             SecondDice.Rool();
-            this.CanBeRaise = IsDouble();
+            this.PlayerCanBeRaise = IsDouble();
 
             if (NumberOfRool == Config.NB_MAX_LAUNCH_DICES)
             {
@@ -70,6 +70,7 @@ namespace Monopoly.Handlers
            
         }
 
+        
         /// <summary>
         /// Check if the dices launch is double 
         /// </summary>

@@ -5,7 +5,9 @@ using Monopoly.Models.Tools;
 using Monopoly.Settings;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -15,11 +17,12 @@ namespace Monopoly.Handlers
     {
         #region Variables 
         
+
         /// <summary>
         /// Game manager instance
         /// </summary>
-        private static GameManager _instance = null;
-        
+        private static GameManager _instance = null;        
+
         /// <summary>
         /// Player handler
         /// </summary>
@@ -44,7 +47,9 @@ namespace Monopoly.Handlers
         /// <summary>
         /// Cout the number of turn
         /// </summary>
-        public int NumberOfTurn { get; set; }
+        public int NumberOfTurn{ get; set; }
+
+        
 
         /// <summary>
         /// Status of game
