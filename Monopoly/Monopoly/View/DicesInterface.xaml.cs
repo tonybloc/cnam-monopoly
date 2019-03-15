@@ -63,9 +63,10 @@ namespace Monopoly.View
 
             _DicesHandler.RoolDices(_PlayerHandler.GetCurrentPlayer());
 
-            timer.Start();
-            timer.Tick += Timer_Tick;
             
+            timer.Interval = new TimeSpan(0, 0, 1);
+            timer.Tick += Timer_Tick;
+            timer.Start();
         }
 
         private void Timer_Tick(object sender, EventArgs e)
@@ -74,15 +75,6 @@ namespace Monopoly.View
             Result.Children.Remove(Gif);
             FirstDice.Source = new BitmapImage(new Uri("/Monopoly;component/Resources/Pictures/Dices/dice" + _DicesHandler.FirstDice.Value + ".png", UriKind.Relative));
             SecondDice.Source = new BitmapImage(new Uri("/Monopoly;component/Resources/Pictures/Dices/dice" + _DicesHandler.SecondDice.Value + ".png", UriKind.Relative));
-            //secondTimer.Start();
-            //secondTimer.Tick += SecondTime_Tick;
-        }
-
-        private void SecondTime_Tick(object sender, EventArgs e)
-        {
-            secondTimer.Stop();
-            MessageBox.Show("Test");
-            
         }
     }
     #endregion
