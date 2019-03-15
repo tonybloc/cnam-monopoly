@@ -2029,9 +2029,6 @@ namespace Monopoly.View
                 playerEllipse.Width = SizeofElipse;
                 playerEllipse.Height = SizeofElipse;
 
-                DropShadowEffect shadowEffect = new DropShadowEffect();
-                shadowEffect.ShadowDepth = 1;
-                playerEllipse.Effect = shadowEffect;
 
                 TextBlock tbPlayerNumber = new TextBlock();
                 tbPlayerNumber.VerticalAlignment = VerticalAlignment.Center;

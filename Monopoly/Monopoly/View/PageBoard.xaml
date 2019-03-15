@@ -223,11 +223,7 @@
                             </Border.Effect>
                             <StackPanel Grid.Row="1" Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center">
                                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                                    <Ellipse Fill="{Binding Path=ColorOfPlayer, Mode=TwoWay}" HorizontalAlignment="Left" Height="35" Stroke="Black" Width="35">
-                                        <Ellipse.Effect>
-                                            <DropShadowEffect ShadowDepth="1"/>
-                                        </Ellipse.Effect>
-                                    </Ellipse>
+                                    <Ellipse Fill="{Binding Path=ColorOfPlayer, Mode=TwoWay}" HorizontalAlignment="Left" Height="35" Width="35"/>
                                     <TextBlock Text="{Binding Path=NameOfPlayer , Mode=TwoWay}" FontSize="24"  Margin="15,0,10,0"></TextBlock>
                                 </StackPanel>
                             </StackPanel>
