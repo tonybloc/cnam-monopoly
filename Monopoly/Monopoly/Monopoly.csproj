@@ -121,9 +121,10 @@
     <Compile Include="Models\Components\Cells\TrainStation.cs" />
     <Compile Include="Models\Components\Dice.cs" />
     <Compile Include="Models\Components\Exceptions\BankBalanceIsNotEnougth.cs" />
-    <Compile Include="Models\Components\Exceptions\ColorAlreadyAssigned.cs" />
+    <Compile Include="Models\Components\Exceptions\InvalidePlayerColorException.cs" />
     <Compile Include="Models\Components\Exceptions\GameIsNotDefined.cs" />
     <Compile Include="Models\Components\Exceptions\InvalideNumberOfPlayerInGameException.cs" />
+    <Compile Include="Models\Components\Exceptions\InvalidePlayerNameException.cs" />
     <Compile Include="Models\Components\Exceptions\SoManyDoubleDicesException.cs" />
     <Compile Include="Models\Components\Exceptions\UserAsMissingToLaunchDicesException.cs" />
     <Compile Include="Models\Components\Exceptions\YouCanNotRoolDicesException.cs" />

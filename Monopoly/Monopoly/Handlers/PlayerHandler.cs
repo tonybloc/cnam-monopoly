@@ -2,6 +2,7 @@
 using Monopoly.Models.Components;
 using Monopoly.Models.Components.Cells;
 using Monopoly.Models.Components.Exceptions;
+using Monopoly.Models.Tools;
 using Monopoly.Resources.Colors;
 using System;
 using System.Collections.Generic;
@@ -72,6 +73,7 @@ namespace Monopoly.Handlers
 
         public void Initialize()
         {
+            Tools.Shuffle(ListOfPlayers);
             InitialisePawnPosition();
             DefineTheNextPlayer();
         }
@@ -107,11 +109,12 @@ namespace Monopoly.Handlers
         {
             if (ListOfPlayers.Exists(x => x.Pawn.ColorValue == player.Pawn.ColorValue))
             {
-                throw new ColorAlreadyAssigned();
+                throw new InvalidePlayerColorException();
             }
             else
             {
                 this.ListOfPlayers.Add(player);
+                bankInstance.CreateBankAccount(player);
             }
             
         }
@@ -125,18 +128,6 @@ namespace Monopoly.Handlers
             this.ListOfPlayers.Remove(player);
         }
 
-        /// <summary>
-        /// Add a new player to the list of participants
-        /// </summary>
-        /// <param name="pseudo">Pseudo of the player</param>
-        /// <param name="colorValue">Color of the pawn</param>
-        public void CreatePlayer(string pseudo, string colorValue)
-        {   
-            numberOfPlayer++;
-            Player p = new Player(numberOfPlayer, pseudo, new Pawn(colorValue));
-            this.AddPlayer(p);
-            bankInstance.CreateBankAccount(p);
-        }
 
         /// <summary>
         /// Définie le prochain joueur à joue

@@ -155,15 +155,7 @@ namespace Monopoly.Handlers
 
        
 
-        /// <summary>
-        /// Crée un nouveau joueur
-        /// </summary>
-        /// <param name="pseudo">pseudo du joueur</param>
-        /// <param name="colorValue">couleur du joueur</param>
-        public void CreatePlayer(string pseudo, string colorValue )
-        {
-            PlayerHandler.CreatePlayer(pseudo, colorValue);
-        }
+        
 
         #endregion
 
@@ -203,7 +195,7 @@ namespace Monopoly.Handlers
 
             for (int i = 0; i < numberOfBot; i++)
             {
-                Player p = new Player(100 + i, BotName[i], new Pawn( BotColors[i] ) );
+                Player p = new Player(BotName[i], new Pawn( BotColors[i]), Player.TypeOfPlayer.BOT );
                 p.SetPlayerType( Player.TypeOfPlayer.BOT );
                 PlayerHandler.AddPlayer(p);
             }

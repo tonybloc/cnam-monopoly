@@ -12,7 +12,7 @@ namespace Monopoly.Models.Components
         #region Constantes
 
         public enum TypeOfPlayer : int {USER = 0,BOT = 1}
-
+        private static int NextID = 0;
         
         public const int WAITING = 0;
         public const int PLAYING = 1;
@@ -33,11 +33,12 @@ namespace Monopoly.Models.Components
 
         #region Constructeurs
         /// <summary>
-        /// Crée une instance de la classe
+        /// Create new instance of class
         /// </summary>
         public Player()
         {
-            this.Id = 2;
+            NextID += 1;
+            this.Id = NextID;
             this.Name = "";
             this.Pawn = new Pawn();
             this.Position = 0;
@@ -48,21 +49,23 @@ namespace Monopoly.Models.Components
         }
 
         /// <summary>
-        /// Crée une instance de la classe
+        /// Create a new instance of class
         /// </summary>
-        /// <param name="id">Id du joueur</param>
-        /// <param name="name">Nom du joueur</param>
-        /// <param name="pawn">Pion du joueur</param>
-        public Player(int id, string name, Pawn pawn)
+        /// <param name="name">name of player</param>
+        /// <param name="pawn">pwan of player</param>
+        public Player(string name, Pawn pawn, TypeOfPlayer type)
         {
-            this.Id = id;
+            NextID += 1;
+            this.Id = NextID;
             this.Name = name;
             this.Pawn = pawn;
             this.Position = 0;
             this.Status = WAITING;
-            this.PlayerType = TypeOfPlayer.USER;
+            this.PlayerType = type;
             this.ListOfProperties = new List<Property>();
         }
+
+        
 
         /// <summary>
         /// Update the type of player

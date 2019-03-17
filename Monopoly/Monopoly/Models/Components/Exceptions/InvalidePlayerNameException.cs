@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 
 namespace Monopoly.Models.Components.Exceptions
 {
-    public class ColorAlreadyAssigned : Exception
+    public class InvalidePlayerNameException : Exception
     {
-        public ColorAlreadyAssigned() : base("La couleur est déjà attribué à un joureur"){}
+        public InvalidePlayerNameException() : base("Le nom du joueur est invalide !") {}
     }
 }
