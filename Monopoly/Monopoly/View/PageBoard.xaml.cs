@@ -1954,7 +1954,7 @@ namespace Monopoly.View
 
             if (result == MessageBoxResult.Yes)
             {
-                PlayerHandler.Instance.BuyProperty(p);
+                _PlayerHandler.BuyProperty(p);
                 PropertyBought(CurrentPlayer);
 
             }
@@ -1964,7 +1964,7 @@ namespace Monopoly.View
         #region Buy building
         private void BuyBuilding(Land l)
         {
-            if (PlayerHandler.Instance.CheckIfPlayerOwnAllLandInLandGroup(CurrentPlayer, l.LandGroup))
+            if (_PlayerHandler.CheckIfPlayerOwnAllLandInLandGroup(CurrentPlayer, l.LandGroup))
             {
                 MessageBoxResult result = MessageBox.Show("Voulez vous acheter une maison ?", "Achat d'une maison", MessageBoxButton.YesNo, MessageBoxImage.Question);
 
@@ -2015,7 +2015,7 @@ namespace Monopoly.View
         {
 
             int index = 0;
-            foreach (Player p in _GameManager.PlayerHandler.ListOfPlayers)
+            foreach (Player p in _PlayerHandler.ListOfPlayers)
             {
                 index++;
                 StackPanel stackPanel = new StackPanel();
@@ -2140,7 +2140,7 @@ namespace Monopoly.View
                {
                     _GameManager.NextTurn();
                     _DicesHandler.PlayerCanBeRaise = true;
-                    CurrentPlayer = _GameManager.PlayerHandler.GetCurrentPlayer();
+                    CurrentPlayer = _PlayerHandler.GetCurrentPlayer();
                     NumberOfTurn = _GameManager.NumberOfTurn;
                }
             }
@@ -2234,6 +2234,7 @@ namespace Monopoly.View
                 {
                     Image image = new Image();
                     image.Source = new BitmapImage(new Uri("/Monopoly;component/Resources/Pictures/motel2.png", UriKind.Relative));
+                    image.Height = 40;
                     Buildings.Children.Add(image);
                 }
             }
@@ -2275,16 +2276,10 @@ namespace Monopoly.View
                 if (p.status == Property.AVAILABLE_ON_SALE)
                 {
                     BuyProperty(p);
-                    //TODO : remove it
-                    /*if (p is Land)
-                    {
-
-                        BuyBuilding((Land)p);
-                    }*/
                 }
                 else if (p.status == Property.NOT_AVAILABLE_ON_SALE)
                 {
-                    if (PlayerHandler.Instance.CheckIfPlayerOwnThisProperty(p))
+                    if (_PlayerHandler.CheckIfPlayerOwnThisProperty(p))
                     {
                         /*if (p is Land)
                         {
@@ -2294,38 +2289,51 @@ namespace Monopoly.View
 
                     }
                     else
-                        PlayerHandler.Instance.PayTheRent(p, _DicesHandler.FirstDice.Value + _DicesHandler.SecondDice.Value);
+                    {
+                        AlertNotification.Content = new AlertDialog("Vous avez payer une taxe de : " + ((Tax)c).Amount, AlertDialog.TypeOfAlert.INFO);
+                        AlertNotification.Visibility = Visibility.Visible;
+                        _PlayerHandler.PayTheRent(p, _DicesHandler.FirstDice.Value + _DicesHandler.SecondDice.Value);
+                    }
+                    
                 }
             }
             else if (c.GetType() == typeof(Tax))
             {
-                MessageBoxResult mb = MessageBox.Show("Vous devez payer la taxe !");
-                PlayerHandler.Instance.PayTheTax((Tax) c);
+                AlertNotification.Content = new AlertDialog("Vous avez payer une taxe de : " + ((Tax)c).Amount, AlertDialog.TypeOfAlert.INFO);
+                AlertNotification.Visibility = Visibility.Visible;
+                _PlayerHandler.PayTheTax((Tax) c);
             }
             else if (c.GetType() == typeof(DrawCard))
             {
-                MessageBoxResult mb = MessageBox.Show("Vous piochez une carte !");
+                AlertNotification.Content = new AlertDialog("Vous piochez une carte !", AlertDialog.TypeOfAlert.SUCCES);
+                AlertNotification.Visibility = Visibility.Visible;
             }
             else if (c.GetType() == typeof(StartPoint))
             {
-                MessageBoxResult mb = MessageBox.Show("Vous etes sur la case départ !");
+                AlertNotification.Content = new AlertDialog("Vous etes sur la case départ !", AlertDialog.TypeOfAlert.INFO);
+                AlertNotification.Visibility = Visibility.Visible;
             }
             else if (c.GetType() == typeof(Jail))
             {
-                MessageBoxResult mb = MessageBox.Show("Vous etes en visite !");
+                AlertNotification.Content = new AlertDialog("Vous êtes en visite !", AlertDialog.TypeOfAlert.ERROR);
+                AlertNotification.Visibility = Visibility.Visible;
             }
             else if (c.GetType() == typeof(GoToJail))
             {
-                MessageBoxResult mb = MessageBox.Show("Vous etes en prison !");
+                AlertNotification.Content = new AlertDialog("Vous êtes en prison !", AlertDialog.TypeOfAlert.INFO);
+                AlertNotification.Visibility = Visibility.Visible;
             }
             else if (c.GetType() == typeof(Parking))
             {
-                MessageBoxResult mb = MessageBox.Show("Vous recevez toute la MONEY !");
-                PlayerHandler.Instance.GetParkingMoney();
+                AlertNotification.Content = new AlertDialog("Vous recevez toute la MONEY !", AlertDialog.TypeOfAlert.INFO);
+                AlertNotification.Visibility = Visibility.Visible;
+                _PlayerHandler.GetParkingMoney();
             }
             else
             {
-                MessageBoxResult mb = MessageBox.Show("Non definie !");
+                AlertNotification.Content = new AlertDialog("Action non définie !", AlertDialog.TypeOfAlert.WARNING);
+                AlertNotification.Visibility = Visibility.Visible;
+
             }
         }
         #endregion

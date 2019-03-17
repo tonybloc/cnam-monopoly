@@ -6,9 +6,9 @@
              xmlns:local="clr-namespace:Monopoly.View.Notifications.Dialog"
              mc:Ignorable="d">
     <Grid>
-        <Border CornerRadius="5" Padding="10" Opacity="0.8" Background="OrangeRed" >
+        <Border CornerRadius="5" Padding="10" Opacity="0.8" Background="{Binding Path=BackgroundColor}" >
         </Border>
-        <TextBlock Padding="20" Text="{Binding Path=Message}">
+        <TextBlock Padding="15" FontSize="14" Text="{Binding Path=Message}">
         </TextBlock>
 
     </Grid>

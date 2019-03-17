@@ -184,6 +184,9 @@ namespace Monopoly.View
                 }
                 else
                 {
+                    if ((ListOfPlayers.Count(x => (x.Pawn.ColorValue == PlayerColor)) != 0))
+                        throw new InvalidePlayerColorException();
+
                     this.ListOfPlayers.Add(new Player(PlayerName, new Pawn(PlayerColor), Player.TypeOfPlayer.USER));
                 }
 
@@ -195,7 +198,7 @@ namespace Monopoly.View
             catch (Exception exp)
             {
                 AlertNotifcation.Visibility = Visibility.Visible;
-                AlertNotifcation.Content = new AlertDialog(exp);
+                AlertNotifcation.Content = new AlertDialog(exp, AlertDialog.TypeOfAlert.ERROR);
             }
             
         }

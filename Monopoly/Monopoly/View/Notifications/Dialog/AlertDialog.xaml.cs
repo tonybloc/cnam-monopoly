@@ -24,7 +24,7 @@ namespace Monopoly.View.Notifications.Dialog
     /// </summary>
     public partial class AlertDialog : UserControl, INotifyPropertyChanged
     {
-        
+
         public event PropertyChangedEventHandler PropertyChanged;
 
         private string _message;
@@ -45,19 +45,156 @@ namespace Monopoly.View.Notifications.Dialog
         }
 
         private DispatcherTimer _timer;
+        private TypeOfAlert _type;
+
+        private string _BackgroundColor;
+        public string BackgroundColor
+        {
+            get { return _BackgroundColor; }
+            set
+            {
+                if(_BackgroundColor != value)
+                {
+                    _BackgroundColor = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        private static string WARNING_COLOR = "#FFAB91";
+        private static string ERROR_COLOR = "#C62828";
+        private static string SUCCES_COLOR = "#A5D6A7";
+        private static string INFO_COLOR = "#64B5F6";
+
+        public enum TypeOfAlert : int { WARNING = 0, ERROR = 1, SUCCES = 2, INFO = 3};
 
         /// <summary>
         /// Create new instance of class
         /// </summary>
-        /// <param name="ex">Exception to show</param>
-        public AlertDialog(Exception ex)
+        /// <param name="ex">Exception</param>
+        /// <param name="t">type of alert</param>
+        public AlertDialog(Exception ex, TypeOfAlert t)
         {
             InitializeComponent();
             DataContext = this;
             Message = ex.Message;
+            _type = t;
+            switch(_type)
+            {
+                case TypeOfAlert.ERROR:
+                    BackgroundColor = ERROR_COLOR;
+                    break;
+                case TypeOfAlert.WARNING:
+                    BackgroundColor = WARNING_COLOR;
+                    break;
+                case TypeOfAlert.SUCCES:
+                    BackgroundColor = SUCCES_COLOR;
+                    break;
+                case TypeOfAlert.INFO:
+                    BackgroundColor = INFO_COLOR;
+                    break;
+            }
+            _timer = new DispatcherTimer { Interval = TimeSpan.FromMilliseconds(10) };
+            _timer.Tick += new EventHandler(EventShowMessage);
+            _timer.Start();
+        }
 
-            _timer = new DispatcherTimer { Interval = TimeSpan.FromSeconds(3) };
-            _timer.Tick += new EventHandler(EventDuration);
+        /// <summary>
+        /// Create new instance of class
+        /// </summary>
+        /// <param name="message">message</param>
+        /// <param name="t">type of alert</param>
+        public AlertDialog(string message, TypeOfAlert t)
+        {
+            InitializeComponent();
+            DataContext = this;
+            Message = message;
+            _type = t;
+            switch (_type)
+            {
+                case TypeOfAlert.ERROR:
+                    BackgroundColor = ERROR_COLOR;
+                    break;
+                case TypeOfAlert.WARNING:
+                    BackgroundColor = WARNING_COLOR;
+                    break;
+                case TypeOfAlert.SUCCES:
+                    BackgroundColor = SUCCES_COLOR;
+                    break;
+                case TypeOfAlert.INFO:
+                    BackgroundColor = INFO_COLOR;
+                    break;
+            }
+
+            _timer = new DispatcherTimer { Interval = TimeSpan.FromMilliseconds(10) };
+            _timer.Tick += new EventHandler(EventShowMessage);
+            _timer.Start();
+        }
+
+        /// <summary>
+        /// Create new instance of class
+        /// </summary>
+        /// <param name="ex">Exception</param>
+        /// <param name="t">type of alert</param>
+        /// <param name="d">dalay to display alert</param>
+        public AlertDialog(Exception ex, TypeOfAlert t, TimeSpan d)
+        {
+            InitializeComponent();
+            DataContext = this;
+            Message = ex.Message;
+            _type = t;
+            switch (_type)
+            {
+                case TypeOfAlert.ERROR:
+                    BackgroundColor = ERROR_COLOR;
+                    break;
+                case TypeOfAlert.WARNING:
+                    BackgroundColor = WARNING_COLOR;
+                    break;
+                case TypeOfAlert.SUCCES:
+                    BackgroundColor = SUCCES_COLOR;
+                    break;
+                case TypeOfAlert.INFO:
+                    BackgroundColor = INFO_COLOR;
+                    break;
+            }
+            this.Opacity = 0;
+            _timer = new DispatcherTimer { Interval = TimeSpan.FromSeconds(1) };
+            _timer.Tick += new EventHandler(EventShowMessage);
+            _timer.Start();
+        }
+
+        /// <summary>
+        /// Create new instance of class
+        /// </summary>
+        /// <param name="message">message</param>
+        /// <param name="t">type of alert</param>
+        /// <param name="d">delay to display the alert </param>
+        public AlertDialog(string message, TypeOfAlert t, TimeSpan d)
+        {
+            InitializeComponent();
+            DataContext = this;
+            Message = message;
+            _type = t;
+            switch (_type)
+            {
+                case TypeOfAlert.ERROR:
+                    BackgroundColor = ERROR_COLOR;
+                    break;
+                case TypeOfAlert.WARNING:
+                    BackgroundColor = WARNING_COLOR;
+                    break;
+                case TypeOfAlert.SUCCES:
+                    BackgroundColor = SUCCES_COLOR;
+                    break;
+                case TypeOfAlert.INFO:
+                    BackgroundColor = INFO_COLOR;
+                    break;
+            }
+
+            this.Opacity = 0;
+            _timer = new DispatcherTimer { Interval = TimeSpan.FromSeconds(1) };
+            _timer.Tick += new EventHandler(EventShowMessage);
             _timer.Start();
         }
 
@@ -79,7 +216,22 @@ namespace Monopoly.View.Notifications.Dialog
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
-        private void EventDuration(object sender, EventArgs e)
+        private void EventShowMessage(object sender, EventArgs e)
+        {
+            double x = 0.05;
+            if (this.Opacity <= 0.95)
+            {
+                _timer.Interval = new TimeSpan(0, 0, 0, 0, 10);
+                this.Opacity += x;
+            }
+            else
+            {
+                _timer.Interval = new TimeSpan(0, 0, 3);
+                _timer.Tick += new EventHandler(EventHiddeMessage);
+            }
+        }
+
+        private void EventHiddeMessage(object sender, EventArgs e)
         {
             double x = 0.05;
             if(this.Opacity <= 0)
@@ -94,5 +246,7 @@ namespace Monopoly.View.Notifications.Dialog
             }
             
         }
+
+        
     }
 }

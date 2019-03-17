@@ -8,23 +8,18 @@
       xmlns:MaterialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
 
       mc:Ignorable="d" 
-      d:DesignHeight="450" d:DesignWidth="800"
+      d:DesignHeight="200" d:DesignWidth="500"
       Title="DicesInterface">
 
     <Grid>
-        <StackPanel Background="AliceBlue" Margin="15" VerticalAlignment="Center" HorizontalAlignment="Center">
-            <StackPanel Orientation="Vertical" HorizontalAlignment="Center" Margin="10">
-                <Label HorizontalAlignment="Center" Content="Lancés des dés..." FontSize="20" FontStyle="Normal" FontWeight="Bold"/>
-            </StackPanel>
-            <StackPanel HorizontalAlignment="Center" Margin="10">
-                <Grid Name="Result" Height="200" Width="600">
-                    <Image x:Name="Gif" gif:ImageBehavior.RepeatBehavior="Forever" HorizontalAlignment="Center"/>
-                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                        <Image x:Name="FirstDice"/>
-                        <Image x:Name="SecondDice"/>
-                    </StackPanel>
-                </Grid>
-            </StackPanel>
+        <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
+            <Grid Name="Result" Height="200" Width="500">
+                <Image x:Name="Gif" gif:ImageBehavior.RepeatBehavior="Forever" HorizontalAlignment="Center"/>
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                    <Image x:Name="FirstDice" Height="75" Width="auto"/>
+                    <Image x:Name="SecondDice" Height="75" Width="auto"/>
+                </StackPanel>
+            </Grid>
         </StackPanel>
 
     </Grid>

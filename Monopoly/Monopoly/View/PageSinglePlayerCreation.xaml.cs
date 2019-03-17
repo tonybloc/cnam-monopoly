@@ -132,9 +132,8 @@ namespace Monopoly.View
             }
             catch (Exception exp)
             {
-
                 AlertNotification.Visibility = Visibility.Visible;
-                AlertNotification.Content = new AlertDialog(exp);
+                AlertNotification.Content = new AlertDialog(exp, AlertDialog.TypeOfAlert.ERROR);
             }
 
                         
