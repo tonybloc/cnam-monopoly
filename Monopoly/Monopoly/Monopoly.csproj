@@ -137,9 +137,11 @@
     <Compile Include="View\ConfigurationInterface.xaml.cs">
       <DependentUpon>ConfigurationInterface.xaml</DependentUpon>
     </Compile>
-
     <Compile Include="View\MortgagedPropertiesListInterface.xaml.cs">
       <DependentUpon>MortgagedPropertiesListInterface.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Notifications\Dialog\AlertDialog.xaml.cs">
+      <DependentUpon>AlertDialog.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\Notifications\Dialog\ExceptionDialog.xaml.cs">
       <DependentUpon>ExceptionDialog.xaml</DependentUpon>
@@ -189,6 +191,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="View\MortgagedPropertiesListInterface.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Notifications\Dialog\AlertDialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
