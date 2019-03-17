@@ -13,7 +13,7 @@ namespace Monopoly.Models.Bank
         /// <summary>
         /// Amount of the bank account
         /// </summary>
-        private int _amount { get; set; }
+        private double _amount { get; set; }
         #endregion
 
         #region Constructeurs
@@ -39,7 +39,7 @@ namespace Monopoly.Models.Bank
         /// Add an amount to the bank balance
         /// </summary>
         /// <param name="amount">Amount value</param>
-        private void AddAmount(int amount)
+        private void AddAmount(double amount)
         {
             this._amount += amount;
         }
@@ -48,7 +48,7 @@ namespace Monopoly.Models.Bank
         /// Remove an amount from the bank balance
         /// </summary>
         /// <param name="amount">Amount value</param>
-        private void RemoveAmount(int amount)
+        private void RemoveAmount(double amount)
         {
             this._amount -= amount;
         }
@@ -58,7 +58,7 @@ namespace Monopoly.Models.Bank
         /// </summary>
         /// <param name="amount">Amount value</param>
         /// <returns>Boolean : is there enougth or not</returns>
-        private bool CheckIfBankBalanceIsEnougth(int amount)
+        private bool CheckIfBankBalanceIsEnougth(double amount)
         {
             if ((this._amount - amount) >= 0)
             {
@@ -74,7 +74,7 @@ namespace Monopoly.Models.Bank
         ///  Withdraw an amount from the bank balance
         /// </summary>
         /// <param name="amount">Amount value</param>
-        private int Withdraw(int amount)
+        private double Withdraw(double amount)
         {
             if (CheckIfBankBalanceIsEnougth(amount))
             {
@@ -90,7 +90,7 @@ namespace Monopoly.Models.Bank
         /// Return the bank balance value
         /// </summary>
         /// <returns>Amount value</returns>
-        public int GetAmount() { return this._amount; }
+        public double GetAmount() { return this._amount; }
 
 
         /// <summary>
@@ -98,9 +98,9 @@ namespace Monopoly.Models.Bank
         /// </summary>
         /// <param name="bankAccount">Target bank account</param>
         /// <param name="amount">Amount value</param>
-        public void BankTransfer(BankAccount bankAccount, int amount)
+        public void BankTransfer(BankAccount bankAccount, double amount)
         {
-            int money = this.Withdraw(amount);
+            double money = this.Withdraw(amount);
             bankAccount.AddAmount(money);
 
         }

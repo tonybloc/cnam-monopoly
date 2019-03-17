@@ -57,6 +57,8 @@ namespace Monopoly.Handlers
                 return instance;
             }
         }
+
+       
         #endregion
 
         #region Methodes (public)
@@ -93,7 +95,7 @@ namespace Monopoly.Handlers
         /// <param name="colorValue">Color of the pawn</param>
         public void CreatePlayer(string pseudo, string colorValue)
         {
-            this.AddPlayer(new Player(ListOfPlayers.Count, pseudo, new Pawn(colorValue)));
+            //this.AddPlayer(new Player(ListOfPlayers.Count, pseudo, new Pawn(colorValue)));
             numberOfPlayer++;
             Player p = new Player(numberOfPlayer, pseudo, new Pawn(colorValue));
             this.AddPlayer(p);
@@ -220,13 +222,20 @@ namespace Monopoly.Handlers
             return ListOfPlayers.Find(filtrePlayer);
         }
 
-        /*public Property GetProperty(int idProperty)
+        /// <summary>
+        /// Retrieve the property thanks to its id
+        /// </summary>
+        /// <param name="idProperty">Id of the property</param>
+        /// <returns>The corresponding property</returns>
+        public Property GetProperty(int idProperty)
         {
+            List<Property> properties = BoardHandler.Instance.Board.ListCell.Where(l => l is Property).Cast<Property>().ToList();
 
-            return BoardHandler.Instance.Board.ListCell.Where(l => l is Property).Cast<Property>().ToList().Where(p => p.Id.Equals(idProperty));
+            Predicate<Cell> filtreProperty = (Cell p) => { return p.Id == idProperty; };
 
+            return properties.Find(filtreProperty);
 
-        }*/
+        }
 
         /// <summary>
         /// Buy a specific property at the bank
@@ -280,12 +289,20 @@ namespace Monopoly.Handlers
             return BoardHandler.Instance.Board.ListCell.Where(l => l is TrainStation).Count();
         }
 
+        private int NumberOfTrainStationOwned()
+        {
+            return GetCurrentPlayer().ListOfProperties.Where(l => l is TrainStation).Count();
+        }
+
         private int CountTheNumberOfPublicSercices()
         {
             return BoardHandler.Instance.Board.ListCell.Where(l => l is PublicService).Count();
         }
 
-
+        private int NumberOfPublicServiceOwned()
+        {
+            return GetCurrentPlayer().ListOfProperties.Where(l => l is PublicService).Count();
+        }
 
         public bool CheckIfPlayerOwnAllLandInLandGroup(Player player, LandGroup groupe)
         {
@@ -295,8 +312,37 @@ namespace Monopoly.Handlers
 
             if (nbLandPlayer == nbLandBoard)
                 return true;
-            
+
             return false;
+        }
+
+        public List<Land> BuilbingLands()
+        {
+            Player p = GetCurrentPlayer();
+            List<Land> ListOfLands = p.ListOfProperties.Where(l => l is Land).Cast<Land>().OrderBy(l => l.LandGroup.IdGroup).ToList();
+            List<Land> BuildingLands = new List<Land>();
+
+            foreach (Land l in ListOfLands)
+            {
+                if (CheckIfPlayerOwnAllLandInLandGroup(p, l.LandGroup))
+                    BuildingLands.Add(l);
+            }
+
+            return BuildingLands;
+        }
+
+        public List<Property> Properties()
+        {
+            Player player = GetCurrentPlayer();
+            return player.ListOfProperties.Where(l => l.status == Land.NOT_AVAILABLE_ON_SALE).OrderBy(p => p.Id).ToList();
+        }
+
+        public List<Property> MortagedLands()
+        {
+            Player p = GetCurrentPlayer();
+            List<Property> MortgagedLands = p.ListOfProperties.Where(l => l.status == Land.MORTGAGED).ToList();
+
+            return MortgagedLands;
         }
 
         public bool CheckIfPlayerOwnThisProperty(Property property)
@@ -311,7 +357,42 @@ namespace Monopoly.Handlers
 
         public void BuildOnLand(Player player, Land land)
         {
-            bankInstance.SellHouse(player, land);
+            if ((land.NbHouse == Land.NB_MAX_HOUSES) && (land.NbHotel < Land.NB_MAX_HOTEL))
+            {
+                bankInstance.SellHotel(player, land);
+
+            }
+
+            if ((land.NbHouse < Land.NB_MAX_HOUSES) && (land.NbHotel == 0))
+            {
+                bankInstance.SellHouse(player, land);
+            }
+        }
+
+        public void Mortgage(Player player, Property p)
+        {
+            p.status = Property.MORTGAGED;
+            bankInstance.Mortgaged(player, p);
+        }
+
+        public void RaiseMortgage(Player player, Property p)
+        {
+            p.status = Property.NOT_AVAILABLE_ON_SALE;
+            bankInstance.RaiseMortgaged(player, p);
+        }
+
+        public void Sell(Player player, Land land)
+        {
+            if ((land.NbHouse <= Land.NB_MAX_HOUSES) && (land.NbHotel == 0))
+            {
+                bankInstance.BuyHouse(player, land);
+            }
+
+            if ((land.NbHouse == 0) && (land.NbHotel == Land.NB_MAX_HOTEL))
+            {
+                bankInstance.BuyHotel(player, land);
+            }
+
         }
 
         /// <summary>
@@ -331,21 +412,25 @@ namespace Monopoly.Handlers
                 {
                     if (l.NbHouse == 0 && l.NbHotel == 0)
                         rentValue = 2 * l.GetRent(0);
-                    else if (l.NbHouse <= 4 && l.NbHotel == 0)
+                    else if (l.NbHouse <= Land.NB_MAX_HOUSES && l.NbHotel == 0)
                         rentValue = l.GetRent(l.NbHouse);
                     else if (l.NbHouse == 0 && l.NbHotel != 0)
-                        rentValue = l.GetRent(4 + l.NbHotel);
+                        rentValue = l.GetRent(Land.NB_MAX_HOUSES + l.NbHotel);
                 }
                 else
                     rentValue = l.GetRent(l.NbHouse);
-
             }
             else if (p is PublicService)
             {
-                if (CountTheNumberOfPublicSercices() == 1)
+                if (NumberOfPublicServiceOwned() == 1)
                     rentValue = 4 * dicesValue;
-                else if (CountTheNumberOfPublicSercices() == 2)
+                else if (NumberOfPublicServiceOwned() == CountTheNumberOfPublicSercices())
                     rentValue = 10 * dicesValue;
+            }
+            else if (p is TrainStation)
+            {
+                TrainStation t = (TrainStation)p;
+                rentValue = t.TrainStationRent * NumberOfTrainStationOwned();
             }
 
             BankAccount accountPlayer = bankInstance.GetBankAccount(GetCurrentPlayer());
@@ -353,18 +438,14 @@ namespace Monopoly.Handlers
             accountPlayer.BankTransfer(accountToPlayer, rentValue);
         }
 
-        public void PayThePublicServiceRent(Property p, int dicesValue)
+        /// <summary>
+        /// When the player is on a tax cell, he pays the tax
+        /// </summary>
+        /// <param name="p">Player</param>
+        /// <param name="t">Tax</param>
+        public void PayTheTax(Tax t)
         {
-            int rentValue = 0;
-
-            if (CountTheNumberOfPublicSercices() == 1)
-                rentValue = 4 * dicesValue;
-            else if (CountTheNumberOfPublicSercices() == 2)
-                rentValue = 10 * dicesValue;
-
-            BankAccount accountPlayer = bankInstance.GetBankAccount(GetCurrentPlayer());
-            BankAccount accountToPlayer = bankInstance.GetBankAccount(WhoOwnThisProperty(p));
-            accountPlayer.BankTransfer(accountToPlayer, rentValue);
+            bankInstance.PayTheTax(GetCurrentPlayer(), t);
 
         }
 
@@ -375,6 +456,15 @@ namespace Monopoly.Handlers
         public void GetGratification(Player p)
         {
             bankInstance.PaymentGratification(p);
+        }
+
+        /// <summary>
+        /// When the player is on the parking cell, he retrieve all the money 
+        /// </summary>
+        /// <param name="p">Player</param>
+        public void GetParkingMoney()
+        {
+            bankInstance.GetParkingMoney(GetCurrentPlayer());
         }
         #endregion
     }

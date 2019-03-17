@@ -25,7 +25,7 @@
 
         <Border Grid.Column="0" BorderBrush="Black" BorderThickness="2" Margin="5" Width="{DynamicResource {x:Static SystemParameters.PrimaryScreenHeightKey}}" >
             <!-- Board (left side)-->
-            <Grid ShowGridLines="True" Name="MonopolyBoard" Background="Beige" >
+            <Grid Name="MonopolyBoard" Background="Beige" >
 
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="2*"/>
@@ -56,13 +56,13 @@
                         <RowDefinition Height="9*"/>
                     </Grid.RowDefinitions>
                     <StackPanel x:Name="Buildings" Orientation="Horizontal" HorizontalAlignment="Center" Margin="5">
-                        
+
                     </StackPanel>
-                    
+
                     <Border BorderThickness="2" BorderBrush="Black" Grid.Row="1" Grid.RowSpan="1">
                         <Label x:Name="lblLandTitle" Grid.Row="1" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
                     </Border>
-                    <Border BorderThickness="2,0,2,2" BorderBrush="Black" Background="White" Grid.Row="2">
+                    <Border x:Name="LandDescription" BorderThickness="2,0,2,2" BorderBrush="Black" Background="White" Grid.Row="2">
                         <Grid Grid.Row="2" Margin="10">
                             <Grid.RowDefinitions >
                                 <RowDefinition Height="*"/>
@@ -82,24 +82,24 @@
                             </Grid.ColumnDefinitions>
 
                             <Label x:Name="lblOwner" Grid.Row="0" HorizontalAlignment="Left" Content="Propriétaire :" VerticalAlignment="Top" Foreground="Black"/>
-                            <Label x:Name="lblOwnerValue" Grid.Row="0" Grid.Column="1" HorizontalAlignment="Left"/>
+                            <Label x:Name="lblOwnerValue" Grid.Row="0" Grid.Column="1" HorizontalAlignment="Right"/>
                             <Label x:Name="lblBuyingPrice" Grid.Row="1" HorizontalAlignment="Left" Content="Prix d'achat :" VerticalAlignment="Top" Foreground="Black"/>
-                            <Label x:Name="lblBuyingPriceValue" Grid.Row="1" Grid.Column="1" HorizontalAlignment="Left"/>
+                            <Label x:Name="lblBuyingPriceValue" Grid.Row="1" Grid.Column="1" HorizontalAlignment="Right"/>
                             <Label x:Name="lblRent" Grid.Row="2" HorizontalAlignment="Left" Content="Loyers :" VerticalAlignment="Top" Foreground="Black"/>
                             <Label x:Name="lblLand" Grid.Row="3" HorizontalAlignment="Left" Content="- Terrain nu : " VerticalAlignment="Top" Foreground="Black"/>
-                            <Label x:Name="lblLandValue" Grid.Row="3" Grid.Column="1" HorizontalAlignment="Left"/>
+                            <Label x:Name="lblLandValue" Grid.Row="3" Grid.Column="1" HorizontalAlignment="Right"/>
                             <Label x:Name="lblHouse1" Grid.Row="4" HorizontalAlignment="Left" Content="- Avec 1 maison :" VerticalAlignment="Top" Foreground="Black"/>
-                            <Label x:Name="lblHouse1Value" Grid.Row="4" Grid.Column="1" HorizontalAlignment="Left"/>
+                            <Label x:Name="lblHouse1Value" Grid.Row="4" Grid.Column="1" HorizontalAlignment="Right"/>
                             <Label x:Name="lblHouse2" Grid.Row="5" HorizontalAlignment="Left" Content="- Avec 2 maisons :" VerticalAlignment="Top" Foreground="Black"/>
-                            <Label x:Name="lblHouse2Value" Grid.Row="5" Grid.Column="1" HorizontalAlignment="Left"/>
+                            <Label x:Name="lblHouse2Value" Grid.Row="5" Grid.Column="1" HorizontalAlignment="Right"/>
                             <Label x:Name="lblHouse3" Grid.Row="6" HorizontalAlignment="Left" Content="- Avec 3 maisons :" VerticalAlignment="Top" Foreground="Black"/>
-                            <Label x:Name="lblHouse3Value" Grid.Row="6" Grid.Column="1" HorizontalAlignment="Left"/>
+                            <Label x:Name="lblHouse3Value" Grid.Row="6" Grid.Column="1" HorizontalAlignment="Right"/>
                             <Label x:Name="lblHouse4" Grid.Row="7" HorizontalAlignment="Left" Content="- Avec 4 maisons :" VerticalAlignment="Top" Foreground="Black"/>
-                            <Label x:Name="lblHouse4Value" Grid.Row="7" Grid.Column="1" HorizontalAlignment="Left"/>
+                            <Label x:Name="lblHouse4Value" Grid.Row="7" Grid.Column="1" HorizontalAlignment="Right"/>
                             <Label x:Name="lblMotel" Grid.Row="8" HorizontalAlignment="Left" Content="- Avec hôtel :" VerticalAlignment="Top" Foreground="Black"/>
-                            <Label x:Name="lblMotelValue" Grid.Row="8" Grid.Column="1" HorizontalAlignment="Left"/>
+                            <Label x:Name="lblMotelValue" Grid.Row="8" Grid.Column="1" HorizontalAlignment="Right"/>
                             <Label x:Name="lblMortgage" Grid.Row="9" HorizontalAlignment="Left" Content="Valeur hypothécaire :" VerticalAlignment="Top" Foreground="Black"/>
-                            <Label x:Name="lblMortgageValue" Grid.Row="9" Grid.Column="1" HorizontalAlignment="Left"/>
+                            <Label x:Name="lblMortgageValue" Grid.Row="9" Grid.Column="1" HorizontalAlignment="Right"/>
 
                         </Grid>
                     </Border>
@@ -124,7 +124,7 @@
                                 <StackPanel Orientation="Horizontal"  HorizontalAlignment="Center">
                                     <Label x:Name="lblMortgagePrice" Content="Valeur hypothécaire :" Foreground="Black"/>
                                     <Label x:Name="lblMortgagePriceValue"></Label>
-                                </StackPanel>                               
+                                </StackPanel>
                             </StackPanel>
 
                         </StackPanel>
@@ -143,7 +143,6 @@
                 <RowDefinition Height="2*" x:Name="First"/>
                 <RowDefinition Height="*"/>
                 <RowDefinition Height="2*"/>
-                <RowDefinition Height="2*"/>
             </Grid.RowDefinitions>
 
             <Grid Grid.Row="0">
@@ -154,7 +153,12 @@
                 </Grid.ColumnDefinitions>
 
                 <!-- Monopoly Man Icons -->
-                <Image Grid.Column="0" x:Name="image" Height="{Binding Height, ElementName=First}" Margin="10"  Source="/Monopoly;component/Resources/Pictures/MonopolyManIcon.png"></Image>
+
+                <StackPanel Grid.Column="0" >
+                    <Image  x:Name="image" Height="{Binding Height, ElementName=First}" Margin="10"  Source="/Monopoly;component/Resources/Pictures/MonopolyManIcon.png"></Image>
+                    <Ellipse Height="20" Width="20" Fill="{Binding Path=test}"></Ellipse>
+                    <TextBlock Grid.Column="0" Text="{Binding Path=NamePlayer}"></TextBlock>
+                </StackPanel>
 
                 <!-- Timer and Number of turn -->
                 <Border Grid.Column="1" Padding="20" Margin="20" Background="White">
@@ -177,21 +181,29 @@
 
             </Grid>
             <!-- Actions -->
-            <StackPanel Grid.Row="1" Orientation="Horizontal" Width="{Binding Width, ElementName=Right}" >
-                <Button x:Name="btnDice" HorizontalAlignment="Stretch" Width="Auto" ToolTip="Lancer les dés" Click="onClickDices">
+            <StackPanel Grid.Row="1" Orientation="Horizontal" Width="{Binding Width, ElementName=Right}" HorizontalAlignment="Center">
+                <Button x:Name="btnDice" Width="80" Height="50" ToolTip="Lancer les dés" Click="onClickDices">
                     <Image Source="/Monopoly;component/Resources/Pictures/dices.png"/>
                 </Button>
-                <Button x:Name="btnNExt" Margin="10" Width="Auto" ToolTip="Au suivant..." Click="onClickNext" HorizontalAlignment="Stretch">
+                <Button x:Name="btnNExt" Width="80" Height="50" Margin="10" ToolTip="Au suivant..." Click="onClickNext" >
                     <Image Source="../Resources/Pictures/next.png"/>
                 </Button>
-                <Button Margin="10" Width="Auto" ></Button>
-                <Button Margin="10" Width="Auto" ></Button>
-                <Button Margin="10" Width="Auto" ></Button>
-                <Button Margin="10" Width="Auto" ></Button>
+                <Button x:Name="btnBuy" Width="80" Height="50" Margin="10" ToolTip="Achat de maisons et hôtels" Click="onClickBuy">
+                    <Image Source="../Resources/Pictures/city.png"/>
+                </Button>
+                <Button x:Name="btnSell" Width="80" Height="50" Margin="10" ToolTip="Vente de maisons et hôtels" Click="onClickSell" >
+                    <Image Source="../Resources/Pictures/sell.png"/>
+                </Button>
+                <Button x:Name="btnMortgaged" Width="80" Height="50" Margin="10" ToolTip="Hypothèque de propriétés" Click="onClickMortgage" >
+                    <Image Source="../Resources/Pictures/mortgage.png"/>
+                </Button>
+                <Button x:Name="btnRaiseMortgaged" Width="80" Height="50" Margin="10" ToolTip="Lève l'hypothèque de propriétés" Click="onClickRaiseMortgage" >
+                    <Image Source="../Resources/Pictures/mortgage.png"/>
+                </Button>
             </StackPanel>
 
             <!--Properties list-->
-            <Frame Grid.Column="1" Grid.Row="2" x:Name="PropertiesListContent" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+            <Frame Grid.Column="1" Grid.Row="3" x:Name="PropertiesListContent" VerticalAlignment="Center" HorizontalAlignment="Center"/>
 
             <!-- Notification -->
             <Frame Grid.Column="1" Grid.Row="3" x:Name="DicesContent" VerticalAlignment="Center" HorizontalAlignment="Center"/>

@@ -31,7 +31,9 @@ namespace Monopoly.View
         private enum GridType : int { GRIDTYPE_ROW = 1, GRIDTYPE_COLUMN = 2 };
         private const int sizeofElipse = 20;
         private const string START_POSITION = "playerPosition0";
-        private Player currentPlayer;
+        public Player currentPlayer;
+        public string NamePlayer { get { return currentPlayer.Name; } }
+        public string test { get { return currentPlayer.Pawn.ColorValue; } }
 
         //threads
         #endregion
@@ -39,11 +41,13 @@ namespace Monopoly.View
         public PageBoard()
         {
             InitializeComponent();
-
+            this.DataContext = this;
             gameManager.StartGame();
             InitialiseBoard();
             GeneratePlayer();
             currentPlayer = gameManager.playerHandler.GetCurrentPlayer();
+            PropertiesListInterface.buildingBought += BuildingBought;
+            SellPropertiesListInterface.buildingBought += BuildingBought;
         }
 
         #region Creation du Plateau
@@ -1760,6 +1764,9 @@ namespace Monopoly.View
             Ellipse ellipse = new Ellipse();
             ellipse.Height = sizeofElipse;
             ellipse.Width = sizeofElipse;
+            SolidColorBrush blackBrush = new SolidColorBrush();
+            blackBrush.Color = Colors.Black;
+            ellipse.Stroke = blackBrush;
             SolidColorBrush playerColor = new SolidColorBrush();
             playerColor.Color = (Color)ColorConverter.ConvertFromString(color);
             ellipse.Fill = playerColor;
@@ -1800,21 +1807,19 @@ namespace Monopoly.View
         #region Buy building
         private void BuyBuilding(Land l)
         {
-            if (PlayerHandler.Instance.CheckIfPlayerOwnAllLandInLandGroup(currentPlayer, l.LandGroup))
+            //if (PlayerHandler.Instance.CheckIfPlayerOwnAllLandInLandGroup(currentPlayer, l.LandGroup))
+            //{
+            MessageBoxResult result = MessageBox.Show("Voulez vous acheter un bien ?", "Achat d'un bien", MessageBoxButton.YesNo, MessageBoxImage.Question);
+
+            if (result == MessageBoxResult.Yes)
             {
-                MessageBoxResult result = MessageBox.Show("Voulez vous acheter une maison ?", "Achat d'une maison", MessageBoxButton.YesNo, MessageBoxImage.Question);
+                PropertiesListInterface propertiesListInterface = new PropertiesListInterface();
+                PropertiesListContent.Content = propertiesListInterface;
 
-                if (result == MessageBoxResult.Yes)
-                {
-                    PlayerHandler.Instance.BuildOnLand(currentPlayer, l);
-                    //PropertiesListInterface propertiesListInterface = new PropertiesListInterface();
-                    //PropertiesListContent.Content = propertiesListInterface;
-
-
-                    MessageBox.Show("Maison achetée !");
-                    BuildingBought(l);
-                }
+                BuildingBought(l);
+                propertiesListInterface.Visibility = Visibility.Hidden;
             }
+            //}
         }
         #endregion
 
@@ -1829,7 +1834,8 @@ namespace Monopoly.View
         {
             DicesInterface dicesInterface = new DicesInterface();
             DicesContent.Content = dicesInterface;
-
+            DicesContent.Visibility = Visibility.Visible;
+            PropertiesListContent.Visibility = Visibility.Hidden;
             Move(currentPlayer, gameManager.FirstDice, gameManager.SecondeDice);
 
         }
@@ -1984,6 +1990,9 @@ namespace Monopoly.View
                 Land.Visibility = Visibility.Hidden;
             }
 
+            Card.Opacity = 1;
+            LandDescription.Opacity = 1;
+
             if (c is TrainStation)
             {
                 TrainStation t = (TrainStation)GameManager.Instance.boardHandler.Board.ListCell.ElementAt(id);
@@ -1994,6 +2003,14 @@ namespace Monopoly.View
                 lblPurchasePriceValue.Content = t.PurchasePrice + " €";
                 lblMortgagePriceValue.Content = t.MortgagePrice + " €";
                 lblOwnerCardValue.Content = t.OwnerName;
+
+                Property property = (Property)c;
+                if (property.status == Property.MORTGAGED)
+                {
+                    Card.Opacity = 0.5;
+                }
+                else
+                    Card.Opacity = 1;
             }
             else if (c is Land)
             {
@@ -2013,10 +2030,19 @@ namespace Monopoly.View
                 lblMotelValue.Content = l.RantalList[5] + " €";
                 lblMortgageValue.Content = l.MortgagePrice + " €";
 
+               Property property = (Property)c;
+                if (property.status == Property.MORTGAGED)
+                {
+                    LandDescription.Opacity = 0.5;
+                }
+                else
+                    Card.Opacity = 1;
+
                 for (int i = 0; i < l.NbHouse; i++)
                 {
                     Image image = new Image();
                     image.Source = new BitmapImage(new Uri("/Monopoly;component/Resources/Pictures/house2.png", UriKind.Relative));
+                    image.Height = 40;
                     Buildings.Children.Add(image);
                 }
 
@@ -2036,6 +2062,13 @@ namespace Monopoly.View
                 lblCardTitle.Text = p.Title;
                 lblPurchasePriceValue.Content = p.PurchasePrice + " €";
                 lblMortgagePriceValue.Content = p.MortgagePrice + " €";
+
+                Property property = (Property)c;
+                if (property.status == Property.MORTGAGED)
+                    Card.Opacity = 0.5;
+                else
+                    Card.Opacity = 1;
+
             }
         }
 
@@ -2058,17 +2091,23 @@ namespace Monopoly.View
                 if (p.status == Property.AVAILABLE_ON_SALE)
                 {
                     BuyProperty(p);
+                    //TODO : remove it
+                    /*if (p is Land)
+                    {
+
+                        BuyBuilding((Land)p);
+                    }*/
                 }
                 else if (p.status == Property.NOT_AVAILABLE_ON_SALE)
                 {
                     if (PlayerHandler.Instance.CheckIfPlayerOwnThisProperty(p))
                     {
-                        if (p is Land)
-                        {                          
+                        /*if (p is Land)
+                        {
 
                             BuyBuilding((Land)p);
-                        }
-                            
+                        }*/
+
                     }
                     else
                         PlayerHandler.Instance.PayTheRent(p, gameManager.FirstDice.Value + gameManager.SecondeDice.Value);
@@ -2077,6 +2116,7 @@ namespace Monopoly.View
             else if (c.GetType() == typeof(Tax))
             {
                 MessageBoxResult mb = MessageBox.Show("Vous devez payer la taxe !");
+                PlayerHandler.Instance.PayTheTax((Tax) c);
             }
             else if (c.GetType() == typeof(DrawCard))
             {
@@ -2097,6 +2137,7 @@ namespace Monopoly.View
             else if (c.GetType() == typeof(Parking))
             {
                 MessageBoxResult mb = MessageBox.Show("Vous recevez toute la MONEY !");
+                PlayerHandler.Instance.GetParkingMoney();
             }
             else
             {
@@ -2126,5 +2167,36 @@ namespace Monopoly.View
         }
         #endregion
 
+        private void onClickBuy(object sender, RoutedEventArgs e)
+        {
+            DicesContent.Visibility = Visibility.Hidden;
+            PropertiesListInterface propertiesListInterface = new PropertiesListInterface();
+            PropertiesListContent.Visibility = Visibility.Visible;
+            PropertiesListContent.Content = propertiesListInterface;
+        }
+
+        private void onClickSell(object sender, RoutedEventArgs e)
+        {
+            DicesContent.Visibility = Visibility.Hidden;
+            SellPropertiesListInterface sellPropertiesListInterface = new SellPropertiesListInterface();
+            PropertiesListContent.Visibility = Visibility.Visible;
+            PropertiesListContent.Content = sellPropertiesListInterface;
+        }
+
+        private void onClickMortgage(object sender, RoutedEventArgs e)
+        {
+            DicesContent.Visibility = Visibility.Hidden;
+            MortgagedPropertiesListInterface mortgagedPropertiesListInterface = new MortgagedPropertiesListInterface();
+            PropertiesListContent.Visibility = Visibility.Visible;
+            PropertiesListContent.Content = mortgagedPropertiesListInterface;
+        }
+
+        private void onClickRaiseMortgage(object sender, RoutedEventArgs e)
+        {
+            DicesContent.Visibility = Visibility.Hidden;
+            RaiseMortgagedPropertiesListInterface raiseMortgagedPropertiesListInterface = new RaiseMortgagedPropertiesListInterface();
+            PropertiesListContent.Visibility = Visibility.Visible;
+            PropertiesListContent.Content = raiseMortgagedPropertiesListInterface;
+        }
     }
 }
