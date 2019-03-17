@@ -42,6 +42,9 @@ namespace Monopoly.Handlers
         #endregion
 
         #region Methode (public)
+
+        
+
         /// <summary>
         /// Retourne la prochaine couleur
         /// </summary>
@@ -61,6 +64,15 @@ namespace Monopoly.Handlers
             _colorIndex = _colorIndex - 1;
             _colorIndex = (_colorIndex < 0) ? _pawnColors.Count - 1 : _colorIndex;
             return _pawnColors[_colorIndex];
+        }
+
+        /// <summary>
+        /// Set color index
+        /// </summary>
+        /// <param name="index"></param>
+        public void SetColorIndex(int index)
+        {
+            _colorIndex = index;
         }
         #endregion
     }

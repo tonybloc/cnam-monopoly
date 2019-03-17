@@ -5,10 +5,10 @@ using Monopoly.Models.Components.Cells;
 using Monopoly.Service;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.Runtime.CompilerServices;
 using System.Linq;
 using System.Text.RegularExpressions;
-using System.Threading;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -16,39 +16,195 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using System.Windows.Threading;
+using Monopoly.View.Notifications.Dialog;
+using System.Windows.Media.Effects;
+using Monopoly.Models.Components.Exceptions;
 
 namespace Monopoly.View
 {
     /// <summary>
     /// Logique d'interaction pour PageBoard.xaml
     /// </summary>
-    public partial class PageBoard : Page
+    public partial class PageBoard : Page, INotifyPropertyChanged
     {
 
         #region Variables
-        private GameManager gameManager = GameManager.Instance;
+        private DispatcherTimer _DispatcherTimer;
+        private TimeSpan _GameTime;
+
+        private DicesHandler _DicesHandler;
+        private PlayerHandler _PlayerHandler;
+        private GameManager _GameManager;
+
         private enum CellOrientation : int { BOTTUM = 0, LEFT = 1, TOP = 2, RIGHT = 3 };
         private enum GridType : int { GRIDTYPE_ROW = 1, GRIDTYPE_COLUMN = 2 };
-        private const int sizeofElipse = 20;
+
+        private const int SizeofElipse = 20;
         private const string START_POSITION = "playerPosition0";
+
+
+        #region Binding Variables
+        private int _numberOfTurn;
+        public int NumberOfTurn
+        {
+            get
+            {
+                return _numberOfTurn;
+            }
+            set
+            {
+                if (_numberOfTurn != value)
+                {
+                    _numberOfTurn = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+        
+        private Player _currentPlayer;
+        public Player CurrentPlayer
+        {
+            get
+            {
+                return _currentPlayer;
+            }
+            set
+            {
+                if (_currentPlayer != value)
+                {
+                    _currentPlayer = value;
+                    NameOfPlayer = _currentPlayer.Name;
+                    ColorOfPlayer = _currentPlayer.Pawn.ColorValue;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        private string _colorOfPlayer;
+        public string ColorOfPlayer
+        {
+            get
+            {
+                return _colorOfPlayer;
+            }
+            set
+            {
+                if(_colorOfPlayer != value)
+                {
+                    _colorOfPlayer = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        private string _nameOfPlayer;
+        public string NameOfPlayer
+        {
+            get
+            {
+                return _nameOfPlayer;
+            }
+            set
+            {
+                if (_nameOfPlayer != value)
+                {
+                    _nameOfPlayer = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
         public Player currentPlayer;
         public string NamePlayer { get { return currentPlayer.Name; } }
         public string test { get { return currentPlayer.Pawn.ColorValue; } }
 
-        //threads
+
+        public event PropertyChangedEventHandler PropertyChanged;
+        #endregion
+
         #endregion
 
         public PageBoard()
         {
+            // Initialise GUI components
             InitializeComponent();
+
             this.DataContext = this;
-            gameManager.StartGame();
+
+            // Initialise Game
+            _GameManager = GameManager.Instance;
+            _DicesHandler = DicesHandler.Instance;
+            _PlayerHandler = PlayerHandler.Instance;
+
+
+            // Initialise Chronometer
+            InitialiseChronometer();
+
+            // Initialise Board 
             InitialiseBoard();
+
+            
+            // Generate the player
             GeneratePlayer();
-            currentPlayer = gameManager.playerHandler.GetCurrentPlayer();
+
+            CurrentPlayer = _GameManager.PlayerHandler.GetCurrentPlayer();
+
             PropertiesListInterface.buildingBought += BuildingBought;
             SellPropertiesListInterface.buildingBought += BuildingBought;
+
+            
+            NumberOfTurn = _GameManager.NumberOfTurn;
+            
+            
+
+            StartGame();
+
+
         }
+
+        #region Game State
+        /// <summary>
+        /// 
+        /// </summary>
+        private void StartGame()
+        {
+            _DispatcherTimer.Start();
+            _GameManager.StartGame();
+        }
+        private void Stop()
+        {
+            _DispatcherTimer.Stop();
+            _GameManager.StopGame();
+        }
+        #endregion
+
+        #region Chronometer
+        /// <summary>
+        /// Initialise le chronometre
+        /// </summary>
+        private void InitialiseChronometer()
+        {
+            _DispatcherTimer = new DispatcherTimer();
+            _DispatcherTimer.Tick += new EventHandler(DispatcherTimer_Chrono);
+            _DispatcherTimer.Interval = new TimeSpan(0, 0, 1);
+            _GameTime = new TimeSpan(0, 0, 0);
+            TextBox_Chronometer.Text = _GameTime.ToString(); 
+        }
+        private void DispatcherTimer_Chrono(object sender, EventArgs e)
+        {
+            _GameTime += new TimeSpan(0, 0, 1);
+            TextBox_Chronometer.Text = _GameTime.ToString();
+        }
+        #endregion
+
+        #region Event Property Change
+        private void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+        #endregion
+
+
 
         #region Creation du Plateau
 
@@ -60,6 +216,7 @@ namespace Monopoly.View
         /// <param name="type">Row or Column</param>
         private void InitialisePanel(Grid panel, int numOfDefinition, int type)
         {
+
             switch (type)
             {
                 case (int)GridType.GRIDTYPE_COLUMN:
@@ -89,7 +246,7 @@ namespace Monopoly.View
         /// </summary>
         private void InitialiseBoard()
         {
-            List<Cell> BoardCells = GameManager.Instance.boardHandler.Board.ListCell;
+            List<Cell> BoardCells = GameManager.Instance.BoardHandler.Board.ListCell;
             int index = 0;
             if ((BoardCells.Count >= 8) && (BoardCells.Count % 4 == 0))
             {
@@ -1762,15 +1919,15 @@ namespace Monopoly.View
         private Ellipse CreateElipse(string color, int rowPosition, int colPosition)
         {
             Ellipse ellipse = new Ellipse();
-            ellipse.Height = sizeofElipse;
-            ellipse.Width = sizeofElipse;
-            SolidColorBrush blackBrush = new SolidColorBrush();
-            blackBrush.Color = Colors.Black;
-            ellipse.Stroke = blackBrush;
+            ellipse.Height = SizeofElipse;
+            ellipse.Width = SizeofElipse;
+            DropShadowEffect shadowEffect = new DropShadowEffect();
+            shadowEffect.ShadowDepth = 1;
+            ellipse.Effect = shadowEffect;
             SolidColorBrush playerColor = new SolidColorBrush();
             playerColor.Color = (Color)ColorConverter.ConvertFromString(color);
             ellipse.Fill = playerColor;
-            ellipse.Visibility = Visibility.Hidden;
+            ellipse.Visibility = Visibility.Hidden;            
 
             Grid.SetRow(ellipse, rowPosition);
             Grid.SetColumn(ellipse, colPosition);
@@ -1783,7 +1940,7 @@ namespace Monopoly.View
         /// <param name="c">cellule spécifique</param>
         private void GeneratePlayerElipse(Grid gridPlayerPosition)
         {
-            foreach (Player p in gameManager.playerHandler.ListOfPlayers)
+            foreach (Player p in _GameManager.PlayerHandler.ListOfPlayers)
             {
                 gridPlayerPosition.Children.Add(CreateElipse(p.Pawn.ColorValue, p.Pawn.X, p.Pawn.Y));
             }
@@ -1797,8 +1954,8 @@ namespace Monopoly.View
 
             if (result == MessageBoxResult.Yes)
             {
-                PlayerHandler.Instance.BuyProperty(p);
-                PropertyBought(currentPlayer);
+                _PlayerHandler.BuyProperty(p);
+                PropertyBought(CurrentPlayer);
 
             }
         }
@@ -1807,22 +1964,21 @@ namespace Monopoly.View
         #region Buy building
         private void BuyBuilding(Land l)
         {
-            //if (PlayerHandler.Instance.CheckIfPlayerOwnAllLandInLandGroup(currentPlayer, l.LandGroup))
-            //{
-            MessageBoxResult result = MessageBox.Show("Voulez vous acheter un bien ?", "Achat d'un bien", MessageBoxButton.YesNo, MessageBoxImage.Question);
-
-            if (result == MessageBoxResult.Yes)
+            if (_PlayerHandler.CheckIfPlayerOwnAllLandInLandGroup(CurrentPlayer, l.LandGroup))
             {
-                PropertiesListInterface propertiesListInterface = new PropertiesListInterface();
-                PropertiesListContent.Content = propertiesListInterface;
+                MessageBoxResult result = MessageBox.Show("Voulez vous acheter une maison ?", "Achat d'une maison", MessageBoxButton.YesNo, MessageBoxImage.Question);
 
-                BuildingBought(l);
-                propertiesListInterface.Visibility = Visibility.Hidden;
+                if (result == MessageBoxResult.Yes)
+                {
+                    PropertiesListInterface propertiesListInterface = new PropertiesListInterface();
+                    PropertiesListContent.Content = propertiesListInterface;
+
+                    BuildingBought(l);
+                    propertiesListInterface.Visibility = Visibility.Hidden;
+                }
             }
-            //}
         }
         #endregion
-
 
         #region Dices
         /// <summary>
@@ -1832,11 +1988,21 @@ namespace Monopoly.View
         /// <param name="e"></param>
         private void onClickDices(object sender, RoutedEventArgs e)
         {
-            DicesInterface dicesInterface = new DicesInterface();
-            DicesContent.Content = dicesInterface;
-            DicesContent.Visibility = Visibility.Visible;
-            PropertiesListContent.Visibility = Visibility.Hidden;
-            Move(currentPlayer, gameManager.FirstDice, gameManager.SecondeDice);
+            try
+            {
+                DicesInterface dicesInterface = new DicesInterface();
+                DicesContent.Content = dicesInterface;
+                DicesContent.Visibility = Visibility.Visible;
+                PropertiesListContent.Visibility = Visibility.Hidden;
+
+                Move(CurrentPlayer, _DicesHandler.GetValue());
+            }
+            catch(Exception exp)
+            {
+                NotificationsPanel.Visibility = Visibility.Visible;
+                NotificationsPanel.Content = new ExceptionDialog(exp);
+            }
+           
 
         }
         #endregion
@@ -1849,7 +2015,7 @@ namespace Monopoly.View
         {
 
             int index = 0;
-            foreach (Player p in gameManager.playerHandler.ListOfPlayers)
+            foreach (Player p in _PlayerHandler.ListOfPlayers)
             {
                 index++;
                 StackPanel stackPanel = new StackPanel();
@@ -1860,8 +2026,9 @@ namespace Monopoly.View
                 Ellipse playerEllipse = new Ellipse();
                 playerEllipse.Margin = new Thickness(0, 0, 10, 0);
                 playerEllipse.Fill = (Brush)bc.ConvertFrom(p.Pawn.ColorValue);
-                playerEllipse.Width = sizeofElipse;
-                playerEllipse.Height = sizeofElipse;
+                playerEllipse.Width = SizeofElipse;
+                playerEllipse.Height = SizeofElipse;
+
 
                 TextBlock tbPlayerNumber = new TextBlock();
                 tbPlayerNumber.VerticalAlignment = VerticalAlignment.Center;
@@ -1880,9 +2047,6 @@ namespace Monopoly.View
                 if (cell is Grid)
                 {
                     Grid start = (Grid)cell;
-                    start.Background = Brushes.Red;
-                    int i = 0;
-                    int j = -1;
                     foreach (UIElement child in start.Children)
                     {
                         child.Visibility = Visibility.Visible;
@@ -1898,11 +2062,11 @@ namespace Monopoly.View
         /// <param name="p">player</param>
         /// <param name="first">first dice</param>
         /// <param name="second">second dice</param>
-        void Move(Player p, Dice first, Dice second)
+        void Move(Player p, int Number)
         {
             int currentPosition = p.Position;
             int previousCurrentPosition = currentPosition;
-            int nextPosition = gameManager.NextPosition(p, first, second);
+            int nextPosition = _GameManager.NextPosition(p, _DicesHandler.GetValue());
 
             Grid currentPlayerPosition = (Grid)this.FindName("playerPosition" + currentPosition);
             Ellipse currentEllipse = (Ellipse)GetChildren(currentPlayerPosition, p.Pawn.X, p.Pawn.Y);
@@ -1916,13 +2080,13 @@ namespace Monopoly.View
                 index++;
                 currentEllipse.Visibility = Visibility.Hidden;
 
-                currentPosition = (currentPosition + 1) % gameManager.boardHandler.Board.ListCell.Count;
+                currentPosition = (currentPosition + 1) % _GameManager.BoardHandler.Board.ListCell.Count;
                 currentPlayerPosition = (Grid)this.FindName("playerPosition" + currentPosition);
                 currentEllipse = (Ellipse)GetChildren(currentPlayerPosition, p.Pawn.X, p.Pawn.Y);
                 currentEllipse.Visibility = Visibility.Visible;
 
-                gameManager.MovePlayerTo(p, currentPosition);
-                if (index > 20)
+                _PlayerHandler.MoveTo(p, currentPosition);
+                if (index > 50)
                 {
                     break;
                 }
@@ -1930,7 +2094,7 @@ namespace Monopoly.View
 
             if (previousCurrentPosition > nextPosition)
             {
-                gameManager.playerHandler.GetGratification(currentPlayer);
+                _GameManager.PlayerHandler.GetGratification(CurrentPlayer);
 
                 MessageBox.Show("200 € de gagné !");
             }
@@ -1966,7 +2130,27 @@ namespace Monopoly.View
         #region Next player
         public void onClickNext(object sender, RoutedEventArgs e)
         {
-            //PlayerHandler.Instance.GetCurrentPlayer
+            try
+            {
+               if (_DicesHandler.PlayerCanBeRaise)
+               {
+                    throw new UserAsMissingToLaunchDicesException();
+               }
+               else
+               {
+                    _GameManager.NextTurn();
+                    _DicesHandler.PlayerCanBeRaise = true;
+                    CurrentPlayer = _PlayerHandler.GetCurrentPlayer();
+                    NumberOfTurn = _GameManager.NumberOfTurn;
+               }
+            }
+            catch (Exception exp)
+            {
+                NotificationsPanel.Visibility = Visibility.Visible;
+                NotificationsPanel.Content = new ExceptionDialog(exp);
+            }
+            
+
         }
         #endregion
 
@@ -1981,7 +2165,7 @@ namespace Monopoly.View
             int id = Convert.ToInt32(number);
 
             //get cell's informations
-            Cell c = GameManager.Instance.boardHandler.Board.GetCell(id);
+            Cell c = GameManager.Instance.BoardHandler.Board.GetCell(id);
             BrushConverter bc = new BrushConverter();
 
             if (Card.Visibility == Visibility.Visible || Land.Visibility == Visibility.Visible)
@@ -1995,7 +2179,7 @@ namespace Monopoly.View
 
             if (c is TrainStation)
             {
-                TrainStation t = (TrainStation)GameManager.Instance.boardHandler.Board.ListCell.ElementAt(id);
+                TrainStation t = (TrainStation)GameManager.Instance.BoardHandler.Board.ListCell.ElementAt(id);
 
                 Card.Visibility = Visibility.Visible;
                 CardIcon.Source = Base64Converter.base64ToImageSource(((TrainStation)c).Icon);
@@ -2017,9 +2201,9 @@ namespace Monopoly.View
                 Buildings.Children.Clear();
                 Land.Visibility = Visibility.Visible;
                 lblLandTitle.Content = c.Title;
-                lblLandTitle.Background = (Brush)bc.ConvertFrom(GameManager.Instance.boardHandler.getColor(c));
+                lblLandTitle.Background = (Brush)bc.ConvertFrom(GameManager.Instance.BoardHandler.getColor(c));
 
-                Land l = (Land)GameManager.Instance.boardHandler.Board.ListCell.ElementAt(id);
+                Land l = (Land)GameManager.Instance.BoardHandler.Board.ListCell.ElementAt(id);
                 lblOwnerValue.Content = l.OwnerName;
                 lblBuyingPriceValue.Content = l.PurchasePrice + " €";
                 lblLandValue.Content = l.RantalList[0] + " €";
@@ -2050,12 +2234,13 @@ namespace Monopoly.View
                 {
                     Image image = new Image();
                     image.Source = new BitmapImage(new Uri("/Monopoly;component/Resources/Pictures/motel2.png", UriKind.Relative));
+                    image.Height = 40;
                     Buildings.Children.Add(image);
                 }
             }
             else if (c is PublicService)
             {
-                PublicService p = (PublicService)GameManager.Instance.boardHandler.Board.ListCell.ElementAt(id);
+                PublicService p = (PublicService)GameManager.Instance.BoardHandler.Board.ListCell.ElementAt(id);
                 Card.Visibility = Visibility.Visible;
 
                 CardIcon.Source = Base64Converter.base64ToImageSource(((PublicService)c).Icon);
@@ -2082,7 +2267,7 @@ namespace Monopoly.View
         /// </summary>
         private void DoCellAction()
         {
-            Cell c = gameManager.boardHandler.Board.GetCell(currentPlayer.Position);
+            Cell c = _GameManager.BoardHandler.Board.GetCell(CurrentPlayer.Position);
 
             if (c is Property)
             {
@@ -2091,16 +2276,10 @@ namespace Monopoly.View
                 if (p.status == Property.AVAILABLE_ON_SALE)
                 {
                     BuyProperty(p);
-                    //TODO : remove it
-                    /*if (p is Land)
-                    {
-
-                        BuyBuilding((Land)p);
-                    }*/
                 }
                 else if (p.status == Property.NOT_AVAILABLE_ON_SALE)
                 {
-                    if (PlayerHandler.Instance.CheckIfPlayerOwnThisProperty(p))
+                    if (_PlayerHandler.CheckIfPlayerOwnThisProperty(p))
                     {
                         /*if (p is Land)
                         {
@@ -2110,38 +2289,51 @@ namespace Monopoly.View
 
                     }
                     else
-                        PlayerHandler.Instance.PayTheRent(p, gameManager.FirstDice.Value + gameManager.SecondeDice.Value);
+                    {
+                        AlertNotification.Content = new AlertDialog("Vous avez payer une taxe de : " + ((Tax)c).Amount, AlertDialog.TypeOfAlert.INFO);
+                        AlertNotification.Visibility = Visibility.Visible;
+                        _PlayerHandler.PayTheRent(p, _DicesHandler.FirstDice.Value + _DicesHandler.SecondDice.Value);
+                    }
+                    
                 }
             }
             else if (c.GetType() == typeof(Tax))
             {
-                MessageBoxResult mb = MessageBox.Show("Vous devez payer la taxe !");
-                PlayerHandler.Instance.PayTheTax((Tax) c);
+                AlertNotification.Content = new AlertDialog("Vous avez payer une taxe de : " + ((Tax)c).Amount, AlertDialog.TypeOfAlert.INFO);
+                AlertNotification.Visibility = Visibility.Visible;
+                _PlayerHandler.PayTheTax((Tax) c);
             }
             else if (c.GetType() == typeof(DrawCard))
             {
-                MessageBoxResult mb = MessageBox.Show("Vous piochez une carte !");
+                AlertNotification.Content = new AlertDialog("Vous piochez une carte !", AlertDialog.TypeOfAlert.SUCCES);
+                AlertNotification.Visibility = Visibility.Visible;
             }
             else if (c.GetType() == typeof(StartPoint))
             {
-                MessageBoxResult mb = MessageBox.Show("Vous etes sur la case départ !");
+                AlertNotification.Content = new AlertDialog("Vous etes sur la case départ !", AlertDialog.TypeOfAlert.INFO);
+                AlertNotification.Visibility = Visibility.Visible;
             }
             else if (c.GetType() == typeof(Jail))
             {
-                MessageBoxResult mb = MessageBox.Show("Vous etes en visite !");
+                AlertNotification.Content = new AlertDialog("Vous êtes en visite !", AlertDialog.TypeOfAlert.ERROR);
+                AlertNotification.Visibility = Visibility.Visible;
             }
             else if (c.GetType() == typeof(GoToJail))
             {
-                MessageBoxResult mb = MessageBox.Show("Vous etes en prison !");
+                AlertNotification.Content = new AlertDialog("Vous êtes en prison !", AlertDialog.TypeOfAlert.INFO);
+                AlertNotification.Visibility = Visibility.Visible;
             }
             else if (c.GetType() == typeof(Parking))
             {
-                MessageBoxResult mb = MessageBox.Show("Vous recevez toute la MONEY !");
-                PlayerHandler.Instance.GetParkingMoney();
+                AlertNotification.Content = new AlertDialog("Vous recevez toute la MONEY !", AlertDialog.TypeOfAlert.INFO);
+                AlertNotification.Visibility = Visibility.Visible;
+                _PlayerHandler.GetParkingMoney();
             }
             else
             {
-                MessageBoxResult mb = MessageBox.Show("Non definie !");
+                AlertNotification.Content = new AlertDialog("Action non définie !", AlertDialog.TypeOfAlert.WARNING);
+                AlertNotification.Visibility = Visibility.Visible;
+
             }
         }
         #endregion

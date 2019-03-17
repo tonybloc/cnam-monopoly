@@ -1,8 +1,13 @@
 ﻿using Monopoly.Models.Bank;
 using Monopoly.Models.Components;
+using Monopoly.Models.Components.Exceptions;
+using Monopoly.Models.Tools;
+using Monopoly.Settings;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -10,117 +15,196 @@ namespace Monopoly.Handlers
 {
     public class GameManager
     {
-        #region Variables
+        #region Variables 
+        
+
         /// <summary>
         /// Game manager instance
         /// </summary>
-        private static GameManager instance = null;
+        private static GameManager _instance = null;        
 
         /// <summary>
         /// Player handler
         /// </summary>
-        public PlayerHandler playerHandler { get; private set; }
+        public PlayerHandler PlayerHandler { get; private set; }
         
         /// <summary>
         /// Board handler
         /// </summary>
-        public BoardHandler boardHandler { get; private set; }
+        public BoardHandler BoardHandler { get; private set; }
 
         /// <summary>
-        /// First dice
+        /// Dice handler
         /// </summary>
-        public Dice FirstDice;
+        public DicesHandler DicesHandler { get; private set; }
+        
+        /// <summary>
+        /// Color handler
+        /// </summary>
+        public ColorHandler ColorHandler { get; private set; }
+        
+        /// <summary>
+        /// Time of game
+        /// </summary>
+        public TimeSpan Time { get; set; }
 
         /// <summary>
-        /// Second dice
+        /// Cout the number of turn
         /// </summary>
-        public Dice SecondeDice;
+        public int NumberOfTurn{ get; set; }
+
+        
+
+        /// <summary>
+        /// Status of game
+        /// </summary>
+        public GameStatus Status { get; private set; }
+
+        /// <summary>
+        /// Type of game
+        /// </summary>
+        private GameType Type { get; set; }
+
+
+        public enum GameStatus : int { START = 0, STOP = 1, END = 2 };
+        public enum GameType : int { SINGLEPLAYER = 0, LOCAL_MUTLIPLAYER = 1, NETWORK_MUTLIPLAYER = 2 }
+
         #endregion
 
-        #region Constructeurs
+        #region Constructeur
         /// <summary>
-        /// Crée une instance de la classe
+        /// Create new instance of GameManager
         /// </summary>
         private GameManager()
         {            
-            this.boardHandler = BoardHandler.Instance;
-            this.playerHandler = PlayerHandler.Instance;
-
-            FirstDice = new Dice();
-            SecondeDice = new Dice();
+            this.BoardHandler = BoardHandler.Instance;
+            this.PlayerHandler = PlayerHandler.Instance;
+            this.DicesHandler = DicesHandler.Instance;
+            this.ColorHandler = ColorHandler.Instance;
         }
 
         /// <summary>
-        /// Récupère l'instance de la classe
+        /// Get the instance of the class
         /// </summary>
         public static GameManager Instance
         {
             get
             {
-                if(instance == null)
+                if(_instance == null)
                 {
-                    instance = new GameManager();
+                    _instance = new GameManager();
                 }
-                return instance;
+                return _instance;
             }
         }
+        
+        /// <summary>
+        /// Set the type of the game
+        /// </summary>
+        /// <param name="type">type of game</param>
+        public void SetType(GameType type)
+        {
+            this.Type = type;
+        }
+
         #endregion
 
         #region Methods
+        
+        /// <summary>
+        /// Initialise the game
+        /// </summary>
+        public void IntialiseGame()
+        {
+
+            int numberOfPlayerInGame = this.PlayerHandler.GetNumberOfPlayer();
+            
+            if( (numberOfPlayerInGame <= Config.NB_MAX_PLAYER_IN_GAME))
+            {
+                GeneratedBot(Config.NB_MAX_PLAYER_IN_GAME - numberOfPlayerInGame);
+            }
+            else
+            {
+                throw new InvalideNumberOfPlayerInGameException();
+            }
+           
+            this.PlayerHandler.Initialize();
+            
+        }
+
+        
+
+        /// <summary>
+        /// Start the game
+        /// </summary>
         public void StartGame()
         {
-            CreatePlayer("Jean", "#FF0000");
-            CreatePlayer("Marc", "#00FF00");
-            CreatePlayer("Camille", "#FFFF00");
-            CreatePlayer("Paul", "#0000FF");
-            CreatePlayer("Sophie", "#00FFFF");
-            CreatePlayer("Lara", "#FF00FF");
-            playerHandler.Shuffle(playerHandler.ListOfPlayers);
-            playerHandler.InitialisePawnPosition();
-            playerHandler.DefineTheNextPlayer();
-
+            this.Status = GameStatus.START;
         }
 
         /// <summary>
-        /// Crée un nouveau joueur
+        /// Stop the game
         /// </summary>
-        /// <param name="pseudo">pseudo du joueur</param>
-        /// <param name="colorValue">couleur du joueur</param>
-        public void CreatePlayer(string pseudo, string colorValue )
+        public void StopGame()
         {
-            playerHandler.CreatePlayer(pseudo, colorValue);
+            this.Status = GameStatus.STOP;
         }
 
         /// <summary>
-        /// Rool dices 
+        /// End the game
         /// </summary>
-        /// <param name="Dice1">First dice</param>
-        /// <param name="Dice2">Second dice</param>
-        public void RoolDice(Dice Dice1, Dice Dice2)
+        public void EndGame()
         {
-            Dice1.Rool();
-            Dice2.Rool();
+            this.Status = GameStatus.END;
         }
 
-        /// <summary>
-        /// Calcule the next position of player
-        /// </summary>
-        /// <param name="first"></param>
-        /// <param name="second"></param>
-        public int NextPosition(Player p, Dice first, Dice second)
-        {
-            return (p.Position + first.Value + second.Value) % boardHandler.Board.ListCell.Count;
-        }
+       
 
-        public void MovePlayerTo(Player p, int position)
-        {
-            playerHandler.MoveTo(p, position);
-        }
+        
 
-        public int GetNumberOfPlayer()
-        {
-            return playerHandler.GetNumberOfPlayer();
-        }
         #endregion
+
+        public void NextTurn()
+        {
+            this.PlayerHandler.DefineTheNextPlayer();
+            int index = this.PlayerHandler.ListOfPlayers.IndexOf(this.PlayerHandler.GetCurrentPlayer());
+            if (index == 0 )
+            {
+                this.NumberOfTurn++;
+            }
+
+        }
+
+
+        /// <summary>
+        /// Get the next position of player
+        /// </summary>
+        /// <param name="numberOfMove">Number of movement</param>
+        public int NextPosition(Player p, int numberOfMove)
+        {
+            return (p.Position + numberOfMove) % BoardHandler.Board.ListCell.Count;
+        }
+
+
+        /// <summary>
+        /// Generate some bot for the game
+        /// </summary>
+        /// <param name="numberOfBot"></param>
+        private void GeneratedBot(int numberOfBot)
+        {
+            List<string> BotColors = PlayerHandler.GetAvailablePawnColors();
+            List<string> BotName = Config.BotNames;
+            Tools.Shuffle(BotName);
+            Tools.Shuffle(BotColors);
+
+
+            for (int i = 0; i < numberOfBot; i++)
+            {
+                Player p = new Player(BotName[i], new Pawn( BotColors[i]), Player.TypeOfPlayer.BOT );
+                p.SetPlayerType( Player.TypeOfPlayer.BOT );
+                PlayerHandler.AddPlayer(p);
+            }
+        }
+        
     }
 }

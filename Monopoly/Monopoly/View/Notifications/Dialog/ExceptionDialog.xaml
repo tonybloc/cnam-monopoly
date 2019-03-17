@@ -1,0 +1,58 @@
+﻿<UserControl x:Class="Monopoly.View.Notifications.Dialog.ExceptionDialog"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:Monopoly.View.Notifications.Dialog"
+             mc:Ignorable="d" 
+             d:DesignHeight="{DynamicResource {x:Static SystemParameters.PrimaryScreenHeightKey}}"
+             d:DesignWidth="{DynamicResource {x:Static SystemParameters.PrimaryScreenWidthKey}}">
+
+    <Grid>
+        <Grid.Background>
+            <SolidColorBrush Color="black" Opacity="0.5"/>
+        </Grid.Background>
+
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <Grid Grid.Column="1" Grid.Row="1">
+            <Grid.Background>
+                <SolidColorBrush Color="white"/>
+            </Grid.Background>
+            <Grid.Effect>
+                <DropShadowEffect ShadowDepth="2"/>
+            </Grid.Effect>
+
+            <Grid.RowDefinitions>
+                <RowDefinition Height="3*"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            
+            <!-- Dialog information -->
+            <StackPanel Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Center"  VerticalAlignment="Center" Margin="50">
+                <Label x:Name="LbMessage" FontSize="18">
+                    <Label.Content>
+                        <AccessText x:Name="ContentMessage"  TextWrapping="Wrap" Text="{Binding Path=Message, Mode=TwoWay}"></AccessText>
+                    </Label.Content>
+                </Label>
+            </StackPanel>
+
+            <!-- Actions -->
+            <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Center" Margin="10">
+                <Button x:Name="btnOk" Width="150" Height="40" Click="BtnOk_Click" FontSize="16">OK</Button>
+            </StackPanel>
+        </Grid>
+
+    </Grid>
+    
+</UserControl>

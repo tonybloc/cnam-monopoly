@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 
 namespace Monopoly.Models.Components.Exceptions
 {
-    public class BankBalanceIsNotEnougth : Exception
+    public class GameIsNotDefined : Exception
     {
-        public BankBalanceIsNotEnougth() : base("Votre solde bancaire n\'est pas suffisant") {}
+        public GameIsNotDefined() : base("Le mode de jeux n'a pas été définie") { }
     }
 }

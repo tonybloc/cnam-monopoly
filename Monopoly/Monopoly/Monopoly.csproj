@@ -77,6 +77,7 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Drawing.Design" />
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Core" />
@@ -100,6 +101,7 @@
     </ApplicationDefinition>
     <Compile Include="Handlers\BoardHandler.cs" />
     <Compile Include="Handlers\ColorHandler.cs" />
+    <Compile Include="Handlers\DicesHandler.cs" />
     <Compile Include="Handlers\GameManager.cs" />
     <Compile Include="Handlers\PlayerHandler.cs" />
     <Compile Include="Models\Components\Bank\Bank.cs" />
@@ -119,8 +121,16 @@
     <Compile Include="Models\Components\Cells\TrainStation.cs" />
     <Compile Include="Models\Components\Dice.cs" />
     <Compile Include="Models\Components\Exceptions\BankBalanceIsNotEnougth.cs" />
+    <Compile Include="Models\Components\Exceptions\InvalidePlayerColorException.cs" />
+    <Compile Include="Models\Components\Exceptions\GameIsNotDefined.cs" />
+    <Compile Include="Models\Components\Exceptions\InvalideNumberOfPlayerInGameException.cs" />
+    <Compile Include="Models\Components\Exceptions\InvalidePlayerNameException.cs" />
+    <Compile Include="Models\Components\Exceptions\SoManyDoubleDicesException.cs" />
+    <Compile Include="Models\Components\Exceptions\UserAsMissingToLaunchDicesException.cs" />
+    <Compile Include="Models\Components\Exceptions\YouCanNotRoolDicesException.cs" />
     <Compile Include="Models\Components\Pawn.cs" />
     <Compile Include="Models\Components\Player.cs" />
+    <Compile Include="Models\Tools\Tools.cs" />
     <Compile Include="Resources\Colors\PawnColors.cs" />
     <Compile Include="Service\Base64Converter.cs" />
     <Compile Include="Service\Xml\XmlDataAccess.cs" />
@@ -131,11 +141,23 @@
     <Compile Include="View\MortgagedPropertiesListInterface.xaml.cs">
       <DependentUpon>MortgagedPropertiesListInterface.xaml</DependentUpon>
     </Compile>
+    <Compile Include="View\Notifications\Dialog\AlertDialog.xaml.cs">
+      <DependentUpon>AlertDialog.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Notifications\Dialog\ExceptionDialog.xaml.cs">
+      <DependentUpon>ExceptionDialog.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Notifications\Dialog\SubMenuOfGame.xaml.cs">
+      <DependentUpon>SubMenuOfGame.xaml</DependentUpon>
+    </Compile>
     <Compile Include="View\PageBoard.xaml.cs">
       <DependentUpon>PageBoard.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\DicesInterface.xaml.cs">
       <DependentUpon>DicesInterface.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\PageMultiplePlayerCreation.xaml.cs">
+      <DependentUpon>PageMultiplePlayerCreation.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\PageSinglePlayerCreation.xaml.cs">
       <DependentUpon>PageSinglePlayerCreation.xaml</DependentUpon>
@@ -173,11 +195,27 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="View\Notifications\Dialog\AlertDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Notifications\Dialog\ExceptionDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Notifications\Dialog\SubMenuOfGame.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="View\PageBoard.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="View\DicesInterface.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\PageMultiplePlayerCreation.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -216,7 +254,6 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <None Include="Monopoly_TemporaryKey.pfx" />
     <None Include="packages.config">
       <SubType>Designer</SubType>
     </None>
@@ -281,5 +318,6 @@
       <Install>false</Install>
     </BootstrapperPackage>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

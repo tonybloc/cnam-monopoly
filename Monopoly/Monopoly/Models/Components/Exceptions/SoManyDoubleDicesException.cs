@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 
 namespace Monopoly.Models.Components.Exceptions
 {
-    public class BankBalanceIsNotEnougth : Exception
+    public class SoManyDoubleDicesException : Exception
     {
-        public BankBalanceIsNotEnougth() : base("Votre solde bancaire n\'est pas suffisant") {}
+        public SoManyDoubleDicesException() : base("Vous avez réalisé trop de lancé double. Vous allez en prison.") { }
     }
 }

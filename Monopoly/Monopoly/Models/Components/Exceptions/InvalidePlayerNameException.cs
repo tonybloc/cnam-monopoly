@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 
 namespace Monopoly.Models.Components.Exceptions
 {
-    public class BankBalanceIsNotEnougth : Exception
+    public class InvalidePlayerNameException : Exception
     {
-        public BankBalanceIsNotEnougth() : base("Votre solde bancaire n\'est pas suffisant") {}
+        public InvalidePlayerNameException() : base("Le nom du joueur est invalide !") {}
     }
 }

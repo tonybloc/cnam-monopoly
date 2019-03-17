@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 
 namespace Monopoly.Models.Components.Exceptions
 {
-    public class BankBalanceIsNotEnougth : Exception
+    public class UserAsMissingToLaunchDicesException : Exception
     {
-        public BankBalanceIsNotEnougth() : base("Votre solde bancaire n\'est pas suffisant") {}
+        public UserAsMissingToLaunchDicesException() : base("Vous avez oublié de lancer les dées") { }
     }
 }

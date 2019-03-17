@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 
 namespace Monopoly.Models.Components.Exceptions
 {
-    public class BankBalanceIsNotEnougth : Exception
+    public class YouCanNotRoolDicesException : Exception
     {
-        public BankBalanceIsNotEnougth() : base("Votre solde bancaire n\'est pas suffisant") {}
+        public YouCanNotRoolDicesException() : base("Vous ne pouvez pas relancer les dés !"){}
     }
 }
