@@ -38,13 +38,13 @@
 
             <!-- Dialog information -->
             <StackPanel Grid.Row="0" Orientation="Vertical" HorizontalAlignment="Center"  VerticalAlignment="Center" Margin="50">
-                <TextBlock  TextAlignment="Center" FontSize="28">Voulez vous quitter le jeu ?</TextBlock>
+                <TextBlock  TextAlignment="Center" FontSize="28">Sous Menu</TextBlock>
                 
-                <StackPanel Margin="30" Orientation="Horizontal">
-                    <Button x:Name="btnAccepte" Width="200" Click="onClick_btnAccepte" Margin="10" Padding="10" Height="60" FontSize="16">Accepter</Button>
-                    <Button x:Name="btnRefuse" Width="200" Click="onClick_btnRefuse" Margin="10" Padding="10" Height="60" FontSize="16">Refuser</Button>
+                <StackPanel Margin="20" Orientation="Vertical">
+                    <Button x:Name="btnResume" Width="200" Click="onClick_btnResume" Margin="5" Padding="5" Height="50" FontSize="16">Continuer</Button>
+                    <Button x:Name="btnHome" Width="200" Click="onClick_btnHome" Margin="5" Padding="5" Height="50" FontSize="16"> Acceuil</Button>
+                    <Button x:Name="btnQuit" Width="200" Click="onClick_btnQuit" Margin="5" Padding="5" Height="50" FontSize="16">Quitter</Button>
                 </StackPanel>
-
             </StackPanel>
         </Grid>
 

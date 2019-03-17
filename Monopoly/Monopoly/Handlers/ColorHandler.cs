@@ -42,6 +42,9 @@ namespace Monopoly.Handlers
         #endregion
 
         #region Methode (public)
+
+        
+
         /// <summary>
         /// Retourne la prochaine couleur
         /// </summary>

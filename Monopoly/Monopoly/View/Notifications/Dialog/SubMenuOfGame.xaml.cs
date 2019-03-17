@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Monopoly.Handlers;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -20,17 +21,27 @@ namespace Monopoly.View.Notifications.Dialog
     /// </summary>
     public partial class SubMenuOfGame : UserControl
     {
+        private GameManager _GameManager;
+
         public SubMenuOfGame()
         {
             InitializeComponent();
+            _GameManager = GameManager.Instance;
         }
 
-        public void onClick_btnRefuse(object sender, RoutedEventArgs e)
+        public void onClick_btnResume(object sender, RoutedEventArgs e)
         {
             this.Content = null;
         }
 
-        public void onClick_btnAccepte(object sender, RoutedEventArgs e)
+        public void onClick_btnHome(object sender, RoutedEventArgs e)
+        {
+            ((MainWindow)Window.GetWindow(this)).MainContent.Content = null;
+            ((MainWindow)Window.GetWindow(this)).MenuContent.Visibility = Visibility.Visible;
+            this.Content = null;
+        }
+
+        public void onClick_btnQuit(object sender, RoutedEventArgs e)
         {
             ((MainWindow)Window.GetWindow(this)).Close();
 

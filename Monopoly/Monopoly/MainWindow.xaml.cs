@@ -48,7 +48,7 @@ namespace Monopoly
         {
             _GameManager.SetType(GameManager.GameType.SINGLEPLAYER);
             MainContent.Content = new PageSinglePlayerCreation();
-            MenuContent.Visibility = Visibility.Visible;
+            MenuContent.Visibility = Visibility.Hidden;
         }
 
         private void btnLocalMultiplayer_Click(object sender, RoutedEventArgs e)

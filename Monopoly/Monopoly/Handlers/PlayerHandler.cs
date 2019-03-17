@@ -25,10 +25,6 @@ namespace Monopoly.Handlers
         /// </summary>
         private Bank bankInstance = null;
 
-        /// <summary>
-        /// Number of players
-        /// </summary>
-        private static int numberOfPlayer = 0;
 
         /// <summary>
         /// List  of players
@@ -223,6 +219,7 @@ namespace Monopoly.Handlers
         #endregion
 
         #region Methodes publiques
+
 
         /// <summary>
         /// Retrieve the current player

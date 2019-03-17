@@ -38,6 +38,10 @@ namespace Monopoly.Handlers
         /// </summary>
         public DicesHandler DicesHandler { get; private set; }
         
+        /// <summary>
+        /// Color handler
+        /// </summary>
+        public ColorHandler ColorHandler { get; private set; }
         
         /// <summary>
         /// Time of game
@@ -76,6 +80,7 @@ namespace Monopoly.Handlers
             this.BoardHandler = BoardHandler.Instance;
             this.PlayerHandler = PlayerHandler.Instance;
             this.DicesHandler = DicesHandler.Instance;
+            this.ColorHandler = ColorHandler.Instance;
         }
 
         /// <summary>
@@ -200,5 +205,6 @@ namespace Monopoly.Handlers
                 PlayerHandler.AddPlayer(p);
             }
         }
+        
     }
 }

@@ -39,7 +39,7 @@ namespace Monopoly.Handlers
                 }
                 return _instance;
             }            
-        }
+        }       
 
         /// <summary>
         /// Rool dices 
