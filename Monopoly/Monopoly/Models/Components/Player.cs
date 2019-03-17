@@ -23,6 +23,7 @@ namespace Monopoly.Models.Components
         public Pawn Pawn { get; set; }
         public int Position { get; set; }
         public List<Property> ListOfProperties { get; private set; }
+        public List<Land> ListOfLands { get; private set; }
         #endregion  
 
         #region Constructeurs
@@ -37,6 +38,7 @@ namespace Monopoly.Models.Components
             this.Position = 0;
             this.Status = WAITING;
             this.ListOfProperties = new List<Property>();
+            this.ListOfLands = new List<Land>();
         }
 
         /// <summary>

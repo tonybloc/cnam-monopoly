@@ -18,13 +18,21 @@ namespace Monopoly.Models.Components.Cells
         /// Train station's Icon
         /// </summary>
         public string Icon { get; set; }
+
+        /// <summary>
+        /// Rent of the train station 
+        /// </summary>
+        [XmlIgnore]
+        public int TrainStationRent { get; private set; }
         #endregion
 
         #region Constructor
         /// <summary>
         /// Creation of a cell "Train station"
         /// </summary>
-        public TrainStation() { }
+        public TrainStation() {
+            TrainStationRent = 25;
+        }
         #endregion
     }
 }

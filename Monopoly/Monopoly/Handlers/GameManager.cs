@@ -88,7 +88,7 @@ namespace Monopoly.Handlers
         /// <param name="colorValue">couleur du joueur</param>
         public void CreatePlayer(string pseudo, string colorValue )
         {
-            playerHandler.CreatePlayer(pseudo, colorValue);            
+            playerHandler.CreatePlayer(pseudo, colorValue);
         }
 
         /// <summary>

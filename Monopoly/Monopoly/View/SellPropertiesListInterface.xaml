@@ -1,4 +1,4 @@
-﻿<Page x:Class="Monopoly.View.PropertiesListInterface"
+﻿<Page x:Class="Monopoly.View.SellPropertiesListInterface"
       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
@@ -6,7 +6,8 @@
       xmlns:local="clr-namespace:Monopoly.Models.Components.Cells"
       mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="800"
-      Title="PropertiesListInterface">
+      Title="SellPropertiesListInterface">
+
     <Page.Resources>
         <ResourceDictionary>
             <!--Call the list -->
@@ -18,7 +19,7 @@
             <LinearGradientBrush x:Key="EquipmentItemSelectedBackground" EndPoint="0.5,1" StartPoint="0.5,0">
                 <GradientStop Color="LightBlue" Offset="1"/>
             </LinearGradientBrush>
-            
+
             <!--Design of one property-->
             <DataTemplate DataType="{x:Type local:Land}" >
                 <Border x:Name="Border" BorderBrush="Black" BorderThickness="1" CornerRadius="4" Width="120" Height="170"
@@ -30,13 +31,13 @@
                                    VerticalAlignment="Center" Background="{Binding LandGroup.Color}" Height="50"/>
                         <Border BorderBrush="Black" BorderThickness="1" CornerRadius="4" ></Border>
 
-                        <!--Number of houses-->
+                        <!--Number of houses-->                        
                         <StackPanel Orientation="Horizontal" Margin="2" HorizontalAlignment="Center">
                             <Image Source="/Monopoly;component/Resources/Pictures/house2.png" Height="25"/>
                             <TextBlock Text="{Binding NbHouse}" Foreground="Black" FontSize="18" TextAlignment="Center" TextWrapping="WrapWithOverflow" 
                                    VerticalAlignment="Center" Margin="10"/>
                         </StackPanel>
-
+                        
                         <!--Separator-->
                         <Border BorderBrush="Black" BorderThickness="1" CornerRadius="4" ></Border>
 
@@ -64,7 +65,7 @@
     <Grid>
         <StackPanel Grid.Row="2" >
             <!--Title-->
-            <TextBlock HorizontalAlignment="Center" Margin="10,0,10,70" Foreground="Black" FontSize="20" TextWrapping="WrapWithOverflow">Sur quel terrain souhaitez-vous construire votre maison ou hotel ?</TextBlock>
+            <TextBlock HorizontalAlignment="Center" Margin="10,0,10,70" Foreground="Black" FontSize="20" TextWrapping="WrapWithOverflow">Ventes de biens</TextBlock>
             <!--ListBox-->
             <ListBox x:Name="horizontalListBox"  SelectionMode="Extended" HorizontalAlignment="Center"
                         Style="{ StaticResource ListBoxWithAutoScroll_Horizontal }"

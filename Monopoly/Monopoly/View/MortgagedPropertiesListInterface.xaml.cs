@@ -2,7 +2,6 @@
 using Monopoly.Models.Components.Cells;
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -19,17 +18,15 @@ using System.Windows.Shapes;
 namespace Monopoly.View
 {
     /// <summary>
-    /// Logique d'interaction pour PropertiesListInterface.xaml
+    /// Logique d'interaction pour MortgagedPropertiesListInterface.xaml
     /// </summary>
-    public partial class PropertiesListInterface : Page
+    public partial class MortgagedPropertiesListInterface : Page
     {
         private static PlayerHandler playerHandler;
 
-        public delegate void BuildingBought(Land l);
+        public new double Opacity = 1;
 
-        public static event BuildingBought buildingBought;
-
-        public PropertiesListInterface()
+        public MortgagedPropertiesListInterface()
         {
             InitializeComponent();
         }
@@ -39,13 +36,14 @@ namespace Monopoly.View
             base.OnInitialized(e);
 
             playerHandler = PlayerHandler.Instance;
-            this.horizontalListBox.ItemsSource = playerHandler.BuilbingLands();
+            this.horizontalListBox.ItemsSource = playerHandler.Properties();
         }
 
         private void horizontalListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            playerHandler.BuildOnLand(playerHandler.GetCurrentPlayer(), (Land)e.AddedItems[0]);
-            buildingBought((Land)e.AddedItems[0]);
+            Property p = (Property)e.AddedItems[0];
+
+            playerHandler.Mortgage(playerHandler.GetCurrentPlayer(), p);
         }
     }
 }

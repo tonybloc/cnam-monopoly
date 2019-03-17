@@ -29,7 +29,7 @@ namespace Monopoly.Models.Bank
         /// Players bank account
         /// </summary>
         private Dictionary<int, BankAccount> DictionayOfBankAcount;
-        
+
         /// <summary>
         /// Number of houses
         /// </summary>
@@ -91,6 +91,14 @@ namespace Monopoly.Models.Bank
         }
 
         /// <summary>
+        /// Get parking account
+        /// </summary>
+        /// <returns>Parking account</returns>
+        public BankAccount GetParkingAccount()
+        {
+            return DictionayOfBankAcount[PARKING_BANK_ACCOUNT];
+        }
+        /// <summary>
         /// Create a specific bank account for a player 
         /// </summary>
         /// <param name="p">Joueur</param>
@@ -118,7 +126,12 @@ namespace Monopoly.Models.Bank
             bankAccount.BankTransfer(playerAccount, Config.GRATIFICATION);
         }
 
-        public void SellHouse(Player p , Land l)
+        /// <summary>
+        /// The bank sell a house to the player
+        /// </summary>
+        /// <param name="p">Player</param>
+        /// <param name="l">Land</param>
+        public void SellHouse(Player p, Land l)
         {
             if (NbHouse > 0)
             {
@@ -133,22 +146,87 @@ namespace Monopoly.Models.Bank
                 throw new Exception();
         }
 
-
+        /// <summary>
+        /// The bank sell a hotel to the player
+        /// </summary>
+        /// <param name="p">Player</param>
+        /// <param name="l">Land</param>
         public void SellHotel(Player p, Land l)
         {
             if (NbHotel > 0)
             {
                 NbHotel--;
                 l.AddHotel();
-
                 BankAccount bankAccount = GetBankAccount();
                 BankAccount playerAccount = GetBankAccount(p);
                 playerAccount.BankTransfer(bankAccount, l.LandGroup.HotelPrice);
             }
+            else
+                throw new Exception();
+        }
+
+        public void BuyHouse(Player p, Land l)
+        {
+            if (l.NbHouse > 0)
+            {
+                NbHouse++;
+                l.RemoveHouse();
+
+                BankAccount bankAccount = GetBankAccount();
+                BankAccount playerAccount = GetBankAccount(p);
+                bankAccount.BankTransfer(playerAccount, (l.LandGroup.HousePrice / 2));
+            }
+
+        }
+
+        public void BuyHotel(Player p, Land l)
+        {
+            NbHouse++;
+            l.RemoveHotel();
+
+            BankAccount bankAccount = GetBankAccount();
+            BankAccount playerAccount = GetBankAccount(p);
+            bankAccount.BankTransfer(playerAccount, (l.LandGroup.HotelPrice / 2));
+
+        }
+
+        /// <summary>
+        /// The player pays the tax
+        /// </summary>
+        /// <param name="p">Player</param>
+        /// <param name="t">Tax</param>
+        public void PayTheTax(Player p, Tax t)
+        {
+            BankAccount bankAccount = GetBankAccount();
+            BankAccount playerAccount = GetBankAccount(p);
+            playerAccount.BankTransfer(bankAccount, t.Amount);
+        }
+
+        /// <summary>
+        /// The bank pays parking mony to the payer 
+        /// </summary>
+        /// <param name="p">Player</param>
+        public void GetParkingMoney(Player p)
+        {
+            BankAccount parkingAccount = GetParkingAccount();
+            BankAccount playerAccount = GetBankAccount(p);
+            parkingAccount.BankTransfer(playerAccount, parkingAccount.GetAmount());
+        }
+
+        public void Mortgaged(Player player, Property property)
+        {
+            BankAccount bankAccount = GetBankAccount();
+            BankAccount playerAccount = GetBankAccount(player);
+            bankAccount.BankTransfer(playerAccount, property.MortgagePrice);
+        }
+
+        public void RaiseMortgaged(Player player, Property property)
+        {
+            BankAccount bankAccount = GetBankAccount();
+            BankAccount playerAccount = GetBankAccount(player);
+            playerAccount.BankTransfer(bankAccount, property.MortgagePrice*1.10);
         }
 
         #endregion
-
-
     }
 }
