@@ -57,16 +57,17 @@ namespace Monopoly.Handlers
 
             if (!PlayerCanBeRaise)
                 throw new YouCanNotRoolDicesException();
+
+            if (NumberOfRool >= Config.NB_MAX_LAUNCH_DICES)
+                throw new SoManyDoubleDicesException();
             
+
             this.NumberOfRool++;
             FirstDice.Rool();
             SecondDice.Rool();
             this.PlayerCanBeRaise = IsDouble();
 
-            if (NumberOfRool == Config.NB_MAX_LAUNCH_DICES)
-            {
-                throw new SoManyDoubleDicesException();
-            }
+            
            
         }
 
