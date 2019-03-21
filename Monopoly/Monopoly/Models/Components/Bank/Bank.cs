@@ -172,6 +172,11 @@ namespace Monopoly.Models.Bank
                 throw new Exception();
         }
 
+        /// <summary>
+        /// The bank buy player's house to its half price 
+        /// </summary>
+        /// <param name="p">Player</param>
+        /// <param name="l">Land</param>
         public void BuyHouse(Player p, Land l)
         {
             if (l.NbHouse > 0)
@@ -186,6 +191,11 @@ namespace Monopoly.Models.Bank
 
         }
 
+        /// <summary>
+        /// The bank buy player's hotel to its half price 
+        /// </summary>
+        /// <param name="p">Player</param>
+        /// <param name="l">Land</param>
         public void BuyHotel(Player p, Land l)
         {
             NbHouse++;
@@ -220,6 +230,11 @@ namespace Monopoly.Models.Bank
             parkingAccount.BankTransfer(playerAccount, parkingAccount.GetAmount());
         }
 
+        /// <summary>
+        /// The property will be mortgaged
+        /// </summary>
+        /// <param name="player">Player</param>
+        /// <param name="property">Property</param>
         public void Mortgaged(Player player, Property property)
         {
             BankAccount bankAccount = GetBankAccount();
@@ -227,6 +242,11 @@ namespace Monopoly.Models.Bank
             bankAccount.BankTransfer(playerAccount, property.MortgagePrice);
         }
 
+        /// <summary>
+        /// You lift the mortgage on the property 
+        /// </summary>
+        /// <param name="player">Player</param>
+        /// <param name="property">Property</param>
         public void RaiseMortgaged(Player player, Property property)
         {
             BankAccount bankAccount = GetBankAccount();
