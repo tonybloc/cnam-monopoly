@@ -147,6 +147,7 @@
     <Compile Include="Service\Base64Converter.cs" />
     <Compile Include="Service\Xml\XmlDataAccess.cs" />
     <Compile Include="Settings\Config.cs" />
+    <Compile Include="View\clsWebbrowser_Errors.cs" />
     <Compile Include="View\ConfigurationInterface.xaml.cs">
       <DependentUpon>ConfigurationInterface.xaml</DependentUpon>
     </Compile>
@@ -185,6 +186,9 @@
     </Compile>
     <Compile Include="View\RaiseMortgagedPropertiesListInterface.xaml.cs">
       <DependentUpon>RaiseMortgagedPropertiesListInterface.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\RulesInterface.xaml.cs">
+      <DependentUpon>RulesInterface.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\SellPropertiesListInterface.xaml.cs">
       <DependentUpon>SellPropertiesListInterface.xaml</DependentUpon>
@@ -254,6 +258,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="View\RaiseMortgagedPropertiesListInterface.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\RulesInterface.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
