@@ -42,7 +42,7 @@
                 
                 <StackPanel Margin="20" Orientation="Vertical">
                     <Button x:Name="btnResume" Width="200" Click="onClick_btnResume" Margin="5" Padding="5" Height="50" FontSize="16">Continuer</Button>
-                    <Button x:Name="btnHome" Width="200" Click="onClick_btnHome" Margin="5" Padding="5" Height="50" FontSize="16"> Acceuil</Button>
+                    <Button x:Name="btnHome" Width="200" Click="onClick_btnHome" Margin="5" Padding="5" Height="50" FontSize="16"> Accueil</Button>
                     <Button x:Name="btnQuit" Width="200" Click="onClick_btnQuit" Margin="5" Padding="5" Height="50" FontSize="16">Quitter</Button>
                 </StackPanel>
             </StackPanel>
