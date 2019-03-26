@@ -100,6 +100,7 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Handlers\BoardHandler.cs" />
+    <Compile Include="Handlers\CardHandler.cs" />
     <Compile Include="Handlers\ColorHandler.cs" />
     <Compile Include="Handlers\DicesHandler.cs" />
     <Compile Include="Handlers\GameManager.cs" />
@@ -107,6 +108,17 @@
     <Compile Include="Models\Components\Bank\Bank.cs" />
     <Compile Include="Models\Components\Bank\BankAccount.cs" />
     <Compile Include="Models\Components\Board.cs" />
+    <Compile Include="Models\Components\Cards\Card.cs" />
+    <Compile Include="Models\Components\Cards\CardAnniversary.cs" />
+    <Compile Include="Models\Components\Cards\CardChoice.cs" />
+    <Compile Include="Models\Components\Cards\CardExitToJail.cs" />
+    <Compile Include="Models\Components\Cards\CardMove.cs" />
+    <Compile Include="Models\Components\Cards\CardMoveToCell.cs" />
+    <Compile Include="Models\Components\Cards\CardMoveToJail.cs" />
+    <Compile Include="Models\Components\Cards\CardType.cs" />
+    <Compile Include="Models\Components\Cards\CardUpdateMoney.cs" />
+    <Compile Include="Models\Components\Cards\CardUpdateMoneyAccordingBuilds.cs" />
+    <Compile Include="Models\Components\Cards\Deck.cs" />
     <Compile Include="Models\Components\Cells\Cell.cs" />
     <Compile Include="Models\Components\Cells\DrawCard.cs" />
     <Compile Include="Models\Components\Cells\GoToJail.cs" />
@@ -143,6 +155,9 @@
     </Compile>
     <Compile Include="View\Notifications\Dialog\AlertDialog.xaml.cs">
       <DependentUpon>AlertDialog.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Notifications\Dialog\CardDialog.xaml.cs">
+      <DependentUpon>CardDialog.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\Notifications\Dialog\ExceptionDialog.xaml.cs">
       <DependentUpon>ExceptionDialog.xaml</DependentUpon>
@@ -196,6 +211,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="View\Notifications\Dialog\AlertDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Notifications\Dialog\CardDialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -268,6 +287,8 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <Resource Include="Resources\XML\XMLChanceCard.xml" />
+    <Resource Include="Resources\XML\XMLCommunityCard.xml" />
     <Resource Include="man.ico" />
     <Resource Include="Resources\Pictures\back.png" />
     <Resource Include="Resources\Pictures\buy.png" />
@@ -303,8 +324,6 @@
     <Resource Include="Resources\XML\XMLBoardCell.xml">
       <SubType>Designer</SubType>
     </Resource>
-    <Resource Include="Resources\XML\XMLChanceCard.xml" />
-    <Resource Include="Resources\XML\XMLCommunityCard.xml" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.6.1">

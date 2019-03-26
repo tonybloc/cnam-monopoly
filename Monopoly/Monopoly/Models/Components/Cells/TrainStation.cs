@@ -11,12 +11,11 @@ namespace Monopoly.Models.Components.Cells
     [XmlRoot("TrainStation")]
     public class TrainStation : Property
     {
-
-        [XmlElement("Icon")]
         #region Variables
         /// <summary>
         /// Train station's Icon
         /// </summary>
+        [XmlElement("Icon")]
         public string Icon { get; set; }
 
         /// <summary>

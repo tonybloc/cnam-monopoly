@@ -39,7 +39,7 @@
             </Grid.RowDefinitions>
             
             <!-- Dialog information -->
-            <StackPanel Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Center"  VerticalAlignment="Center" Margin="50">
+            <StackPanel Grid.Row="0" Orientation="Vertical" HorizontalAlignment="Center"  VerticalAlignment="Center" Margin="50">
                 <Label x:Name="LbMessage" FontSize="18">
                     <Label.Content>
                         <AccessText x:Name="ContentMessage"  TextWrapping="Wrap" Text="{Binding Path=Message, Mode=TwoWay}"></AccessText>

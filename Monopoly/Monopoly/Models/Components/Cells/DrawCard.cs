@@ -21,13 +21,7 @@ namespace Monopoly.Models.Components.Cells
         /// <summary>
         /// Type chance
         /// </summary>
-        [XmlIgnore]
-        public const int TYPE_CHANCE = 0;
-        /// <summary>
-        /// Type community
-        /// </summary>
-        [XmlIgnore]
-        public const int TYPE_COMMUNITY_SERVICE = 1;
+       
         #endregion
 
         #region Constructor

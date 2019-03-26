@@ -81,6 +81,11 @@ namespace Monopoly.Models.Bank
             return DictionayOfBankAcount[player.Id];
         }
 
+        public BankAccount GetBankAccount(int id)
+        {
+            return DictionayOfBankAcount[id];
+        }
+
         /// <summary>
         /// Get main bank account 
         /// </summary>
@@ -106,7 +111,9 @@ namespace Monopoly.Models.Bank
         {
             if (!this.DictionayOfBankAcount.ContainsKey(p.Id))
             {
-                this.DictionayOfBankAcount.Add(p.Id, new BankAccount(Config.INITIAL_PLAYER_BANK_BALANCE));
+                BankAccount bk = new BankAccount(Config.INITIAL_PLAYER_BANK_BALANCE);
+                this.DictionayOfBankAcount.Add(p.Id, bk);
+                p.Amount = bk;
             }
             else
             {
@@ -225,6 +232,27 @@ namespace Monopoly.Models.Bank
             BankAccount bankAccount = GetBankAccount();
             BankAccount playerAccount = GetBankAccount(player);
             playerAccount.BankTransfer(bankAccount, property.MortgagePrice*1.10);
+        }
+
+        public void PlayerPayTo(Player target, Player receiver, int amount)
+        {
+            BankAccount origin = GetBankAccount(target);
+            BankAccount to = GetBankAccount(receiver);
+            origin.BankTransfer(to, amount);
+              
+        }
+
+        public void PlayerPaye(Player p, int amount)
+        {
+            BankAccount playerAccount = GetBankAccount(p);
+            playerAccount.BankTransfer(GetBankAccount(), amount);
+        }
+
+        public void GiveMoneyTo(Player p, int amount)
+        {
+            BankAccount playerAccount = GetBankAccount(p);
+            BankAccount globalAccount = GetBankAccount();
+            globalAccount.BankTransfer(playerAccount, amount);
         }
 
         #endregion
