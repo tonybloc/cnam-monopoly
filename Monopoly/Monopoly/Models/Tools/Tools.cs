@@ -10,10 +10,11 @@ namespace Monopoly.Models.Tools
     public class Tools
     {
         /// <summary>
-        /// Shuffle a list of player
+        /// Shuffle list of object
         /// </summary>
-        /// <param name="list"></param>
-        public static void Shuffle(List<Player> list)
+        /// <typeparam name="T">type of object</typeparam>
+        /// <param name="list">liste to shuffle</param>
+        public static void Shuffle<T>(List<T> list)
         {
             Random rand = new Random();
             int nbMotion = list.Count;
@@ -21,28 +22,9 @@ namespace Monopoly.Models.Tools
             {
                 nbMotion--;
                 int randomIndex = rand.Next(nbMotion + 1);
-                Player player = list[randomIndex];
+                T obj = list[randomIndex];
                 list[randomIndex] = list[nbMotion];
-                list[nbMotion] = player;
-            }
-
-        }
-
-        /// <summary>
-        /// Shuffle a list of string
-        /// </summary>
-        /// <param name="list"></param>
-        public static void Shuffle(List<string> list)
-        {
-            Random rand = new Random();
-            int nbMotion = list.Count;
-            while (nbMotion > 1)
-            {
-                nbMotion--;
-                int randomIndex = rand.Next(nbMotion + 1);
-                string s = list[randomIndex];
-                list[randomIndex] = list[nbMotion];
-                list[nbMotion] = s;
+                list[nbMotion] = obj;
             }
 
         }
