@@ -5,14 +5,28 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:Monopoly.View"
       xmlns:handler="clr-namespace:Monopoly.Handlers"
+      xmlns:m="clr-namespace:Monopoly.Models.Components"
+      xmlns:bank="clr-namespace:Monopoly.Models.Bank"      
       xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
       mc:Ignorable="d" 
       Height="{DynamicResource {x:Static SystemParameters.PrimaryScreenHeightKey}}"
       Width="{DynamicResource {x:Static SystemParameters.PrimaryScreenWidthKey}}"
       Background="{DynamicResource MaterialDesignPaper}"
       FontFamily="{DynamicResource MaterialDesignFont}"
-      Title="Plateau de jeux">    
-    
+      Title="Plateau de jeux">
+
+    <Page.Resources>
+        <DataTemplate DataType="{x:Type m:Player}">
+            <StackPanel Orientation="Horizontal" Margin="5">
+                <Ellipse Width="20" Height="20" Fill="{Binding Pawn.ColorValue}" Margin="5,0,5,0" VerticalAlignment="Center"/>
+                <TextBlock Text="{Binding Name}" FontSize="16" Margin="5,0,5,0" VerticalAlignment="Center"/>
+                <TextBlock Text="{Binding Amount.Amount}" FontSize="16" FontWeight="Bold" Margin="5,0,5,0" VerticalAlignment="Center"/>
+                <Label>€</Label>
+            </StackPanel>
+        </DataTemplate>
+
+        
+    </Page.Resources>
     
     <Grid>
         <Grid.ColumnDefinitions>
@@ -169,14 +183,13 @@
                 <Grid Grid.Row="0">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="2*"/>
-                        <ColumnDefinition Width="2*"/>
+                        <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>
 
                     <!-- Monopoly Man Icons -->
-                    <Image Grid.Column="0" x:Name="image" Height="{Binding Height, ElementName=First}" Margin="10"  Source="/Monopoly;component/Resources/Pictures/MonopolyManIcon.png"></Image>
+                    <!-- <Image Grid.Column="0" x:Name="image" Height="{Binding Height, ElementName=First}" Margin="10"  Source="/Monopoly;component/Resources/Pictures/MonopolyManIcon.png"></Image> -->
 
-                    <Grid Grid.Column="1" Margin="10">
+                    <Grid Grid.Column="0" Margin="10">
                         <Grid.RowDefinitions>
                             <RowDefinition Height="*"/>
                             <RowDefinition Height="*"/>
@@ -204,7 +217,7 @@
                             <StackPanel Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center">
                                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
                                     <TextBlock FontSize="24"  Margin="10,0,10,0" >Tour</TextBlock>
-                                    <TextBlock FontSize="24" Text="{Binding Path=NumberOfTurn, Mode=TwoWay}"></TextBlock>
+                                    <TextBlock FontSize="24" Text="{Binding Path=UINumberOfTurn, Mode=TwoWay}"></TextBlock>
                                 </StackPanel>
                             </StackPanel>
                         </Border>
@@ -213,21 +226,28 @@
                             <Border.Effect>
                                 <DropShadowEffect ShadowDepth="2" />
                             </Border.Effect>
+
                             <StackPanel Grid.Row="1" Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center">
                                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                                    <Ellipse Fill="{Binding Path=ColorOfPlayer, Mode=TwoWay}" HorizontalAlignment="Left" Height="35" Width="35"/>
-                                    <TextBlock Text="{Binding Path=NameOfPlayer , Mode=TwoWay}" FontSize="24"  Margin="15,0,10,0"></TextBlock>
+                                    <Ellipse Fill="{Binding Path=CurrentPlayer.Pawn.ColorValue, Mode=TwoWay}" VerticalAlignment="Center" Height="30" Width="30"/>
+                                    <TextBlock Text="{Binding Path=CurrentPlayer.Name , Mode=TwoWay}" VerticalAlignment="Center" FontSize="20"  Margin="10,0,20,0"></TextBlock>                                    
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                                    <Image Grid.Column="0" Height="30" Margin="5"  Source="/Monopoly;component/Resources/Pictures/buy.png" VerticalAlignment="Center"/>
+                                    <TextBlock Text="{Binding Path=CurrentPlayer.Amount.Amount , Mode=TwoWay}" VerticalAlignment="Center" FontSize="20"  Margin="10,0,10,0"></TextBlock>
                                 </StackPanel>
                             </StackPanel>
                         </Border>
                     </Grid>
 
                     <!-- List of players info -->
-                    <Border  Grid.Column="2" Padding="20" Margin="10" Background="White">
+                    <Border  Grid.Column="1" Padding="20" Margin="10" Background="White">
                         <Border.Effect>
                             <DropShadowEffect ShadowDepth="2" />
                         </Border.Effect>
-                        <StackPanel x:Name="StackPanel_ListOfPlayer" Orientation="Vertical" HorizontalAlignment="Center"></StackPanel>
+                        <!-- <StackPanel x:Name="StackPanel_ListOfPlayer" Orientation="Vertical" HorizontalAlignment="Center"></StackPanel> -->
+                        <ListView x:Name="lvPlayers" 
+                                  ItemsSource="{Binding Path=ListOfPlayers, Mode=TwoWay}" Height="300"/>
                     </Border>
 
                 </Grid>

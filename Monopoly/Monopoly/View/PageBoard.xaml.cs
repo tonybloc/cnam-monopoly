@@ -19,6 +19,8 @@ using System.Windows.Threading;
 using Monopoly.View.Notifications.Dialog;
 using System.Windows.Media.Effects;
 using Monopoly.Models.Components.Exceptions;
+using Monopoly.Models.Components.Cards;
+using System.Collections.ObjectModel;
 
 namespace Monopoly.View
 {
@@ -35,17 +37,18 @@ namespace Monopoly.View
         private DicesHandler _DicesHandler;
         private PlayerHandler _PlayerHandler;
         private GameManager _GameManager;
+        private CardHandler _CardHandler;
 
         private enum CellOrientation : int { BOTTUM = 0, LEFT = 1, TOP = 2, RIGHT = 3 };
         private enum GridType : int { GRIDTYPE_ROW = 1, GRIDTYPE_COLUMN = 2 };
 
         private const int SizeofElipse = 20;
         private const string START_POSITION = "playerPosition0";
-
+        
 
         #region Binding Variables
         private int _numberOfTurn;
-        public int NumberOfTurn
+        public int UINumberOfTurn
         {
             get
             {
@@ -73,50 +76,15 @@ namespace Monopoly.View
                 if (_currentPlayer != value)
                 {
                     _currentPlayer = value;
-                    NameOfPlayer = _currentPlayer.Name;
-                    ColorOfPlayer = _currentPlayer.Pawn.ColorValue;
                     OnPropertyChanged();
                 }
             }
         }
 
-        private string _colorOfPlayer;
-        public string ColorOfPlayer
-        {
-            get
-            {
-                return _colorOfPlayer;
-            }
-            set
-            {
-                if(_colorOfPlayer != value)
-                {
-                    _colorOfPlayer = value;
-                    OnPropertyChanged();
-                }
-            }
-        }
+        
+        // List of player in Right Panel
+        public ObservableCollection<Player> ListOfPlayers { get; set; }
 
-        private string _nameOfPlayer;
-        public string NameOfPlayer
-        {
-            get
-            {
-                return _nameOfPlayer;
-            }
-            set
-            {
-                if (_nameOfPlayer != value)
-                {
-                    _nameOfPlayer = value;
-                    OnPropertyChanged();
-                }
-            }
-        }
-
-        public Player currentPlayer;
-        public string NamePlayer { get { return currentPlayer.Name; } }
-        public string test { get { return currentPlayer.Pawn.ColorValue; } }
 
 
         public event PropertyChangedEventHandler PropertyChanged;
@@ -135,7 +103,7 @@ namespace Monopoly.View
             _GameManager = GameManager.Instance;
             _DicesHandler = DicesHandler.Instance;
             _PlayerHandler = PlayerHandler.Instance;
-
+            _CardHandler = CardHandler.Instance;
 
             // Initialise Chronometer
             InitialiseChronometer();
@@ -143,17 +111,19 @@ namespace Monopoly.View
             // Initialise Board 
             InitialiseBoard();
 
-            
+
             // Generate the player
-            GeneratePlayer();
+            //GeneratePlayer();
+            ListOfPlayers = new ObservableCollection<Player>(_PlayerHandler.ListOfPlayers);
 
             CurrentPlayer = _GameManager.PlayerHandler.GetCurrentPlayer();
 
             PropertiesListInterface.buildingBought += BuildingBought;
             SellPropertiesListInterface.buildingBought += BuildingBought;
+            CardDialog.EventMovePlayer += UIMovePlayer;
+            CardDialog.EventMovePlayerToCell += UIMovePlayerToCell;
 
-            
-            NumberOfTurn = _GameManager.NumberOfTurn;
+            UINumberOfTurn = _GameManager.NumberOfTurn;
             
             
 
@@ -482,32 +452,7 @@ namespace Monopoly.View
                                 int position = (numberOfCellsToInsertInPanel - indexOfNumberOfCellInPanel - 1);
                                 GenerateLand(((Land)c), CellOrientation.BOTTUM, position, globalIndex);
                                 indexOfNumberOfCellInPanel++;
-
-                                /*StackPanel stackProperties = new StackPanel();
-                                PackIcon house = new PackIcon { Kind = PackIconKind.House };
-                                PackIcon motel = new PackIcon { Kind = PackIconKind.HouseModern };
-
-                                for (int i = 0; i < 4; i++)
-                                {
-                                     Label l = new Label();
-                                     l.Content = house;
-                                     stackProperties.Children.Add(l);
-
-                                    PackIcon house = new PackIcon { Kind = PackIconKind.House };
-
-                                    stackProperties.Children.Add(motel);
-                                }
-
-                                stackProperties.Children.Add(motel);
-                                Grid.SetRow(stackProperties, 1);
-
-                                MaterialDesignThemes.Wpf.Icon icon = 
-
-                                PackIcon house = new PackIcon { Kind = PackIconKind.House };                                
-                                PackIcon motel = new PackIcon { Kind = PackIconKind.HouseModern };
-                                gridProperties.Children.Add(house);
-                                gridProperties.Children.Add(motel);*/
-
+                                
                             }
                             else if (c.GetType() == typeof(TrainStation))
                             {
@@ -1995,7 +1940,7 @@ namespace Monopoly.View
                 DicesContent.Visibility = Visibility.Visible;
                 PropertiesListContent.Visibility = Visibility.Hidden;
 
-                Move(CurrentPlayer, _DicesHandler.GetValue());
+                UIMovePlayer(CurrentPlayer, _DicesHandler.GetValue(), true);
             }
             catch(Exception exp)
             {
@@ -2008,99 +1953,73 @@ namespace Monopoly.View
         #endregion
 
         #region Players
+
+
         /// <summary>
-        /// Generate the liste of player in right of frame
-        /// </summary>
-        private void GeneratePlayer()
-        {
-
-            int index = 0;
-            foreach (Player p in _PlayerHandler.ListOfPlayers)
-            {
-                index++;
-                StackPanel stackPanel = new StackPanel();
-                stackPanel.Orientation = Orientation.Horizontal;
-                stackPanel.Margin = new Thickness(5);
-
-                BrushConverter bc = new BrushConverter();
-                Ellipse playerEllipse = new Ellipse();
-                playerEllipse.Margin = new Thickness(0, 0, 10, 0);
-                playerEllipse.Fill = (Brush)bc.ConvertFrom(p.Pawn.ColorValue);
-                playerEllipse.Width = SizeofElipse;
-                playerEllipse.Height = SizeofElipse;
-
-
-                TextBlock tbPlayerNumber = new TextBlock();
-                tbPlayerNumber.VerticalAlignment = VerticalAlignment.Center;
-                tbPlayerNumber.Text = string.Format("Player {0} : {1}  = ", index, p.Name);
-
-                TextBlock tbPlayerAmount = new TextBlock();
-                tbPlayerAmount.VerticalAlignment = VerticalAlignment.Center;
-                tbPlayerAmount.Text = string.Format("CACHING € or $");
-
-                stackPanel.Children.Add(playerEllipse);
-                stackPanel.Children.Add(tbPlayerNumber);
-                stackPanel.Children.Add(tbPlayerAmount);
-                this.StackPanel_ListOfPlayer.Children.Add(stackPanel);
-
-                object cell = MonopolyBoard.FindName(START_POSITION);
-                if (cell is Grid)
-                {
-                    Grid start = (Grid)cell;
-                    foreach (UIElement child in start.Children)
-                    {
-                        child.Visibility = Visibility.Visible;
-                    }
-                }
-
-            }
-
-        }
-        /// <summary>
-        /// Move the player to next cell
+        /// UserInterface : move the player to n cell
         /// </summary>
         /// <param name="p">player</param>
-        /// <param name="first">first dice</param>
-        /// <param name="second">second dice</param>
-        void Move(Player p, int Number)
+        /// <param name="Number">number of movement</param>
+        /// <param name="withStartAmount">with start amount</param>
+        public void UIMovePlayer(Player p, int Number, bool withStartAmount)
         {
             int currentPosition = p.Position;
             int previousCurrentPosition = currentPosition;
-            int nextPosition = _GameManager.NextPosition(p, _DicesHandler.GetValue());
+            int nextPosition = _GameManager.NextPosition(p, Number);
 
             Grid currentPlayerPosition = (Grid)this.FindName("playerPosition" + currentPosition);
             Ellipse currentEllipse = (Ellipse)GetChildren(currentPlayerPosition, p.Pawn.X, p.Pawn.Y);
+            currentEllipse.Visibility = Visibility.Hidden;
+
+            _PlayerHandler.MoveTo(p, nextPosition);
 
             Grid nextPlayerPosition = (Grid)this.FindName("playerPosition" + nextPosition);
             Ellipse nextEllipse = (Ellipse)GetChildren(nextPlayerPosition, p.Pawn.X, p.Pawn.Y);
+            nextEllipse.Visibility = Visibility.Visible;
+            
 
-            int index = 0;
-            while (currentPosition != nextPosition)
-            {
-                index++;
-                currentEllipse.Visibility = Visibility.Hidden;
-
-                currentPosition = (currentPosition + 1) % _GameManager.BoardHandler.Board.ListCell.Count;
-                currentPlayerPosition = (Grid)this.FindName("playerPosition" + currentPosition);
-                currentEllipse = (Ellipse)GetChildren(currentPlayerPosition, p.Pawn.X, p.Pawn.Y);
-                currentEllipse.Visibility = Visibility.Visible;
-
-                _PlayerHandler.MoveTo(p, currentPosition);
-                if (index > 50)
-                {
-                    break;
-                }
-            }
-
-            if (previousCurrentPosition > nextPosition)
+            if ((previousCurrentPosition > nextPosition) && withStartAmount)
             {
                 _GameManager.PlayerHandler.GetGratification(CurrentPlayer);
 
-                MessageBox.Show("200 € de gagné !");
+                AlertNotification.Content = new AlertDialog("Vous avez gagné : 200 €");
             }
 
             DoCellAction();
         }
+
+        /// <summary>
+        /// UserInterface : move the player in cell
+        /// </summary>
+        /// <param name="p">player</param>
+        /// <param name="c">cellule</param>
+        /// <param name="withStartAmount">with start amount</param>
+        public void UIMovePlayerToCell(Player p, Cell c, bool withStartAmount)
+        {
+            int currentPosition = p.Position;
+            int previousCurrentPosition = currentPosition;
+            int nextPosition = _GameManager.NextPosition(p, c);
+
+            Grid currentPlayerPosition = (Grid)this.FindName("playerPosition" + currentPosition);
+            Ellipse currentEllipse = (Ellipse)GetChildren(currentPlayerPosition, p.Pawn.X, p.Pawn.Y);
+            currentEllipse.Visibility = Visibility.Hidden;
+            _PlayerHandler.MoveTo(p, nextPosition);
+
+            Grid nextPlayerPosition = (Grid)this.FindName("playerPosition" + nextPosition);
+            Ellipse nextEllipse = (Ellipse)GetChildren(nextPlayerPosition, p.Pawn.X, p.Pawn.Y);
+            nextEllipse.Visibility = Visibility.Visible;
+            
+            if ((previousCurrentPosition > nextPosition) && withStartAmount)
+            {
+                _GameManager.PlayerHandler.GetGratification(CurrentPlayer);
+
+                AlertNotification.Content = new AlertDialog("Vous avez gagné : 200 €");
+            }
+
+            DoCellAction();
+        }
+
+
 
         void PropertyBought(Player p)
         {
@@ -2141,7 +2060,7 @@ namespace Monopoly.View
                     _GameManager.NextTurn();
                     _DicesHandler.PlayerCanBeRaise = true;
                     CurrentPlayer = _PlayerHandler.GetCurrentPlayer();
-                    NumberOfTurn = _GameManager.NumberOfTurn;
+                    UINumberOfTurn = _GameManager.NumberOfTurn;
                }
             }
             catch (Exception exp)
@@ -2189,7 +2108,7 @@ namespace Monopoly.View
                 lblOwnerCardValue.Content = t.OwnerName;
 
                 Property property = (Property)c;
-                if (property.status == Property.MORTGAGED)
+                if (property.Status == Property.MORTGAGED)
                 {
                     Card.Opacity = 0.5;
                 }
@@ -2215,7 +2134,7 @@ namespace Monopoly.View
                 lblMortgageValue.Content = l.MortgagePrice + " €";
 
                Property property = (Property)c;
-                if (property.status == Property.MORTGAGED)
+                if (property.Status == Property.MORTGAGED)
                 {
                     LandDescription.Opacity = 0.5;
                 }
@@ -2249,7 +2168,7 @@ namespace Monopoly.View
                 lblMortgagePriceValue.Content = p.MortgagePrice + " €";
 
                 Property property = (Property)c;
-                if (property.status == Property.MORTGAGED)
+                if (property.Status == Property.MORTGAGED)
                     Card.Opacity = 0.5;
                 else
                     Card.Opacity = 1;
@@ -2273,11 +2192,11 @@ namespace Monopoly.View
             {
                 Property p = (Property)c;
 
-                if (p.status == Property.AVAILABLE_ON_SALE)
+                if (p.Status == Property.AVAILABLE_ON_SALE)
                 {
                     BuyProperty(p);
                 }
-                else if (p.status == Property.NOT_AVAILABLE_ON_SALE)
+                else if (p.Status == Property.NOT_AVAILABLE_ON_SALE)
                 {
                     if (_PlayerHandler.CheckIfPlayerOwnThisProperty(p))
                     {
@@ -2290,7 +2209,7 @@ namespace Monopoly.View
                     }
                     else
                     {
-                        AlertNotification.Content = new AlertDialog("Vous avez payer une taxe de : " + ((Tax)c).Amount, AlertDialog.TypeOfAlert.INFO);
+                        AlertNotification.Content = new AlertDialog("Vous avez payer une taxe de : ", AlertDialog.TypeOfAlert.INFO);
                         AlertNotification.Visibility = Visibility.Visible;
                         _PlayerHandler.PayTheRent(p, _DicesHandler.FirstDice.Value + _DicesHandler.SecondDice.Value);
                     }
@@ -2305,8 +2224,23 @@ namespace Monopoly.View
             }
             else if (c.GetType() == typeof(DrawCard))
             {
-                AlertNotification.Content = new AlertDialog("Vous piochez une carte !", AlertDialog.TypeOfAlert.SUCCES);
+                AlertNotification.Content = new AlertDialog("Vous piochez une carte !", AlertDialog.TypeOfAlert.INFO);
                 AlertNotification.Visibility = Visibility.Visible;
+                DrawCard card = (DrawCard)c;
+
+                switch(card.Type)
+                {
+                    case (int)CardType.CHANCE:
+                        _CardHandler.GetNextChanceCard();
+                        NotificationsPanel.Content = new CardDialog(_CardHandler.CurrentCard);
+                        NotificationsPanel.Visibility = Visibility.Visible;
+                        break;
+                    case (int)CardType.COMMUNITY:
+                        _CardHandler.GetNextCommunityCard();
+                        NotificationsPanel.Content = new CardDialog(_CardHandler.CurrentCard);
+                        NotificationsPanel.Visibility = Visibility.Visible;
+                        break;
+                }
             }
             else if (c.GetType() == typeof(StartPoint))
             {
@@ -2322,6 +2256,7 @@ namespace Monopoly.View
             {
                 AlertNotification.Content = new AlertDialog("Vous êtes en prison !", AlertDialog.TypeOfAlert.INFO);
                 AlertNotification.Visibility = Visibility.Visible;
+                _PlayerHandler.GoToJail();
             }
             else if (c.GetType() == typeof(Parking))
             {

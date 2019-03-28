@@ -32,7 +32,7 @@ namespace Monopoly.View
         private static PlayerHandler _PlayerHandler;
 
         private const string placeholder = "Enter your pseudo...";
-        public string defaultColorValue = "#FFFFFF";
+        public const string defaultColorValue = "#FFFFFF";
 
         private string _playerName;
         public string PlayerName

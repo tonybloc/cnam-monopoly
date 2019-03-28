@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
@@ -11,7 +12,7 @@ namespace Monopoly.Models.Components.Cells
 {
     [Serializable]
     [XmlRoot("Land")]
-    public class Land : Property, INotifyPropertyChanged
+    public class Land : Property
     {
         #region Variables
         /// <summary>
@@ -24,8 +25,7 @@ namespace Monopoly.Models.Components.Cells
         /// </summary>
         [XmlIgnore]
         public const int NB_MAX_HOTEL = 1;
-
-        public event PropertyChangedEventHandler PropertyChanged;
+        
 
         /// <summary>
         /// Group of lands
@@ -39,52 +39,47 @@ namespace Monopoly.Models.Components.Cells
         [XmlArray("RantalList")]
         [XmlArrayItem("Rantal")]
         public List<int> RantalList { get; set; }
-
-        private int NbHouseValue = 0;
-        private int NbHotelValue = 0;
-
-        /// <summary>
-        /// Number of hotels
-        /// </summary>
+   
+        private int _NbHotelValue;
         [XmlIgnore]
         public int NbHotel
         {
             get
             {
-                return this.NbHotelValue;
+                return this._NbHotelValue;
             }
             private set
             {
-                if(value != this.NbHotelValue)
+                if(value != this._NbHotelValue)
                 {
-                    this.NbHotelValue = value;
-                    NotifyPropertyChanged();
+                    this._NbHotelValue = value;
+                    OnPropertyChanged();
                 }
             }
         }
-        /// <summary>
-        /// Number of houses
-        /// </summary>
+
+        private int _NbHouseValue;
         [XmlIgnore]
         public int NbHouse {
             get
             {
-                return this.NbHouseValue;
+                return this._NbHouseValue;
             }
             private set
             {
-                if (value != this.NbHouseValue)
+                if (value != this._NbHouseValue)
                 {
-                    this.NbHouseValue = value;
-                    NotifyPropertyChanged();
+                    this._NbHouseValue = value;
+                    OnPropertyChanged();
                 }
             }
         }
         #endregion
 
         #region Constructor
+
         /// <summary>
-        /// Creation of a cell "Land"
+        /// Create new instance of class
         /// </summary>
         public Land()
         {
@@ -92,40 +87,54 @@ namespace Monopoly.Models.Components.Cells
             NbHotel = 0;
             this.RantalList = new List<int>();
         }
+
         #endregion
-
-        private void NotifyPropertyChanged([CallerMemberName] String propertyName = "")
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
-
+ 
         #region Public methods
+
+        /// <summary>
+        /// Add House to Land
+        /// </summary>
         public void AddHouse()
         {
             this.NbHouse++;
         }
 
+        /// <summary>
+        /// Remove House to Land
+        /// </summary>
         public void RemoveHouse()
         {
             if (NbHouse > 0)
                 this.NbHouse--;
         }
 
+        /// <summary>
+        /// Add Hotel to Land
+        /// </summary>
         public void AddHotel()
         {
             this.NbHotel++;
             this.NbHouse = 0;
         }
 
+        /// <summary>
+        /// Remove Hotel to Land
+        /// </summary>
         public void RemoveHotel()
         {
             this.NbHotel--;
             this.NbHouse = NB_MAX_HOUSES;
         }
 
-        public int GetRent(int nb)
+        /// <summary>
+        /// Return Rent of Land
+        /// </summary>
+        /// <param name="nb">Number of House / Hotel</param>
+        /// <returns></returns>
+        public int GetRent(int nbBulding)
         {
-            return RantalList[nb];
+            return RantalList[nbBulding];
         }
 
         #endregion

@@ -1,19 +1,38 @@
 ﻿using Monopoly.Models.Components.Exceptions;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace Monopoly.Models.Bank
 {
-    public class BankAccount
+    public class BankAccount: INotifyPropertyChanged
     {
         #region Variables
         /// <summary>
         /// Amount of the bank account
         /// </summary>
         private double _amount { get; set; }
+        public double Amount
+        {
+            get
+            {
+                return _amount;
+            }
+            set
+            {
+                if(_amount != value)
+                {
+                    _amount = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
         #endregion
 
         #region Constructeurs
@@ -22,18 +41,33 @@ namespace Monopoly.Models.Bank
         /// </summary>
         public BankAccount()
         {
-            this._amount = 1500;
+            this.Amount = 1500;
         }
 
         /// <summary>
         ///  Create an instance of the class with the amount value
         /// </summary>
         /// <param name="amount">Initail amount value</param>
-        public BankAccount(int amount)
+        public BankAccount(double amount)
         {
-            this._amount = amount;
+            this.Amount = amount;
         }
+        
         #endregion
+
+        #region NotifyPropertyChanged
+
+        /// <summary>
+        /// Notify Property Changed
+        /// </summary>
+        /// <param name="propertyName">Name of property</param>
+        private void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+        #endregion
+
         #region Private methods
         /// <summary>
         /// Add an amount to the bank balance
@@ -41,7 +75,7 @@ namespace Monopoly.Models.Bank
         /// <param name="amount">Amount value</param>
         private void AddAmount(double amount)
         {
-            this._amount += amount;
+            this.Amount += amount;
         }
 
         /// <summary>
@@ -50,7 +84,8 @@ namespace Monopoly.Models.Bank
         /// <param name="amount">Amount value</param>
         private void RemoveAmount(double amount)
         {
-            this._amount -= amount;
+            CheckIfBankBalanceIsEnougth(amount);
+            this.Amount -= amount;
         }
 
         /// <summary>
@@ -60,7 +95,7 @@ namespace Monopoly.Models.Bank
         /// <returns>Boolean : is there enougth or not</returns>
         private bool CheckIfBankBalanceIsEnougth(double amount)
         {
-            if ((this._amount - amount) >= 0)
+            if ((this.Amount - amount) >= 0)
             {
                 return true;
             }
@@ -76,12 +111,10 @@ namespace Monopoly.Models.Bank
         /// <param name="amount">Amount value</param>
         private double Withdraw(double amount)
         {
-            if (CheckIfBankBalanceIsEnougth(amount))
-            {
-                RemoveAmount(amount);
-                return amount;
-            }
-            return 0;
+            CheckIfBankBalanceIsEnougth(amount);
+            RemoveAmount(amount);
+            return amount;
+            
         }
         #endregion
 
@@ -90,7 +123,7 @@ namespace Monopoly.Models.Bank
         /// Return the bank balance value
         /// </summary>
         /// <returns>Amount value</returns>
-        public double GetAmount() { return this._amount; }
+        public double GetAmount() { return this.Amount; }
 
 
         /// <summary>
@@ -102,8 +135,8 @@ namespace Monopoly.Models.Bank
         {
             double money = this.Withdraw(amount);
             bankAccount.AddAmount(money);
-
         }
+        
 
         #endregion
 

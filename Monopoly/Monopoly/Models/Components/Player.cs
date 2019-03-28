@@ -1,34 +1,149 @@
-﻿using Monopoly.Models.Components.Cells;
+﻿using Monopoly.Handlers;
+using Monopoly.Models.Bank;
+using Monopoly.Models.Components.Cards;
+using Monopoly.Models.Components.Cells;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace Monopoly.Models.Components
 {
-    public class Player
+    public class Player : INotifyPropertyChanged
     {
-        #region Constantes
+        #region Constantes & Enumeration
 
         public enum TypeOfPlayer : int {USER = 0,BOT = 1}
+        public enum StatusOfPlayer : int { WAITING = 0, PLAYING = 1}
+        public enum StatusSpeOfPlayer : int { NO_SPE=0, IN_JAIL = 1, HAS_LOST=2, HAS_WIN = 3 }
+        public enum TypeOfBulding : int { BUILD_HOTEL = 0, BUILD_HOUSE = 2}
         private static int NextID = 0;
-        
-        public const int WAITING = 0;
-        public const int PLAYING = 1;
-        public const int BUILD_HOTEL = 1;
-        public const int BUILD_HOUSE = 2;
         #endregion
 
         #region Variables
-        public int Id { get; set; }
-        public string Name { get; set; }
-        public int Status { get; set; }
-        public Pawn Pawn { get; set; }
-        public int Position { get; set; }
-        public TypeOfPlayer PlayerType { get; private set; }
-        public List<Property> ListOfProperties { get; private set; }
-        public List<Land> ListOfLands { get; private set; }
+        private int _id;
+        public int Id
+        {
+            get
+            {
+                return _id;
+            }
+            set
+            {
+                if(_id != value)
+                {
+                    _id = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+        private string _name;
+        public string Name
+        {
+            get
+            {
+                return _name;
+            }
+            set
+            {
+                if(_name != value)
+                {
+                    _name = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+        private int _position;
+        public int Position
+        {
+            get
+            {
+                return _position;
+            }
+            set
+            {
+                if(_position != value)
+                {
+                    _position = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+        private Pawn _pawn;
+        public Pawn Pawn
+        {
+            get
+            {
+                return _pawn;
+            }
+            set
+            {
+                if(_pawn != value)
+                {
+                    _pawn = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+        private StatusOfPlayer _status;
+        public StatusOfPlayer Status
+        {
+            get
+            {
+                return _status;
+            }
+            set
+            {
+                if(_status != value)
+                {
+                    _status = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+        private StatusSpeOfPlayer _statusSpe;
+        public StatusSpeOfPlayer StatusSpe
+        {
+            get
+            {
+                return _statusSpe;
+            }
+            set
+            {
+                if(_statusSpe != value)
+                {
+                    _statusSpe = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+        private TypeOfPlayer _playerType;
+        public TypeOfPlayer PlayerType
+        {
+            get
+            {
+                return _playerType;
+            }
+            set
+            {
+                if(_playerType != value)
+                {
+                    _playerType = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        public BankAccount Amount { get; set; }
+
+        public ObservableCollection<Property> ListOfProperties { get; private set; }
+        public ObservableCollection<Card> ListOfCards { get; private set; }
+        
+        public event PropertyChangedEventHandler PropertyChanged;        
         #endregion  
 
         #region Constructeurs
@@ -42,10 +157,12 @@ namespace Monopoly.Models.Components
             this.Name = "";
             this.Pawn = new Pawn();
             this.Position = 0;
-            this.Status = WAITING;
+            this.Status = StatusOfPlayer.WAITING;
+            this.StatusSpe = StatusSpeOfPlayer.NO_SPE;
             this.PlayerType = TypeOfPlayer.USER;
-            this.ListOfProperties = new List<Property>();
-            this.ListOfLands = new List<Land>();
+            this.ListOfProperties = new ObservableCollection<Property>();
+            this.ListOfCards = new ObservableCollection<Card>();
+            this.Amount = null;
         }
 
         /// <summary>
@@ -60,21 +177,30 @@ namespace Monopoly.Models.Components
             this.Name = name;
             this.Pawn = pawn;
             this.Position = 0;
-            this.Status = WAITING;
+            this.Status = StatusOfPlayer.WAITING;
+            this.StatusSpe = StatusSpeOfPlayer.NO_SPE;
             this.PlayerType = type;
-            this.ListOfProperties = new List<Property>();
+            this.ListOfProperties = new ObservableCollection<Property>();            
+            this.ListOfCards = new ObservableCollection<Card>();
+            this.Amount = null;
         }
 
-        
+        #endregion
+
+        #region NotifyPropertyChanged
 
         /// <summary>
-        /// Update the type of player
+        /// Notify Property Changed
         /// </summary>
-        /// <param name="t">player type</param>
-        public void SetPlayerType(TypeOfPlayer t)
+        /// <param name="propertyName">Name of property</param>
+        private void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
-            this.PlayerType = t;
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
+
+        #endregion
+
+        #region Methodes publique
 
         /// <summary>
         /// Deplace le joueurs à la position cible
@@ -93,26 +219,43 @@ namespace Monopoly.Models.Components
         {
             this.Position = cell.Id;      
         }
-        #endregion
-
-        #region Methodes publique
+        
         /// <summary>
-        /// Ajoute une propriété à sa liste de biens
+        /// Add new Property in list
         /// </summary>
-        /// <param name="property">Porpriete</param>
+        /// <param name="property">Property</param>
         public void AddPorperty(Property p)
         {
             this.ListOfProperties.Add(p);
         }
 
         /// <summary>
-        /// Enlève une propriété à sa la liste de bien
+        /// Remove property in list
         /// </summary>
-        /// <param name="p">Propriété</param>
+        /// <param name="p">Property</param>
         public void RemoveProperty(Property p)
         {
             this.ListOfProperties.Remove(p);
         }
+
+        /// <summary>
+        /// Add new card in list
+        /// </summary>
+        /// <param name="c">Card</param>
+        public void AddCard(Card c)
+        {
+            this.ListOfCards.Add(c);
+        }
+
+        /// <summary>
+        /// Remove Card in list
+        /// </summary>
+        /// <param name="c">Card</param>
+        public void RemoveCard(Card c)
+        {
+            this.ListOfCards.Remove(c);
+        }
+
         #endregion
     }
 }

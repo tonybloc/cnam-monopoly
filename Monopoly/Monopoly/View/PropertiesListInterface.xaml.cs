@@ -26,7 +26,6 @@ namespace Monopoly.View
         private static PlayerHandler playerHandler;
 
         public delegate void BuildingBought(Land l);
-
         public static event BuildingBought buildingBought;
 
         public PropertiesListInterface()

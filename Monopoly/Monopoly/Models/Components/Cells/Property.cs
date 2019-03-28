@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Serialization;
@@ -12,7 +14,7 @@ namespace Monopoly.Models.Components.Cells
     [XmlInclude(typeof(Land))]
     [XmlInclude(typeof(PublicService))]
     [XmlInclude(typeof(TrainStation))]
-    public class Property : Cell
+    public class Property : Cell, INotifyPropertyChanged
     {
         #region Constants
         /// <summary>
@@ -33,36 +35,111 @@ namespace Monopoly.Models.Components.Cells
         #endregion
 
         #region Variables
-        /// <summary>
-        /// Property's status
-        /// </summary>
+
+        private int _status;
         [XmlElement("Status")]
-        public int status;
-        /// <summary>
-        /// Property's purchase price
-        /// </summary>
+        public int Status
+        {
+            get
+            {
+                return _status;
+            }
+            set
+            {
+                if(_status != value)
+                {
+                    _status = value;
+                    OnPropertyChanged();
+                }
+            }
+            
+        }
+
+        private int _purchasePrice;
         [XmlElement("PurchasePrice")]
-        public int PurchasePrice { get; set; }
-        /// <summary>
-        /// Property's mortgage price
-        /// </summary>
+        public int PurchasePrice
+        {
+            get
+            {
+                return _purchasePrice;
+            }
+            set
+            {
+                if(_purchasePrice != value)
+                {
+                    _purchasePrice = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        private int _mortgagePrice;
         [XmlElement("MortgagePrice")]
-        public int MortgagePrice { get; set; }
-        /// <summary>
-        /// Name of the owner
-        /// </summary>
+        public int MortgagePrice
+        {
+            get
+            {
+                return _mortgagePrice;
+            }
+            set
+            {
+                if(_mortgagePrice != value)
+                {
+                    _mortgagePrice = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        private string _ownerName;
         [XmlIgnore]
-        public string OwnerName { get; set; }
+        public string OwnerName
+        {
+            get
+            {
+                return _ownerName;
+            }
+            set
+            {
+                if(_ownerName != value)
+                {
+                    _ownerName = value;
+                    OnPropertyChanged();
+                }
+
+            }
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
         #endregion
 
         #region Constructor
+
         /// <summary>
-        /// Creation of the cell "Property"
+        /// Create new instance of class
         /// </summary>
         public Property()
         {
-            status = AVAILABLE_ON_SALE;
+            Status = AVAILABLE_ON_SALE;
+            PurchasePrice = 0;
+            MortgagePrice = 0;
+            OwnerName = "";
         }
+
+        #endregion
+
+        #region NotifyPropertyChanged
+
+        /// <summary>
+        /// Notify Property Changed
+        /// </summary>
+        /// <param name="propertyName">Name of property</param>
+        protected void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
         #endregion
     }
 }

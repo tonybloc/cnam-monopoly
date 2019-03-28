@@ -1,5 +1,6 @@
 ﻿using Monopoly.Models.Bank;
 using Monopoly.Models.Components;
+using Monopoly.Models.Components.Cells;
 using Monopoly.Models.Components.Exceptions;
 using Monopoly.Models.Tools;
 using Monopoly.Settings;
@@ -185,6 +186,11 @@ namespace Monopoly.Handlers
             return (p.Position + numberOfMove) % BoardHandler.Board.ListCell.Count;
         }
 
+        public int NextPosition(Player p, Cell c)
+        {
+            return c.Id;
+        }
+
 
         /// <summary>
         /// Generate some bot for the game
@@ -194,14 +200,14 @@ namespace Monopoly.Handlers
         {
             List<string> BotColors = PlayerHandler.GetAvailablePawnColors();
             List<string> BotName = Config.BotNames;
-            Tools.Shuffle(BotName);
-            Tools.Shuffle(BotColors);
+            Tools.Shuffle<string>(BotName);
+            Tools.Shuffle<string>(BotColors);
 
 
             for (int i = 0; i < numberOfBot; i++)
             {
                 Player p = new Player(BotName[i], new Pawn( BotColors[i]), Player.TypeOfPlayer.BOT );
-                p.SetPlayerType( Player.TypeOfPlayer.BOT );
+                p.PlayerType = Player.TypeOfPlayer.BOT;
                 PlayerHandler.AddPlayer(p);
             }
         }

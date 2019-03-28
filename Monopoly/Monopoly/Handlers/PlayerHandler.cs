@@ -1,5 +1,6 @@
 ﻿using Monopoly.Models.Bank;
 using Monopoly.Models.Components;
+using Monopoly.Models.Components.Cards;
 using Monopoly.Models.Components.Cells;
 using Monopoly.Models.Components.Exceptions;
 using Monopoly.Models.Tools;
@@ -24,7 +25,7 @@ namespace Monopoly.Handlers
         /// Instance of the bank
         /// </summary>
         private Bank bankInstance = null;
-
+        private BoardHandler _BoardHandler;
 
         /// <summary>
         /// List  of players
@@ -72,6 +73,7 @@ namespace Monopoly.Handlers
             Tools.Shuffle(ListOfPlayers);
             InitialisePawnPosition();
             DefineTheNextPlayer();
+            _BoardHandler = BoardHandler.Instance;
         }
 
         /// <summary>
@@ -88,6 +90,8 @@ namespace Monopoly.Handlers
             
             return colors;
         }
+    
+        
 
         /// <summary>
         /// Récupère le nombre de joueur dans la liste
@@ -137,13 +141,13 @@ namespace Monopoly.Handlers
                 {
                     int currentIndex = this.ListOfPlayers.IndexOf(current);
                     Player next = this.ListOfPlayers[(currentIndex + 1) % this.ListOfPlayers.Count];
-                    current.Status = Player.WAITING;
-                    next.Status = Player.PLAYING;
+                    current.Status = Player.StatusOfPlayer.WAITING;
+                    next.Status = Player.StatusOfPlayer.PLAYING;
                     
                 }
                 else
                 {
-                    this.ListOfPlayers[0].Status = Player.PLAYING;
+                    this.ListOfPlayers[0].Status = Player.StatusOfPlayer.PLAYING;
                 }
             }
             else
@@ -158,8 +162,8 @@ namespace Monopoly.Handlers
         /// <param name="p">Joueur</param>
         /// <param name="position">Position</param>
         public void MoveTo(Player p, int position)
-        {
-            p.MoveTo(position);
+        {            
+            p.MoveTo((position) % _BoardHandler.Board.ListCell.Count);
         }
 
         /// <summary>
@@ -200,8 +204,8 @@ namespace Monopoly.Handlers
         /// <returns>Boolean</returns>
         private bool PlayerOwnProperty(Player player, Property property)
         {
-            Predicate<Property> findProperty = (Property p) => { return p.Id == property.Id; };
-            return player.ListOfProperties.Find(findProperty) != null;
+            //Predicate<Property> findProperty = (Property p) => { return p.Id == property.Id; };
+            return player.ListOfProperties.Count(p => p.Id == property.Id) != 0;
 
         }
         /// <summary>
@@ -226,10 +230,10 @@ namespace Monopoly.Handlers
         /// </summary>
         /// <returns>The player who is playing</returns>
         public Player GetCurrentPlayer()
-        {
-            
-            Predicate<Player> filtrePlayer = (Player p) => { return p.Status == Player.PLAYING; };
-            return ListOfPlayers.Find(filtrePlayer);
+        {            
+            Predicate<Player> filtrePlayer = (Player p) => { return p.Status == Player.StatusOfPlayer.PLAYING; };
+            currentPlayer =  ListOfPlayers.Find(filtrePlayer);
+            return currentPlayer;
             
         }
 
@@ -248,6 +252,7 @@ namespace Monopoly.Handlers
 
         }
 
+
         /// <summary>
         /// Buy a specific property at the bank
         /// </summary>
@@ -258,7 +263,7 @@ namespace Monopoly.Handlers
             BankAccount account = bankInstance.GetBankAccount(player);
             account.BankTransfer(bankInstance.GetBankAccount(), property.PurchasePrice);
             player.AddPorperty(property);
-            property.status = Property.NOT_AVAILABLE_ON_SALE;
+            property.Status = Property.NOT_AVAILABLE_ON_SALE;
             property.OwnerName = player.Name;
 
         }
@@ -271,14 +276,14 @@ namespace Monopoly.Handlers
         /// <param name="property">Property wished</param>
         public bool BuyPropertyTo(Player player, Player toPlayer, Property property)
         {
-            if (property.status == Property.MORTGAGED)
+            if (property.Status == Property.MORTGAGED)
             {
                 BankAccount accountPlayer = bankInstance.GetBankAccount(player);
                 BankAccount accountToPlayer = bankInstance.GetBankAccount(toPlayer);
                 accountPlayer.BankTransfer(accountToPlayer, property.MortgagePrice);
                 player.RemoveProperty(property);
                 toPlayer.AddPorperty(property);
-                property.status = Property.NOT_AVAILABLE_ON_SALE;
+                property.Status = Property.NOT_AVAILABLE_ON_SALE;
 
                 return true;
             }
@@ -345,13 +350,13 @@ namespace Monopoly.Handlers
         public List<Property> Properties()
         {
             Player player = GetCurrentPlayer();
-            return player.ListOfProperties.Where(l => l.status == Land.NOT_AVAILABLE_ON_SALE).OrderBy(p => p.Id).ToList();
+            return player.ListOfProperties.Where(l => l.Status == Land.NOT_AVAILABLE_ON_SALE).OrderBy(p => p.Id).ToList();
         }
 
         public List<Property> MortagedLands()
         {
             Player p = GetCurrentPlayer();
-            List<Property> MortgagedLands = p.ListOfProperties.Where(l => l.status == Land.MORTGAGED).ToList();
+            List<Property> MortgagedLands = p.ListOfProperties.Where(l => l.Status == Land.MORTGAGED).ToList();
 
             return MortgagedLands;
         }
@@ -382,13 +387,13 @@ namespace Monopoly.Handlers
 
         public void Mortgage(Player player, Property p)
         {
-            p.status = Property.MORTGAGED;
+            p.Status = Property.MORTGAGED;
             bankInstance.Mortgaged(player, p);
         }
 
         public void RaiseMortgage(Player player, Property p)
         {
-            p.status = Property.NOT_AVAILABLE_ON_SALE;
+            p.Status = Property.NOT_AVAILABLE_ON_SALE;
             bankInstance.RaiseMortgaged(player, p);
         }
 
@@ -476,6 +481,49 @@ namespace Monopoly.Handlers
         public void GetParkingMoney()
         {
             bankInstance.GetParkingMoney(GetCurrentPlayer());
+        }
+
+        /// <summary>
+        /// the player pay amount to player target
+        /// </summary>
+        /// <param name="p"></param>
+        /// <param name="to"></param>
+        /// <param name="amount"></param>
+        public void PayeTo(Player p, Player target, int amount)
+        {
+            bankInstance.PlayerPayTo(p,target,amount);
+        }
+
+        public void PayeAmount(Player p, int amount)
+        {
+            Bank.Instance.PlayerPaye(p, amount);
+        }
+
+        public void CardGiveMoney(Player p, int amount)
+        {
+            Bank.Instance.GiveMoneyTo(p, amount);
+        }
+
+        public void CardPayeAmount(Player p, int amount)
+        {
+            Bank.Instance.PlayerPaye(p, amount);
+        }
+
+        public void AddCardTo(Player p, Card c)
+        {
+            p.AddCard(c);
+        }
+        public void RemoveCardTo(Player p, Card c)
+        {
+            p.RemoveCard(c);
+        }
+        public void ExitToJail(Player p)
+        {
+
+        }
+        public void GoToJail()
+        {
+            currentPlayer.StatusSpe = Player.StatusSpeOfPlayer.IN_JAIL;
         }
         #endregion
     }

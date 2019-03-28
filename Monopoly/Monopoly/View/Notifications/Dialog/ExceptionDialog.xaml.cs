@@ -71,7 +71,6 @@ namespace Monopoly.View.Notifications.Dialog
         private void BtnOk_Click(object sender, RoutedEventArgs e)
         {
             this.Content = null;
-
         }
 
         /// <summary>

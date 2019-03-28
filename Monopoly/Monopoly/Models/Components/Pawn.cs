@@ -1,22 +1,39 @@
 ﻿using Monopoly.Resources.Colors;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace Monopoly.Models.Components
 {
-    public class Pawn
+    public class Pawn : INotifyPropertyChanged
     {
         #region Variables
         /// <summary>
         /// Couleur du pion
         /// </summary>
-        public string ColorValue { get; set; }
+        private string _colorValue;
+        public string ColorValue
+        {
+            get { return _colorValue; }
+            set
+            {
+                if(_colorValue != value)
+                {
+                    _colorValue = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
         public int X;
         public int Y;
-        
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
         #endregion
 
         #region Constructeurs
@@ -45,6 +62,19 @@ namespace Monopoly.Models.Components
         {
             this.ColorValue = colorvalue;
         }
+        #endregion
+
+        #region NotifyPropertyChanged
+
+        /// <summary>
+        /// Notify Property Changed
+        /// </summary>
+        /// <param name="propertyName">Name of property</param>
+        private void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
         #endregion
     }
 }
