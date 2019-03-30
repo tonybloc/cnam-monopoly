@@ -8,6 +8,6 @@ namespace Monopoly.Models.Components.Exceptions
 {
     public class SoManyDoubleDicesException : Exception
     {
-        public SoManyDoubleDicesException() : base("Vous avez réalisé trop de lancé double. Vous allez en prison.") { }
+        public SoManyDoubleDicesException() : base("Vous avez réalisé trop de lancés doubles. Vous allez en prison.") { }
     }
 }
