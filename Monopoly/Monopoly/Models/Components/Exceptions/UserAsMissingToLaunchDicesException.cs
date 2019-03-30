@@ -8,6 +8,6 @@ namespace Monopoly.Models.Components.Exceptions
 {
     public class UserAsMissingToLaunchDicesException : Exception
     {
-        public UserAsMissingToLaunchDicesException() : base("Vous avez oublié de lancer les dées") { }
+        public UserAsMissingToLaunchDicesException() : base("Vous avez oublié de lancer les dés") { }
     }
 }

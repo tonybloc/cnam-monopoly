@@ -109,8 +109,8 @@
                     <Label DockPanel.Dock="Top" HorizontalAlignment="Center" Content="Liste des joueurs" FontSize="32" Margin="30,20" FontStyle="Normal" FontWeight="Bold"/>
 
                     <StackPanel DockPanel.Dock="Bottom" VerticalAlignment="Center" HorizontalAlignment="Center" Orientation="Horizontal">
-                        <Button x:Name="btnBack" Width="75" Foreground="Black" Margin="20" Content="Annuler" Click="onClickBack"/>
-                        <Button x:Name="btnPlay" Width="75" Foreground="Black" Margin="20" Content="Jouer" Click="onClickPlay"/>
+                        <Button x:Name="btnBack" Width="90" Foreground="Black" Margin="20" Content="Annuler" Click="onClickBack"/>
+                        <Button x:Name="btnPlay" Width="90" Foreground="Black" Margin="20" Content="Jouer" Click="onClickPlay"/>
                     </StackPanel>
 
                     <ScrollViewer VerticalScrollBarVisibility="Auto">

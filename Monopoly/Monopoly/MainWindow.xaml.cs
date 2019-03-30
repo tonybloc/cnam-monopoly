@@ -61,7 +61,8 @@ namespace Monopoly
 
         private void btnRules_Click(object sender, RoutedEventArgs e)
         {
-
+            MainContent.Content = new RulesInterface();
+            MenuContent.Visibility = Visibility.Hidden;
         }
 
         /// <summary>

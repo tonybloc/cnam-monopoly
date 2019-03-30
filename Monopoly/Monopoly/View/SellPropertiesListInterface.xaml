@@ -62,15 +62,18 @@
     </Page.Resources>
 
     <!--Design of the page-->
-    <Grid>
+    <Grid>        
         <StackPanel Grid.Row="2" >
+            <Border BorderBrush="Black" BorderThickness="1" CornerRadius="4" ></Border>
             <!--Title-->
-            <TextBlock HorizontalAlignment="Center" Margin="10,0,10,70" Foreground="Black" FontSize="20" TextWrapping="WrapWithOverflow">Ventes de biens</TextBlock>
+            <TextBlock HorizontalAlignment="Center" Margin="10,20,10,20" Foreground="Black" FontWeight="DemiBold" FontSize="20" TextWrapping="WrapWithOverflow">Vente de maisons et hôtels</TextBlock>
             <!--ListBox-->
             <ListBox x:Name="horizontalListBox"  SelectionMode="Extended" HorizontalAlignment="Center"
                         Style="{ StaticResource ListBoxWithAutoScroll_Horizontal }"
                         Selector.SelectionChanged="horizontalListBox_SelectionChanged">
             </ListBox>
+            <!--Empty List-->
+            <TextBlock x:Name="EmptyList" Visibility="Hidden" HorizontalAlignment="Center" Margin="10,0,10,70" Foreground="Black" FontSize="18" TextWrapping="WrapWithOverflow">Aucuns terrains disponibles ...</TextBlock>
         </StackPanel>
     </Grid>
 </Page>

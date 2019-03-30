@@ -27,8 +27,9 @@ namespace Monopoly.View
 
         private void ReturnToMenu(object sender, RoutedEventArgs e)
         {
-            ((MainWindow)Window.GetWindow(this)).MainContent.Content = "";
+            ((MainWindow)Window.GetWindow(this)).MainContent.Content = null;
             ((MainWindow)Window.GetWindow(this)).MenuContent.Visibility = Visibility.Visible;
+            this.Content = null;
         }
     }
 }

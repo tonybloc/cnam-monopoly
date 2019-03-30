@@ -13,8 +13,6 @@
         WindowStyle="None"
         Title="Menu"
         WindowStartupLocation="CenterScreen">
-
-    
     
     <Window.Background>
         <ImageBrush ImageSource="Resources/Pictures/menu.jpg"/>
@@ -27,7 +25,6 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="*"></RowDefinition>
         </Grid.RowDefinitions>
-
 
         <Grid Grid.Column="0" Grid.Row="0" HorizontalAlignment="Center"  VerticalAlignment="Center">
 

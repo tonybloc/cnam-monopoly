@@ -39,7 +39,6 @@
                                 <TextBlock Text="{Binding MortgagePrice}" Foreground="Black" FontSize="14" Margin="5" Height="50"/>
                                 <TextBlock Text="€" Foreground="Black" FontSize="14" Height="50"/>
                             </StackPanel>
-                            <TextBlock  Foreground="Black" FontSize="14"  TextAlignment="Center" TextWrapping="WrapWithOverflow"/>
                         </StackPanel>
                         
                     </StackPanel>
@@ -56,15 +55,18 @@
     </Page.Resources>
     
     <!--Design of the page-->
-    <Grid>
-        <StackPanel Grid.Row="2" >
+    <Grid>        
+        <StackPanel>
+            <Border BorderBrush="Black" BorderThickness="1" CornerRadius="4" ></Border>
             <!--Title-->
-            <TextBlock HorizontalAlignment="Center" Margin="10,0,10,70" Foreground="Black" FontSize="20" TextWrapping="WrapWithOverflow">Quels terrains souhaitez-vous hypothéquer ?</TextBlock>
+            <TextBlock HorizontalAlignment="Center" Margin="10,30,10,30" Foreground="Black" FontWeight="DemiBold" FontSize="20" TextWrapping="WrapWithOverflow">Quels terrains souhaitez-vous hypothéquer ?</TextBlock>
+           
             <!--ListBox-->
-            <ListBox x:Name="horizontalListBox"  SelectionMode="Extended" HorizontalAlignment="Center"
-                        Style="{ StaticResource ListBoxWithAutoScroll_Horizontal }"
+            <ListBox x:Name="horizontalListBox"  SelectionMode="Extended" HorizontalAlignment="Center" VerticalAlignment="Center"
+                        Style="{ StaticResource ListBoxWithAutoScroll_Horizontal }"                     
                         Selector.SelectionChanged="horizontalListBox_SelectionChanged">
             </ListBox>
+            <TextBlock x:Name="EmptyList" Visibility="Hidden" HorizontalAlignment="Center" Margin="10,0,10,70" Foreground="Black" FontSize="18" TextWrapping="WrapWithOverflow">Aucuns terrains disponibles ...</TextBlock>
         </StackPanel>
     </Grid>
 </Page>

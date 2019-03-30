@@ -94,7 +94,7 @@ namespace Monopoly.View.Notifications.Dialog
                     BackgroundColor = INFO_COLOR;
                     break;
             }
-            _timer = new DispatcherTimer { Interval = TimeSpan.FromMilliseconds(10) };
+            _timer = new DispatcherTimer { Interval = TimeSpan.FromMilliseconds(15) };
             _timer.Tick += new EventHandler(EventShowMessage);
             _timer.Start();
         }
@@ -126,7 +126,7 @@ namespace Monopoly.View.Notifications.Dialog
                     break;
             }
 
-            _timer = new DispatcherTimer { Interval = TimeSpan.FromMilliseconds(10) };
+            _timer = new DispatcherTimer { Interval = TimeSpan.FromMilliseconds(15) };
             _timer.Tick += new EventHandler(EventShowMessage);
             _timer.Start();
         }

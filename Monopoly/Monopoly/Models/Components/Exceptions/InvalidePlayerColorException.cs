@@ -8,6 +8,6 @@ namespace Monopoly.Models.Components.Exceptions
 {
     public class InvalidePlayerColorException : Exception
     {
-        public InvalidePlayerColorException() : base("La couleur est déjà attribué à un joureur"){}
+        public InvalidePlayerColorException() : base("La couleur est déjà attribuée à un joueur"){}
     }
 }

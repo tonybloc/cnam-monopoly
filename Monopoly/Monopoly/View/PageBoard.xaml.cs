@@ -63,7 +63,7 @@ namespace Monopoly.View
                 }
             }
         }
-        
+
         private Player _currentPlayer;
         public Player CurrentPlayer
         {
@@ -131,16 +131,14 @@ namespace Monopoly.View
 
             PropertiesListInterface.buildingBought += BuildingBought;
             SellPropertiesListInterface.buildingBought += BuildingBought;
+            BuyLandDialog.propertyBought += PropertyBought;
             CardDialog.EventMovePlayer += UIMovePlayer;
             CardDialog.EventMovePlayerToCell += UIMovePlayerToCell;
 
             UINumberOfTurn = _GameManager.NumberOfTurn;
-            
-            
+           
 
             StartGame();
-
-
         }
 
         #region Game State
@@ -169,7 +167,7 @@ namespace Monopoly.View
             _DispatcherTimer.Tick += new EventHandler(DispatcherTimer_Chrono);
             _DispatcherTimer.Interval = new TimeSpan(0, 0, 1);
             _GameTime = new TimeSpan(0, 0, 0);
-            TextBox_Chronometer.Text = _GameTime.ToString(); 
+            TextBox_Chronometer.Text = _GameTime.ToString();
         }
         private void DispatcherTimer_Chrono(object sender, EventArgs e)
         {
@@ -1878,12 +1876,12 @@ namespace Monopoly.View
             ellipse.Height = SizeofElipse;
             ellipse.Width = SizeofElipse;
             DropShadowEffect shadowEffect = new DropShadowEffect();
-            shadowEffect.ShadowDepth = 1;
+            shadowEffect.ShadowDepth = 2;
             ellipse.Effect = shadowEffect;
             SolidColorBrush playerColor = new SolidColorBrush();
             playerColor.Color = (Color)ColorConverter.ConvertFromString(color);
             ellipse.Fill = playerColor;
-            ellipse.Visibility = Visibility.Hidden;            
+            ellipse.Visibility = Visibility.Hidden;
 
             Grid.SetRow(ellipse, rowPosition);
             Grid.SetColumn(ellipse, colPosition);
@@ -1906,14 +1904,8 @@ namespace Monopoly.View
         #region Buy property
         private void BuyProperty(Property p)
         {
-            MessageBoxResult result = MessageBox.Show("Voulez vous acheter ce terrain à " + p.PurchasePrice + " € ?", "Achat", MessageBoxButton.YesNo, MessageBoxImage.Question);
-
-            if (result == MessageBoxResult.Yes)
-            {
-                _PlayerHandler.BuyProperty(p);
-                PropertyBought(CurrentPlayer);
-
-            }
+            NotificationsPanel.Visibility = Visibility.Visible;
+            NotificationsPanel.Content = new BuyLandDialog(p);
         }
         #endregion
 
@@ -1922,7 +1914,7 @@ namespace Monopoly.View
         {
             if (_PlayerHandler.CheckIfPlayerOwnAllLandInLandGroup(CurrentPlayer, l.LandGroup))
             {
-                MessageBoxResult result = MessageBox.Show("Voulez vous acheter une maison ?", "Achat d'une maison", MessageBoxButton.YesNo, MessageBoxImage.Question);
+                MessageBoxResult result = MessageBox.Show("Voulez-vous acheter une maison ?", "Achat d'une maison", MessageBoxButton.YesNo, MessageBoxImage.Question);
 
                 if (result == MessageBoxResult.Yes)
                 {
@@ -1957,12 +1949,64 @@ namespace Monopoly.View
             {
                 UINotifyMessage("Vous ne pouvez pas relancer les dés !");
             }
-            
         }
         #endregion
 
         #region Players
 
+        /*
+        /// <summary>
+        /// Generate the liste of player in right of frame
+        /// </summary>
+        private void GeneratePlayer()
+        {
+
+            int index = 0;
+            foreach (Player p in _PlayerHandler.ListOfPlayers)
+            {
+                index++;
+                StackPanel stackPanel = new StackPanel();
+                stackPanel.Orientation = Orientation.Horizontal;
+                stackPanel.Margin = new Thickness(5);
+
+                BrushConverter bc = new BrushConverter();
+                Ellipse playerEllipse = new Ellipse();
+                playerEllipse.Margin = new Thickness(0, 0, 10, 0);
+                playerEllipse.Fill = (Brush)bc.ConvertFrom(p.Pawn.ColorValue);
+                DropShadowEffect shadowEffect = new DropShadowEffect();
+                shadowEffect.ShadowDepth = 1;
+                playerEllipse.Effect = shadowEffect;
+                playerEllipse.Width = SizeofElipse;
+                playerEllipse.Height = SizeofElipse;
+
+
+                TextBlock tbPlayerNumber = new TextBlock();
+                tbPlayerNumber.VerticalAlignment = VerticalAlignment.Center;
+                tbPlayerNumber.Text = string.Format("Player {0} : {1}  = ", index, p.Name);
+
+                TextBlock tbPlayerAmount = new TextBlock();
+                tbPlayerAmount.VerticalAlignment = VerticalAlignment.Center;
+                tbPlayerAmount.Text = string.Format("CACHING € or $");
+
+                stackPanel.Children.Add(playerEllipse);
+                stackPanel.Children.Add(tbPlayerNumber);
+                stackPanel.Children.Add(tbPlayerAmount);
+                this.StackPanel_ListOfPlayer.Children.Add(stackPanel);
+
+                object cell = MonopolyBoard.FindName(START_POSITION);
+                if (cell is Grid)
+                {
+                    Grid start = (Grid)cell;
+                    foreach (UIElement child in start.Children)
+                    {
+                        child.Visibility = Visibility.Visible;
+                    }
+                }
+
+            }
+
+        }
+        */
 
         /// <summary>
         /// UserInterface : move the player to n cell
@@ -2061,11 +2105,13 @@ namespace Monopoly.View
             if(temp)
             {
                 _PlayerHandler.GoToJail();
+                
             }
             if(_GameManager.NumberOfTurn != 0)
             {
                 temp = false;
             }
+
             DicesContent.Content = null;
             PropertiesListContent.Content = null;
             NotificationContent.Content = null;
@@ -2094,7 +2140,6 @@ namespace Monopoly.View
                     CurrentPlayer.NbTurnInJail = 0;
                     UINotifyAlertMessage("Vous avez passer 3 tour en prison. Vous êtes dorénavant libérer de prison.", AlertDialog.TypeOfAlert.INFO);
                 }
-
             }
         }
         #endregion
@@ -2159,7 +2204,7 @@ namespace Monopoly.View
                 lblMotelValue.Content = l.RantalList[5] + " €";
                 lblMortgageValue.Content = l.MortgagePrice + " €";
 
-               Property property = (Property)c;
+                Property property = (Property)c;
                 if (property.Status == Property.MORTGAGED)
                 {
                     LandDescription.Opacity = 0.5;
@@ -2235,10 +2280,11 @@ namespace Monopoly.View
                     }
                     else
                     {
-                        UINotifyAlertMessage("Vous avez payer une taxe de : ", AlertDialog.TypeOfAlert.INFO);
+                        int loyer = _PlayerHandler.PayTheRent(p, _DicesHandler.FirstDice.Value + _DicesHandler.SecondDice.Value);
+                        UINotifyAlertMessage("Vous avez payé " + loyer + " € de loyer", AlertDialog.TypeOfAlert.INFO);
                         _PlayerHandler.PayTheRent(p, _DicesHandler.FirstDice.Value + _DicesHandler.SecondDice.Value);
                     }
-                    
+
                 }
             }
             else if (c.GetType() == typeof(Tax))
@@ -2267,7 +2313,7 @@ namespace Monopoly.View
             }
             else if (c.GetType() == typeof(StartPoint))
             {
-                UINotifyAlertMessage("Vous etes sur la case départ !", AlertDialog.TypeOfAlert.INFO);
+                UINotifyAlertMessage("Vous etes sur la case départ et recevez 200 € !", AlertDialog.TypeOfAlert.INFO);
                 _PlayerHandler.GetGratification(CurrentPlayer);
             }
             else if (c.GetType() == typeof(Jail))
@@ -2320,9 +2366,9 @@ namespace Monopoly.View
         }
         #endregion
 
+        #region OnCLickEvents
         private void onClickBuy(object sender, RoutedEventArgs e)
         {
-            DicesContent.Visibility = Visibility.Hidden;
             PropertiesListInterface propertiesListInterface = new PropertiesListInterface();
             PropertiesListContent.Visibility = Visibility.Visible;
             PropertiesListContent.Content = propertiesListInterface;
@@ -2330,7 +2376,6 @@ namespace Monopoly.View
 
         private void onClickSell(object sender, RoutedEventArgs e)
         {
-            DicesContent.Visibility = Visibility.Hidden;
             SellPropertiesListInterface sellPropertiesListInterface = new SellPropertiesListInterface();
             PropertiesListContent.Visibility = Visibility.Visible;
             PropertiesListContent.Content = sellPropertiesListInterface;
@@ -2338,7 +2383,6 @@ namespace Monopoly.View
 
         private void onClickMortgage(object sender, RoutedEventArgs e)
         {
-            DicesContent.Visibility = Visibility.Hidden;
             MortgagedPropertiesListInterface mortgagedPropertiesListInterface = new MortgagedPropertiesListInterface();
             PropertiesListContent.Visibility = Visibility.Visible;
             PropertiesListContent.Content = mortgagedPropertiesListInterface;
@@ -2346,11 +2390,11 @@ namespace Monopoly.View
 
         private void onClickRaiseMortgage(object sender, RoutedEventArgs e)
         {
-            DicesContent.Visibility = Visibility.Hidden;
             RaiseMortgagedPropertiesListInterface raiseMortgagedPropertiesListInterface = new RaiseMortgagedPropertiesListInterface();
             PropertiesListContent.Visibility = Visibility.Visible;
             PropertiesListContent.Content = raiseMortgagedPropertiesListInterface;
         }
+        #endregion
 
         /// <summary>
         /// Methode to display message in view
@@ -2371,6 +2415,6 @@ namespace Monopoly.View
         {
             AlertNotification.Content = new AlertDialog(Message, type);
             AlertNotification.Visibility = Visibility.Visible;
-        }
+        }        
     }
 }
