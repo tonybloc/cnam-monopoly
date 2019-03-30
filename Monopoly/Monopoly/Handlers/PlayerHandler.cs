@@ -8,6 +8,7 @@ using Monopoly.Resources.Colors;
 using Monopoly.Settings;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -316,9 +317,9 @@ namespace Monopoly.Handlers
             return BoardHandler.Instance.Board.ListCell.Where(l => l is TrainStation).Count();
         }
 
-        private int NumberOfTrainStationOwned()
+        private int NumberOfTrainStationOwned(Property p )
         {
-            return GetCurrentPlayer().ListOfProperties.Where(l => l is TrainStation).Count();
+            return WhoOwnThisProperty(p).ListOfProperties.Where(l => l is TrainStation).Where(l => l.Status != Property.MORTGAGED).Count();
         }
 
         private int CountTheNumberOfPublicSercices()
@@ -326,14 +327,14 @@ namespace Monopoly.Handlers
             return BoardHandler.Instance.Board.ListCell.Where(l => l is PublicService).Count();
         }
 
-        private int NumberOfPublicServiceOwned()
+        private int NumberOfPublicServiceOwned(Property p)
         {
-            return GetCurrentPlayer().ListOfProperties.Where(l => l is PublicService).Count();
+            return WhoOwnThisProperty(p).ListOfProperties.Where(l => l is PublicService).Where(l => l.Status != Property.MORTGAGED).Count();
         }
 
         public bool CheckIfPlayerOwnAllLandInLandGroup(Player player, LandGroup groupe)
         {
-            int nbLandPlayer = player.ListOfProperties.Where(l => l is Land).Cast<Land>().ToList().Where(land => land.LandGroup.IdGroup.Equals(groupe.IdGroup)).Count();
+            int nbLandPlayer = player.ListOfProperties.Where(l => l.Status != Property.MORTGAGED).Where(l => l is Land).Cast<Land>().ToList().Where(land => land.LandGroup.IdGroup.Equals(groupe.IdGroup)).Count();
 
             int nbLandBoard = CountTheNumberOfLandInLandGroup(groupe);
 
@@ -346,7 +347,7 @@ namespace Monopoly.Handlers
         public List<Land> BuilbingLands()
         {
             Player p = GetCurrentPlayer();
-            List<Land> ListOfLands = p.ListOfProperties.Where(l => l is Land).Cast<Land>().OrderBy(l => l.LandGroup.IdGroup).ToList();
+            List<Land> ListOfLands = p.ListOfProperties.Where(l => l.Status != Property.MORTGAGED).Where(l => l is Land).Cast<Land>().OrderBy(l => l.LandGroup.IdGroup).ToList();
             List<Land> BuildingLands = new List<Land>();
 
             foreach (Land l in ListOfLands)
@@ -358,16 +359,25 @@ namespace Monopoly.Handlers
             return BuildingLands;
         }
 
-        public List<Property> Properties()
+        public ObservableCollection<Property> Properties()
         {
             Player player = GetCurrentPlayer();
-            return player.ListOfProperties.Where(l => l.Status == Land.NOT_AVAILABLE_ON_SALE).OrderBy(p => p.Id).ToList();
+            List<Property> properties = player.ListOfProperties.Where(l => l.Status == Property.NOT_AVAILABLE_ON_SALE).ToList();
+            List<Property> ListOtherProperties = properties.Where(l => l.GetType() != typeof(Land)).ToList();
+            List<Property> ListOfLands = properties.Where(l => l is Land).Cast<Land>().Where(l => l.NbHouse == 0 && l.NbHotel == 0).OrderBy(l => l.LandGroup.IdGroup).Cast<Property>().ToList();
+
+            var res = new ObservableCollection<Property>();
+            ListOtherProperties.ForEach(p => res.Add(p));
+            ListOfLands.ForEach(p => res.Add(p));
+            res.OrderBy(p => p.Id);
+            return res;
         }
 
         public List<Property> MortagedLands()
         {
             Player p = GetCurrentPlayer();
-            List<Property> MortgagedLands = p.ListOfProperties.Where(l => l.Status == Land.MORTGAGED).ToList();
+
+            List<Property> MortgagedLands = p.ListOfProperties.Where(l => l.Status == Property.MORTGAGED).ToList();
 
             return MortgagedLands;
         }
@@ -427,7 +437,7 @@ namespace Monopoly.Handlers
         /// </summary>
         /// //Le loyer pour un terrain nu (sans bâtiments) est indiqué sur le titre de propriété 
         /// //correspondant. Ce loyer est doublé si le propriétaire possède tous les terrains (non hypothéqués) d’un même groupe de couleur.
-        public void PayTheRent(Property p, int dicesValue)
+        public int PayTheRent(Property p, int dicesValue)
         {
             int rentValue = 0;
 
@@ -449,20 +459,22 @@ namespace Monopoly.Handlers
             }
             else if (p is PublicService)
             {
-                if (NumberOfPublicServiceOwned() == 1)
+                if (NumberOfPublicServiceOwned(p) == 1)
                     rentValue = 4 * dicesValue;
-                else if (NumberOfPublicServiceOwned() == CountTheNumberOfPublicSercices())
+                else if (NumberOfPublicServiceOwned(p) == CountTheNumberOfPublicSercices())
                     rentValue = 10 * dicesValue;
             }
             else if (p is TrainStation)
             {
                 TrainStation t = (TrainStation)p;
-                rentValue = t.TrainStationRent * NumberOfTrainStationOwned();
+                rentValue = t.TrainStationRent * NumberOfTrainStationOwned(p);
             }
 
             BankAccount accountPlayer = bankInstance.GetBankAccount(GetCurrentPlayer());
             BankAccount accountToPlayer = bankInstance.GetBankAccount(WhoOwnThisProperty(p));
             accountPlayer.BankTransfer(accountToPlayer, rentValue);
+
+            return rentValue;
         }
 
         /// <summary>

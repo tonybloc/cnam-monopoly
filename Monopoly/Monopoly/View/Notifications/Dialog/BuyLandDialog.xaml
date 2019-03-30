@@ -1,0 +1,51 @@
+﻿<UserControl x:Class="Monopoly.View.Notifications.Dialog.BuyLandDialog"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:Monopoly.View.Notifications.Dialog"
+             mc:Ignorable="d" 
+             d:DesignHeight="{DynamicResource {x:Static SystemParameters.PrimaryScreenHeightKey}}"
+             d:DesignWidth="{DynamicResource {x:Static SystemParameters.PrimaryScreenWidthKey}}">
+    <Grid>
+        <Grid.Background>
+            <SolidColorBrush Color="black" Opacity="0.5"/>
+        </Grid.Background>
+
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <Grid Grid.Column="1" Grid.Row="1">
+            <Grid.Background>
+                <SolidColorBrush Color="white"/>
+            </Grid.Background>
+            <Grid.Effect>
+                <DropShadowEffect ShadowDepth="2"/>
+            </Grid.Effect>
+
+            <Grid.RowDefinitions>
+                <RowDefinition Height="3*"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+
+            <!-- Dialog information -->
+            <TextBlock Grid.Row="0" VerticalAlignment="Center" x:Name="ContentMessage" Margin="40" FontSize="18" TextWrapping="WrapWithOverflow" Text="{Binding Path=Message, Mode=TwoWay}" HorizontalAlignment="Center"  TextAlignment="Center" LineHeight="30" />
+
+            <!-- Actions -->
+            <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Center" >
+                <Button x:Name="btnOui" Width="150" Height="40" Click="BtnOui_Click" FontSize="16" Margin="0">Oui</Button>
+                <Button x:Name="btnNon" Width="150" Height="40" Click="BtnNon_Click" FontSize="16" Margin="10">Non</Button>
+            </StackPanel>
+        </Grid>
+
+    </Grid>
+</UserControl>
