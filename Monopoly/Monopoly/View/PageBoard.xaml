@@ -314,7 +314,7 @@
 
 
         <!-- Notification -->
-        <ContentControl x:Name="NotificationsPanel" Content="buy"></ContentControl>
+        <ContentControl x:Name="NotificationsPanel"></ContentControl>
     </Grid>
     
     
