@@ -1,0 +1,36 @@
+﻿<UserControl x:Class="Monopoly.View.JailInterface"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:Monopoly.View"
+             mc:Ignorable="d" 
+             d:DesignHeight="200" d:DesignWidth="500">
+    <UserControl.Resources>
+        <BooleanToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
+    </UserControl.Resources>
+    <Grid>
+        <Grid.Background>
+            <SolidColorBrush Color="White" />
+        </Grid.Background>
+        <Grid.Effect>
+            <DropShadowEffect ShadowDepth="2"></DropShadowEffect>
+        </Grid.Effect>
+
+        <DockPanel>
+            <Grid DockPanel.Dock="Bottom">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <Button Grid.Column="0" Margin="10" FontSize="16" Click="onClickPayeFees">Payer 50€</Button>
+                <Button Grid.Column="1" Margin="10" FontSize="16" Click="onClickUseCard" IsEnabled="{Binding Path=CanUseCard}">Utiliser Carte</Button>
+            </Grid>
+            
+            <TextBlock TextAlignment="Center" VerticalAlignment="Center" TextWrapping="Wrap" FontSize="16" Margin="10,30">Vous etes en prison. Que voulez vous faire ?</TextBlock>
+        </DockPanel>
+        
+
+    </Grid>
+</UserControl>

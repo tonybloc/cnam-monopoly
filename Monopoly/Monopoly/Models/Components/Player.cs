@@ -143,7 +143,19 @@ namespace Monopoly.Models.Components
                 }
             }
         }
-
+        private int _nbTurnInJail;
+        public int NbTurnInJail
+        {
+            get { return _nbTurnInJail; }
+            set
+            {
+                if(_nbTurnInJail != value)
+                {
+                    _nbTurnInJail = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
         private TypeOfPlayer _playerType;
         public TypeOfPlayer PlayerType
         {
@@ -188,6 +200,7 @@ namespace Monopoly.Models.Components
             this.ListOfProperties = new ObservableCollection<Property>();
             this.ListOfCards = new ObservableCollection<Card>();
             this.Amount = null;
+            this.NbTurnInJail = 0;
         }
 
         /// <summary>
@@ -210,6 +223,7 @@ namespace Monopoly.Models.Components
             this.ListOfProperties = new ObservableCollection<Property>();            
             this.ListOfCards = new ObservableCollection<Card>();
             this.Amount = null;
+            this.NbTurnInJail = 0;
         }
 
         #endregion
