@@ -2192,6 +2192,7 @@ namespace Monopoly.View
                 Card.Visibility = Visibility.Visible;
 
                 CardIcon.Source = Base64Converter.base64ToImageSource(((PublicService)c).Icon);
+                lblOwnerCardValue.Content = p.OwnerName;
                 lblCardTitle.Text = p.Title;
                 lblPurchasePriceValue.Content = p.PurchasePrice + " €";
                 lblMortgagePriceValue.Content = p.MortgagePrice + " €";
@@ -2298,7 +2299,6 @@ namespace Monopoly.View
             else
             {
                 UINotifyAlertMessage("Action non définie !", AlertDialog.TypeOfAlert.ERROR);
-
             }
         }
         #endregion
