@@ -15,7 +15,7 @@
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <Deterministic>true</Deterministic>
     <IsWebBootstrapper>false</IsWebBootstrapper>
-    <PublishUrl>publish\</PublishUrl>
+    <PublishUrl>C:\Users\Carole\Documents\</PublishUrl>
     <Install>true</Install>
     <InstallFrom>Disk</InstallFrom>
     <UpdateEnabled>false</UpdateEnabled>
@@ -25,10 +25,12 @@
     <UpdatePeriodically>false</UpdatePeriodically>
     <UpdateRequired>false</UpdateRequired>
     <MapFileExtensions>true</MapFileExtensions>
+    <ProductName>Monopoly</ProductName>
     <AutorunEnabled>true</AutorunEnabled>
     <ApplicationRevision>7</ApplicationRevision>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
+    <CreateDesktopShortcut>true</CreateDesktopShortcut>
     <PublishWizardCompleted>true</PublishWizardCompleted>
     <BootstrapperEnabled>true</BootstrapperEnabled>
   </PropertyGroup>
@@ -143,7 +145,9 @@
     <Compile Include="Models\Components\Pawn.cs" />
     <Compile Include="Models\Components\Player.cs" />
     <Compile Include="Models\Tools\Tools.cs" />
-    <Compile Include="Resources\Colors\PawnColors.cs" />
+    <Compile Include="Resources\Colors\PawnColors.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Compile>
     <Compile Include="Service\Base64Converter.cs" />
     <Compile Include="Service\Xml\XmlDataAccess.cs" />
     <Compile Include="Settings\Config.cs" />
@@ -162,6 +166,9 @@
     </Compile>
     <Compile Include="View\Notifications\Dialog\CardDialog.xaml.cs">
       <DependentUpon>CardDialog.xaml</DependentUpon>
+    </Compile>  
+    <Compile Include="View\Notifications\Dialog\BuyLandDialog.xaml.cs">
+      <DependentUpon>BuyLandDialog.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\Notifications\Dialog\ExceptionDialog.xaml.cs">
       <DependentUpon>ExceptionDialog.xaml</DependentUpon>
@@ -226,6 +233,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="View\Notifications\Dialog\CardDialog.xaml">
+	  <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Notifications\Dialog\BuyLandDialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

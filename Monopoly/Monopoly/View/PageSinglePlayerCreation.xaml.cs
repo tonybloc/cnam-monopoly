@@ -31,8 +31,13 @@ namespace Monopoly.View
         private static GameManager _GameManager;
         private static PlayerHandler _PlayerHandler;
 
+<<<<<<< HEAD
         private const string placeholder = "Enter your pseudo...";
         public const string defaultColorValue = "#FFFFFF";
+=======
+        private const string placeholder = "Entrer votre pseudo...";
+        public string defaultColorValue = "#FFFFFF";
+>>>>>>> feat(single-page-player): redesign of the interface
 
         private string _playerName;
         public string PlayerName
@@ -75,6 +80,9 @@ namespace Monopoly.View
         {
             InitializeComponent();
 
+            int[] quantityBots = new int[] { 1, 2, 3, 4, 5, 6, 7 };
+            cbNbBot.ItemsSource = quantityBots;
+
             DataContext = this;
 
             _ColorHandler = ColorHandler.Instance;
@@ -97,7 +105,7 @@ namespace Monopoly.View
         {
             PlayerName = "";
         }
-        
+
         private void onLostFocus_Pseudo(object sender, RoutedEventArgs e)
         {
             if (string.IsNullOrWhiteSpace(tbPlayerName.Text))
@@ -120,29 +128,29 @@ namespace Monopoly.View
         {
             try
             {
-                if (PlayerName == placeholder)
-                    throw new InvalidePlayerNameException();
+                int numberOfPlayerInGame = _PlayerHandler.GetNumberOfPlayer();
 
-                _PlayerHandler.AddPlayer(new Player(PlayerName, new Pawn(PlayerColor), Player.TypeOfPlayer.USER) );
+                int nbBot = Convert.ToInt32(cbNbBot.SelectedItem.ToString());
+
+                if (PlayerName == placeholder)
+                {
+                    throw new InvalidePlayerNameException();
+                }
+                else
+                {
+                    _PlayerHandler.AddPlayer(new Player(PlayerName, new Pawn(PlayerColor), Player.TypeOfPlayer.USER));
+                    _GameManager.GeneratedBot(nbBot);
+                }
+
                 _GameManager.IntialiseGame();
                 ((MainWindow)Window.GetWindow(this)).MainContent.Content = new PageBoard();
                 ((MainWindow)Window.GetWindow(this)).MenuContent.Visibility = Visibility.Hidden;
-                
-                
             }
             catch (Exception exp)
             {
                 AlertNotification.Visibility = Visibility.Visible;
                 AlertNotification.Content = new AlertDialog(exp, AlertDialog.TypeOfAlert.ERROR);
             }
-
-                        
-        }
-
-        private void onClickCancel(object sender, RoutedEventArgs e)
-        {
-            ((MainWindow)Window.GetWindow(this)).MainContent.Content = null;
-            ((MainWindow)Window.GetWindow(this)).MenuContent.Visibility = Visibility.Visible;
         }
         #endregion
     }
