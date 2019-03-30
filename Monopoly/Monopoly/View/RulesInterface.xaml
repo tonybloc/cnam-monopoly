@@ -65,6 +65,7 @@
                 </Grid>
             </Grid>
         </Grid>
-
+        <!-- Notification -->
+        <ContentControl x:Name="NotificationsPanel"></ContentControl>
     </Grid>
 </Page>

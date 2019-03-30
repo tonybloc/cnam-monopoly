@@ -81,7 +81,7 @@ namespace Monopoly.Handlers
             this.BoardHandler = BoardHandler.Instance;
             this.PlayerHandler = PlayerHandler.Instance;
             this.DicesHandler = DicesHandler.Instance;
-            this.ColorHandler = ColorHandler.Instance;
+            this.ColorHandler = ColorHandler.Instance;            
         }
 
         /// <summary>
@@ -116,21 +116,8 @@ namespace Monopoly.Handlers
         /// Initialise the game
         /// </summary>
         public void IntialiseGame()
-        {
-
-            int numberOfPlayerInGame = this.PlayerHandler.GetNumberOfPlayer();
-            
-            if( (numberOfPlayerInGame <= Config.NB_MAX_PLAYER_IN_GAME))
-            {
-                GeneratedBot(Config.NB_MAX_PLAYER_IN_GAME - numberOfPlayerInGame);
-            }
-            else
-            {
-                throw new InvalideNumberOfPlayerInGameException();
-            }
-           
-            this.PlayerHandler.Initialize();
-            
+        {         
+            this.PlayerHandler.Initialize();            
         }
 
         
@@ -196,7 +183,7 @@ namespace Monopoly.Handlers
         /// Generate some bot for the game
         /// </summary>
         /// <param name="numberOfBot"></param>
-        private void GeneratedBot(int numberOfBot)
+        public void GeneratedBot(int numberOfBot)
         {
             List<string> BotColors = PlayerHandler.GetAvailablePawnColors();
             List<string> BotName = Config.BotNames;

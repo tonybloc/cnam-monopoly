@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Monopoly.View.Notifications.Dialog;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -39,7 +40,8 @@ namespace Monopoly.View
             }
             catch(Exception e)
             {
-                MessageBox.Show("Une connection Internet est requise.");
+                NotificationsPanel.Visibility = Visibility.Visible;
+                NotificationsPanel.Content = new ExceptionDialog("Une connection Internet est requise.");
             }
         }
       
