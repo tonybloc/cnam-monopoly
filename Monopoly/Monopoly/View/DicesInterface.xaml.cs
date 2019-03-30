@@ -60,9 +60,6 @@ namespace Monopoly.View
             image.EndInit();
 
             ImageBehavior.SetAnimatedSource(Gif, image);
-
-            _DicesHandler.RoolDices(_PlayerHandler.GetCurrentPlayer());
-
             
             timer.Interval = new TimeSpan(0, 0, 1);
             timer.Tick += Timer_Tick;
@@ -73,6 +70,7 @@ namespace Monopoly.View
         {
             timer.Stop();
             Result.Children.Remove(Gif);
+            _DicesHandler.RoolDices(_PlayerHandler.GetCurrentPlayer());
             FirstDice.Source = new BitmapImage(new Uri("/Monopoly;component/Resources/Pictures/Dices/dice" + _DicesHandler.FirstDice.Value + ".png", UriKind.Relative));
             SecondDice.Source = new BitmapImage(new Uri("/Monopoly;component/Resources/Pictures/Dices/dice" + _DicesHandler.SecondDice.Value + ".png", UriKind.Relative));
         }

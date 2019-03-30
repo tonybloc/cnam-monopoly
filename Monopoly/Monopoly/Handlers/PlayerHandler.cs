@@ -5,6 +5,7 @@ using Monopoly.Models.Components.Cells;
 using Monopoly.Models.Components.Exceptions;
 using Monopoly.Models.Tools;
 using Monopoly.Resources.Colors;
+using Monopoly.Settings;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -34,8 +35,18 @@ namespace Monopoly.Handlers
 
         public Player currentPlayer { get; private set; }
 
+        public delegate void UIEventNotifyMessage(string Message);
+        public static event UIEventNotifyMessage EventNotifyMessage;
+
+        public delegate void UIEventMovePlayer(Player p, int move, bool startAmount);
+        public static event UIEventMovePlayer EventMovePlayer;
+
+        public delegate void UIEventMovePlayerCell(Player p, Cell c, bool startAmount);
+        public static event UIEventMovePlayerCell EventMovePlayerToCell;
 
         #endregion
+
+
 
         #region Constructeurs
         /// <summary>
@@ -462,7 +473,6 @@ namespace Monopoly.Handlers
         public void PayTheTax(Tax t)
         {
             bankInstance.PayTheTax(GetCurrentPlayer(), t);
-
         }
 
         /// <summary>
@@ -519,11 +529,21 @@ namespace Monopoly.Handlers
         }
         public void ExitToJail(Player p)
         {
-
+            currentPlayer.InJail = false;
         }
         public void GoToJail()
         {
-            currentPlayer.StatusSpe = Player.StatusSpeOfPlayer.IN_JAIL;
+            currentPlayer.InJail = true;
+            currentPlayer.NbTurnInJail = 0;
+            EventMovePlayerToCell(currentPlayer, _BoardHandler.Board.GetCell(Config.JAIL_POSITION), false);
+            DicesHandler.Instance.PlayerCanBeRaise = false;
+        }
+
+        public bool PlayerOwnExitToJailCard(out CardExitToJail card)
+        {
+            card = (CardExitToJail)currentPlayer.ListOfCards.FirstOrDefault(x => x is CardExitToJail);
+            return (card != default(CardExitToJail));
+
         }
         #endregion
     }

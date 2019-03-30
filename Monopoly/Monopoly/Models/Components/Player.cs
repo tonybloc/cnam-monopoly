@@ -19,7 +19,6 @@ namespace Monopoly.Models.Components
 
         public enum TypeOfPlayer : int {USER = 0,BOT = 1}
         public enum StatusOfPlayer : int { WAITING = 0, PLAYING = 1}
-        public enum StatusSpeOfPlayer : int { NO_SPE=0, IN_JAIL = 1, HAS_LOST=2, HAS_WIN = 3 }
         public enum TypeOfBulding : int { BUILD_HOTEL = 0, BUILD_HOUSE = 2}
         private static int NextID = 0;
         #endregion
@@ -105,18 +104,54 @@ namespace Monopoly.Models.Components
                 }
             }
         }
-        private StatusSpeOfPlayer _statusSpe;
-        public StatusSpeOfPlayer StatusSpe
+        private bool _inJail;
+        public bool InJail
         {
-            get
-            {
-                return _statusSpe;
-            }
+            get { return _inJail; }
             set
             {
-                if(_statusSpe != value)
+                if(_inJail != value)
                 {
-                    _statusSpe = value;
+                    _inJail = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+        private bool _isWinner;
+        public bool IsWinner
+        {
+            get { return _isWinner; }
+            set
+            {
+                if (_isWinner != value)
+                {
+                    _isWinner = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+        private bool _hasLost;
+        public bool HasLost
+        {
+            get { return _hasLost; }
+            set
+            {
+                if (_hasLost != value)
+                {
+                    _hasLost = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+        private int _nbTurnInJail;
+        public int NbTurnInJail
+        {
+            get { return _nbTurnInJail; }
+            set
+            {
+                if(_nbTurnInJail != value)
+                {
+                    _nbTurnInJail = value;
                     OnPropertyChanged();
                 }
             }
@@ -137,7 +172,7 @@ namespace Monopoly.Models.Components
                 }
             }
         }
-
+       
         public BankAccount Amount { get; set; }
 
         public ObservableCollection<Property> ListOfProperties { get; private set; }
@@ -158,11 +193,14 @@ namespace Monopoly.Models.Components
             this.Pawn = new Pawn();
             this.Position = 0;
             this.Status = StatusOfPlayer.WAITING;
-            this.StatusSpe = StatusSpeOfPlayer.NO_SPE;
+            this.InJail = false;
+            this.HasLost = false;
+            this.IsWinner = false;
             this.PlayerType = TypeOfPlayer.USER;
             this.ListOfProperties = new ObservableCollection<Property>();
             this.ListOfCards = new ObservableCollection<Card>();
             this.Amount = null;
+            this.NbTurnInJail = 0;
         }
 
         /// <summary>
@@ -178,11 +216,14 @@ namespace Monopoly.Models.Components
             this.Pawn = pawn;
             this.Position = 0;
             this.Status = StatusOfPlayer.WAITING;
-            this.StatusSpe = StatusSpeOfPlayer.NO_SPE;
+            this.InJail = false;
+            this.HasLost = false;
+            this.IsWinner = false;
             this.PlayerType = type;
             this.ListOfProperties = new ObservableCollection<Property>();            
             this.ListOfCards = new ObservableCollection<Card>();
             this.Amount = null;
+            this.NbTurnInJail = 0;
         }
 
         #endregion

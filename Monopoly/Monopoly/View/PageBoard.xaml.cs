@@ -29,7 +29,7 @@ namespace Monopoly.View
     /// </summary>
     public partial class PageBoard : Page, INotifyPropertyChanged
     {
-
+        private bool temp;
         #region Variables
         private DispatcherTimer _DispatcherTimer;
         private TimeSpan _GameTime;
@@ -96,7 +96,7 @@ namespace Monopoly.View
         {
             // Initialise GUI components
             InitializeComponent();
-
+            temp = true;
             this.DataContext = this;
 
             // Initialise Game
@@ -117,6 +117,17 @@ namespace Monopoly.View
             ListOfPlayers = new ObservableCollection<Player>(_PlayerHandler.ListOfPlayers);
 
             CurrentPlayer = _GameManager.PlayerHandler.GetCurrentPlayer();
+
+            DicesHandler.EventNotifyMessage += UINotifyMessage;
+            DicesHandler.EventMovePlayer += UIMovePlayer;
+            DicesHandler.EventMovePlayerToCell += UIMovePlayerToCell;
+            DicesHandler.EventNotifyAlertMessage += UINotifyAlertMessage;
+
+            PlayerHandler.EventNotifyMessage += UINotifyMessage;
+            PlayerHandler.EventMovePlayer += UIMovePlayer;
+            PlayerHandler.EventMovePlayerToCell += UIMovePlayerToCell;
+
+            JailInterface.EventNotifyAlertMessage += UINotifyAlertMessage;
 
             PropertiesListInterface.buildingBought += BuildingBought;
             SellPropertiesListInterface.buildingBought += BuildingBought;
@@ -1933,22 +1944,20 @@ namespace Monopoly.View
         /// <param name="e"></param>
         private void onClickDices(object sender, RoutedEventArgs e)
         {
-            try
+            NotificationContent.Content = null;
+            AlertNotification.Content = null;
+            if (_DicesHandler.PlayerCanBeRaise)
             {
                 DicesInterface dicesInterface = new DicesInterface();
                 DicesContent.Content = dicesInterface;
                 DicesContent.Visibility = Visibility.Visible;
                 PropertiesListContent.Visibility = Visibility.Hidden;
-
-                UIMovePlayer(CurrentPlayer, _DicesHandler.GetValue(), true);
             }
-            catch(Exception exp)
+            else
             {
-                NotificationsPanel.Visibility = Visibility.Visible;
-                NotificationsPanel.Content = new ExceptionDialog(exp);
+                UINotifyMessage("Vous ne pouvez pas relancer les dés !");
             }
-           
-
+            
         }
         #endregion
 
@@ -2049,27 +2058,44 @@ namespace Monopoly.View
         #region Next player
         public void onClickNext(object sender, RoutedEventArgs e)
         {
-            try
+            if(temp)
             {
-               if (_DicesHandler.PlayerCanBeRaise)
-               {
-                    throw new UserAsMissingToLaunchDicesException();
-               }
-               else
-               {
-                    _GameManager.NextTurn();
-                    _DicesHandler.PlayerCanBeRaise = true;
-                    CurrentPlayer = _PlayerHandler.GetCurrentPlayer();
-                    UINumberOfTurn = _GameManager.NumberOfTurn;
-               }
+                _PlayerHandler.GoToJail();
             }
-            catch (Exception exp)
+            if(_GameManager.NumberOfTurn != 0)
             {
-                NotificationsPanel.Visibility = Visibility.Visible;
-                NotificationsPanel.Content = new ExceptionDialog(exp);
+                temp = false;
             }
-            
+            DicesContent.Content = null;
+            PropertiesListContent.Content = null;
+            NotificationContent.Content = null;
+            AlertNotification.Content = null;
 
+            if (_DicesHandler.PlayerCanBeRaise)
+            {
+                UINotifyMessage("Vous avez oublié de lancer les dées !");
+            }
+            else
+            {
+                _GameManager.NextTurn();
+                _DicesHandler.PlayerCanBeRaise = true;
+                CurrentPlayer = _PlayerHandler.GetCurrentPlayer();
+                UINumberOfTurn = _GameManager.NumberOfTurn;
+
+                if ( (CurrentPlayer.InJail) && (CurrentPlayer.NbTurnInJail < 3) )
+                {
+                    NotificationContent.Content = new JailInterface();
+                    NotificationContent.Visibility = Visibility.Visible;
+                    PropertiesListContent.Visibility = Visibility.Hidden;
+                }
+                else if ((CurrentPlayer.InJail) && (CurrentPlayer.NbTurnInJail >= 3))
+                {
+                    CurrentPlayer.InJail = false;
+                    CurrentPlayer.NbTurnInJail = 0;
+                    UINotifyAlertMessage("Vous avez passer 3 tour en prison. Vous êtes dorénavant libérer de prison.", AlertDialog.TypeOfAlert.INFO);
+                }
+
+            }
         }
         #endregion
 
@@ -2209,8 +2235,7 @@ namespace Monopoly.View
                     }
                     else
                     {
-                        AlertNotification.Content = new AlertDialog("Vous avez payer une taxe de : ", AlertDialog.TypeOfAlert.INFO);
-                        AlertNotification.Visibility = Visibility.Visible;
+                        UINotifyAlertMessage("Vous avez payer une taxe de : ", AlertDialog.TypeOfAlert.INFO);
                         _PlayerHandler.PayTheRent(p, _DicesHandler.FirstDice.Value + _DicesHandler.SecondDice.Value);
                     }
                     
@@ -2218,14 +2243,12 @@ namespace Monopoly.View
             }
             else if (c.GetType() == typeof(Tax))
             {
-                AlertNotification.Content = new AlertDialog("Vous avez payer une taxe de : " + ((Tax)c).Amount, AlertDialog.TypeOfAlert.INFO);
-                AlertNotification.Visibility = Visibility.Visible;
+                UINotifyAlertMessage("Vous avez payer une taxe de : " + ((Tax)c).Amount, AlertDialog.TypeOfAlert.INFO);
                 _PlayerHandler.PayTheTax((Tax) c);
             }
             else if (c.GetType() == typeof(DrawCard))
             {
-                AlertNotification.Content = new AlertDialog("Vous piochez une carte !", AlertDialog.TypeOfAlert.INFO);
-                AlertNotification.Visibility = Visibility.Visible;
+                UINotifyAlertMessage("Vous piochez une carte !", AlertDialog.TypeOfAlert.INFO);
                 DrawCard card = (DrawCard)c;
 
                 switch(card.Type)
@@ -2244,30 +2267,33 @@ namespace Monopoly.View
             }
             else if (c.GetType() == typeof(StartPoint))
             {
-                AlertNotification.Content = new AlertDialog("Vous etes sur la case départ !", AlertDialog.TypeOfAlert.INFO);
-                AlertNotification.Visibility = Visibility.Visible;
+                UINotifyAlertMessage("Vous etes sur la case départ !", AlertDialog.TypeOfAlert.INFO);
+                _PlayerHandler.GetGratification(CurrentPlayer);
             }
             else if (c.GetType() == typeof(Jail))
             {
-                AlertNotification.Content = new AlertDialog("Vous êtes en visite !", AlertDialog.TypeOfAlert.ERROR);
-                AlertNotification.Visibility = Visibility.Visible;
+                if(CurrentPlayer.InJail)
+                {
+                    UINotifyAlertMessage("Vous êtes en prison !", AlertDialog.TypeOfAlert.WARNING);
+                }else
+                {
+                    UINotifyAlertMessage("Vous êtes en visite !", AlertDialog.TypeOfAlert.INFO);
+                }
+                
             }
             else if (c.GetType() == typeof(GoToJail))
             {
-                AlertNotification.Content = new AlertDialog("Vous êtes en prison !", AlertDialog.TypeOfAlert.INFO);
-                AlertNotification.Visibility = Visibility.Visible;
+                UINotifyAlertMessage("Vous êtes en prison !", AlertDialog.TypeOfAlert.INFO);
                 _PlayerHandler.GoToJail();
             }
             else if (c.GetType() == typeof(Parking))
             {
-                AlertNotification.Content = new AlertDialog("Vous recevez toute la MONEY !", AlertDialog.TypeOfAlert.INFO);
-                AlertNotification.Visibility = Visibility.Visible;
+                UINotifyAlertMessage("Vous recevez toute la MONEY !", AlertDialog.TypeOfAlert.INFO);
                 _PlayerHandler.GetParkingMoney();
             }
             else
             {
-                AlertNotification.Content = new AlertDialog("Action non définie !", AlertDialog.TypeOfAlert.WARNING);
-                AlertNotification.Visibility = Visibility.Visible;
+                UINotifyAlertMessage("Action non définie !", AlertDialog.TypeOfAlert.ERROR);
 
             }
         }
@@ -2324,6 +2350,27 @@ namespace Monopoly.View
             RaiseMortgagedPropertiesListInterface raiseMortgagedPropertiesListInterface = new RaiseMortgagedPropertiesListInterface();
             PropertiesListContent.Visibility = Visibility.Visible;
             PropertiesListContent.Content = raiseMortgagedPropertiesListInterface;
+        }
+
+        /// <summary>
+        /// Methode to display message in view
+        /// </summary>
+        /// <param name="Message">Message to show</param>
+        public void UINotifyMessage(string Message)
+        {
+            NotificationsPanel.Visibility = Visibility.Visible;
+            NotificationsPanel.Content = new ExceptionDialog(Message);
+        }
+
+        /// <summary>
+        /// Methode to display message alert in view
+        /// </summary>
+        /// <param name="Message">Message to show</param>
+        /// <param name="type">Type of alert</param>
+        public void UINotifyAlertMessage(string Message, AlertDialog.TypeOfAlert type)
+        {
+            AlertNotification.Content = new AlertDialog(Message, type);
+            AlertNotification.Visibility = Visibility.Visible;
         }
     }
 }

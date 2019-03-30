@@ -24,6 +24,7 @@ namespace Monopoly.Handlers
         private BoardHandler()
         {
             this.Board = XmlDataAccess.XMLDeserializeObject<Board>(Config.filePath_XmlBoard);
+            
         }
 
         /// <summary>

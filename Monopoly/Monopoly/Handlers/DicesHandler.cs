@@ -1,6 +1,8 @@
 ﻿using Monopoly.Models.Components;
+using Monopoly.Models.Components.Cells;
 using Monopoly.Models.Components.Exceptions;
 using Monopoly.Settings;
+using Monopoly.View.Notifications.Dialog;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,7 +20,19 @@ namespace Monopoly.Handlers
         public Dice SecondDice { get; private set; }
         private Player CurrentLauncher { get; set; }
         private int NumberOfRool { get; set; }
-        public bool PlayerCanBeRaise { get; set; } 
+        public bool PlayerCanBeRaise { get; set; }
+
+        public delegate void UIEventNotifyMessage(string Message);
+        public static event UIEventNotifyMessage EventNotifyMessage;
+
+        public delegate void UIEventNotifyAlertMessage(string Message, AlertDialog.TypeOfAlert type);
+        public static event UIEventNotifyAlertMessage EventNotifyAlertMessage;
+
+        public delegate void UIEventMovePlayer(Player p, int move, bool startAmount);
+        public static event UIEventMovePlayer EventMovePlayer;
+
+        public delegate void UIEventMovePlayerCell(Player p, Cell c, bool startAmount);
+        public static event UIEventMovePlayerCell EventMovePlayerToCell;
 
         private DicesHandler()
         {
@@ -47,6 +61,7 @@ namespace Monopoly.Handlers
         /// <param name="launcher">the player who rool dices</param>
         public void RoolDices(Player launcher)
         {
+
             // Define the launcher
             if ((this.CurrentLauncher.Id != launcher.Id) )
             {
@@ -56,19 +71,55 @@ namespace Monopoly.Handlers
             }
 
             if (!PlayerCanBeRaise)
-                throw new YouCanNotRoolDicesException();
-
-            if (NumberOfRool >= Config.NB_MAX_LAUNCH_DICES)
-                throw new SoManyDoubleDicesException();
+            {
+                EventNotifyMessage("Vous ne pouvez pas relancer les dés !");
+                
+            }else if (NumberOfRool >= Config.NB_MAX_LAUNCH_DICES)
+            {
+                this.PlayerCanBeRaise = false;
+                launcher.InJail = true;
+                EventNotifyMessage("Vous avez réalisé trop de lancé double. Vous allez en prison.");
+                EventMovePlayerToCell(CurrentLauncher, BoardHandler.Instance.Board.GetCell(Config.JAIL_POSITION), false);
+            }
+            else
+            {
+                this.NumberOfRool++;
+                FirstDice.Rool();
+                SecondDice.Rool();
+                if(IsDouble())
+                {
+                    if( (this.CurrentLauncher.InJail))
+                    {
+                        CurrentLauncher.NbTurnInJail = 0;
+                        this.CurrentLauncher.InJail = false;
+                        this.PlayerCanBeRaise = true;
+                        EventNotifyAlertMessage("Vous etes libérer de prison !", AlertDialog.TypeOfAlert.INFO);
+                        EventMovePlayer(CurrentLauncher, GetValue(), true);
+                    }
+                    else
+                    {
+                        this.PlayerCanBeRaise = true;
+                        EventMovePlayer(CurrentLauncher, GetValue(), true);
+                    }
+                    
+                }
+                else
+                {
+                    if(this.CurrentLauncher.InJail)
+                    {
+                        CurrentLauncher.NbTurnInJail += 1;
+                        this.PlayerCanBeRaise = false;
+                        EventNotifyAlertMessage("Vous etes toujours en prison !", AlertDialog.TypeOfAlert.INFO);
+                    }
+                    else
+                    {
+                        this.PlayerCanBeRaise = false;
+                        EventMovePlayer(CurrentLauncher, GetValue(), true);
+                    }
+                    
+                }
+            }
             
-
-            this.NumberOfRool++;
-            FirstDice.Rool();
-            SecondDice.Rool();
-            this.PlayerCanBeRaise = IsDouble();
-
-            
-           
         }
 
         
@@ -76,18 +127,20 @@ namespace Monopoly.Handlers
         /// Check if the dices launch is double 
         /// </summary>
         /// <returns>true/false</returns>
-        public bool IsDouble()
+        private bool IsDouble()
         {
             return (FirstDice.Value == SecondDice.Value);
         }
 
+        
         /// <summary>
         /// Return the values of dices
         /// </summary>
         /// <returns></returns>
-        public int GetValue()
+        private int GetValue()
         {
             return FirstDice.Value + SecondDice.Value;
         }
+        
     }
 }

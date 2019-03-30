@@ -150,6 +150,7 @@ namespace Monopoly.Handlers
             {
                 CardMoveToJail card = (CardMoveToJail)c;
                 Player current = _PlayerHandler.currentPlayer;
+                current.InJail = true;
                 _PlayerHandler.MoveTo(current, _BoardHandler.Board.GetCell(card.CellPosition));
             }
             else if (c is CardExitToJail)

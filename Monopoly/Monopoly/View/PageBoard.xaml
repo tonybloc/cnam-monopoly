@@ -296,10 +296,11 @@
                 <Frame Grid.Row="3" x:Name="PropertiesListContent" VerticalAlignment="Center" HorizontalAlignment="Center"/>
                 
                 <!-- Notification -->
-                <DockPanel Grid.Row="2" >
+                <DockPanel Grid.Row="2">
                     <ContentControl DockPanel.Dock="Top" x:Name="AlertNotification" Height="50" VerticalAlignment="Center" HorizontalAlignment="Center" />
                     <Frame x:Name="DicesContent" VerticalAlignment="Center" HorizontalAlignment="Center"/>                
                 </DockPanel>
+                <ContentControl Grid.Row="2" x:Name="NotificationContent"></ContentControl>
                 
                 <ListBox x:Name="listBox" HorizontalAlignment="Left" Height="65" Margin="72,192.4,0,0" Grid.Row="2" VerticalAlignment="Top" Width="133"/>
             </Grid>
