@@ -36,7 +36,7 @@ namespace Monopoly.View
 
                 InitializeComponent();
                 clsWebbrowser_Errors.SuppressscriptErrors(webBrowser, true);
-                this.webBrowser.Navigate("http://www.regledujeu.fr/monopoly/");
+                this.webBrowser.Navigate("https://ludos.brussels/ludo-sesame/opac_css/doc_num.php?explnum_id=275");
             }
             catch(Exception e)
             {
