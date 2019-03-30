@@ -39,6 +39,11 @@ namespace Monopoly.View
 
             playerHandler = PlayerHandler.Instance;
             this.horizontalListBox.ItemsSource = playerHandler.BuilbingLands();
+
+            if (playerHandler.BuilbingLands().Count() == 0)
+            {
+                EmptyList.Visibility = Visibility.Visible;
+            }
         }
 
         private void horizontalListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)

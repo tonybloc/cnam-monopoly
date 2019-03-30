@@ -28,7 +28,7 @@ namespace Monopoly.View
 
         public MortgagedPropertiesListInterface()
         {
-            InitializeComponent();
+            InitializeComponent();            
         }
 
         protected override void OnInitialized(EventArgs e)
@@ -37,6 +37,11 @@ namespace Monopoly.View
 
             playerHandler = PlayerHandler.Instance;
             this.horizontalListBox.ItemsSource = playerHandler.Properties();
+
+            if (playerHandler.Properties().Count() == 0)
+            {
+                EmptyList.Visibility = Visibility.Visible;
+            }
         }
 
         private void horizontalListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
