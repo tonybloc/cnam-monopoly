@@ -116,7 +116,6 @@ namespace Monopoly.View
             _PlayerHandler = PlayerHandler.Instance;
 
             ListOfPlayers = new ObservableCollection<Player>();
-            ListOfPlayers.CollectionChanged += OnCollectionChanged;
 
             PlayerName = placeholder;
             PlayerColor = defaultColorValue;
@@ -130,17 +129,13 @@ namespace Monopoly.View
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
-
-        private void OnCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
-        {
-            OnPropertyChanged("ListOfPlayer");
-        }
         #endregion
 
 
 
 
         #region Events
+        
         private void onGotFocus_Pseudo(object sender, RoutedEventArgs e)
         {
             PlayerName = "";
@@ -169,36 +164,49 @@ namespace Monopoly.View
         {
             try
             {
-                if(PlayerName == placeholder)
-                    throw new InvalidePlayerNameException();
-
-                if (IndexSelected != -1)
+                if (PlayerName == placeholder)
                 {
-                    if ((ListOfPlayers.Count(x => (x.Pawn.ColorValue == PlayerColor) && (x.Id != PlayerSelected.Id) ) != 0) )
-                        throw new InvalidePlayerColorException();
-                
-                    Player p = ListOfPlayers.Single(x => x.Id == PlayerSelected.Id);
-                    p.Name = PlayerName;
-                    p.Pawn.ColorValue = PlayerColor;
-                    OnPropertyChanged("ListOfPlayers");
+                    UINotifyAlertMessage("Le nom du joueur est invalide !", AlertDialog.TypeOfAlert.WARNING);
                 }
                 else
                 {
-                    if ((ListOfPlayers.Count(x => (x.Pawn.ColorValue == PlayerColor)) != 0))
-                        throw new InvalidePlayerColorException();
-
-                    this.ListOfPlayers.Add(new Player(PlayerName, new Pawn(PlayerColor), Player.TypeOfPlayer.USER));
+                    if (IndexSelected != -1)
+                    {
+                        if ( ListOfPlayers.Count( x => (x.Pawn.ColorValue == PlayerColor) && (x.Id != PlayerSelected.Id) ) != 0 )
+                        {
+                            UINotifyAlertMessage("La couleur est déjà attribuée à un joueur", AlertDialog.TypeOfAlert.WARNING);
+                        }
+                        else
+                        {
+                            Player p = ListOfPlayers.Single(x => x.Id == PlayerSelected.Id);
+                            p.Name = PlayerName;
+                            p.Pawn.ColorValue = PlayerColor;
+                            OnPropertyChanged("ListOfPlayers");
+                            PlayerName = placeholder;
+                            PlayerColor = defaultColorValue;
+                            _ColorHandler.SetColorIndex(0);
+                        }
+                    }
+                    else
+                    {
+                        if ((ListOfPlayers.Count(x => (x.Pawn.ColorValue == PlayerColor)) != 0))
+                        {
+                            UINotifyAlertMessage("La couleur est déjà attribuée à un joueur", AlertDialog.TypeOfAlert.WARNING);
+                        }
+                        else
+                        {
+                            this.ListOfPlayers.Add(new Player(PlayerName, new Pawn(PlayerColor), Player.TypeOfPlayer.USER));
+                            PlayerName = placeholder;
+                            PlayerColor = defaultColorValue;
+                            _ColorHandler.SetColorIndex(0);
+                        }
+                        
+                    }
                 }
-
-                PlayerName = placeholder;
-                PlayerColor = defaultColorValue;
-                _ColorHandler.SetColorIndex(0);
-
             }
             catch (Exception exp)
             {
-                AlertNotifcation.Visibility = Visibility.Visible;
-                AlertNotifcation.Content = new AlertDialog(exp, AlertDialog.TypeOfAlert.ERROR);
+                UINotifyAlertMessage(exp.Message, AlertDialog.TypeOfAlert.ERROR);
             }
             
         }
@@ -226,10 +234,8 @@ namespace Monopoly.View
             _GameManager.IntialiseGame();
             ((MainWindow)Window.GetWindow(this)).MainContent.Content = new PageBoard();
             ((MainWindow)Window.GetWindow(this)).MenuContent.Visibility = Visibility.Hidden;
-            
         }
-
-        
+    
         private void onSelecionChangeListeViewPlayers(object sender, SelectionChangedEventArgs e)
         {
             if(IndexSelected != -1)
@@ -243,6 +249,18 @@ namespace Monopoly.View
                 PlayerName = placeholder;
             }
             
+        }
+
+        
+        /// <summary>
+        /// Methode to display message alert in view
+        /// </summary>
+        /// <param name="Message">Message to show</param>
+        /// <param name="type">Type of alert</param>
+        public void UINotifyAlertMessage(string Message, AlertDialog.TypeOfAlert type)
+        {
+            AlertNotifcation.Content = new AlertDialog(Message, type);
+            AlertNotifcation.Visibility = Visibility.Visible;
         }
         #endregion
 

@@ -77,7 +77,7 @@ namespace Monopoly.View.Notifications.Dialog
         {
             InitializeComponent();
             DataContext = this;
-            Message = ex.StackTrace.ToString();
+            Message = ex.Message;
             _type = t;
             switch(_type)
             {
