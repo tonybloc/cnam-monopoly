@@ -29,7 +29,7 @@ namespace Monopoly.View
     /// </summary>
     public partial class PageBoard : Page, INotifyPropertyChanged
     {
-        private bool temp;
+        
         #region Variables
         private DispatcherTimer _DispatcherTimer;
         private TimeSpan _GameTime;
@@ -96,7 +96,6 @@ namespace Monopoly.View
         {
             // Initialise GUI components
             InitializeComponent();
-            temp = true;
             this.DataContext = this;
 
             // Initialise Game
@@ -2070,17 +2069,7 @@ namespace Monopoly.View
 
         #region Next player
         public void onClickNext(object sender, RoutedEventArgs e)
-        {
-            if(temp)
-            {
-                _PlayerHandler.GoToJail();
-                
-            }
-            if(_GameManager.NumberOfTurn != 0)
-            {
-                temp = false;
-            }
-
+        {            
             DicesContent.Content = null;
             PropertiesListContent.Content = null;
             NotificationContent.Content = null;
