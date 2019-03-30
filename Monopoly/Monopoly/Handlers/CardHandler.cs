@@ -6,6 +6,7 @@ using Monopoly.Service.Xml;
 using Monopoly.Settings;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Reflection;
 using System.Text;
@@ -113,7 +114,7 @@ namespace Monopoly.Handlers
             else if (c is CardUpdateMoneyAccordingBuilds)
             {
                 CardUpdateMoneyAccordingBuilds card = (CardUpdateMoneyAccordingBuilds)c;
-                List<Property> properties = _PlayerHandler.Properties();
+                ObservableCollection<Property> properties = _PlayerHandler.Properties();
                 int Amount = 0;
                 foreach(Land p in properties)
                 {

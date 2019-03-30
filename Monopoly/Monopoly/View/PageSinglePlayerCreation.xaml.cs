@@ -31,13 +31,8 @@ namespace Monopoly.View
         private static GameManager _GameManager;
         private static PlayerHandler _PlayerHandler;
 
-<<<<<<< HEAD
-        private const string placeholder = "Enter your pseudo...";
-        public const string defaultColorValue = "#FFFFFF";
-=======
         private const string placeholder = "Entrer votre pseudo...";
         public string defaultColorValue = "#FFFFFF";
->>>>>>> feat(single-page-player): redesign of the interface
 
         private string _playerName;
         public string PlayerName

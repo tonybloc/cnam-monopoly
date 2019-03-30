@@ -1954,6 +1954,59 @@ namespace Monopoly.View
 
         #region Players
 
+        /*
+        /// <summary>
+        /// Generate the liste of player in right of frame
+        /// </summary>
+        private void GeneratePlayer()
+        {
+
+            int index = 0;
+            foreach (Player p in _PlayerHandler.ListOfPlayers)
+            {
+                index++;
+                StackPanel stackPanel = new StackPanel();
+                stackPanel.Orientation = Orientation.Horizontal;
+                stackPanel.Margin = new Thickness(5);
+
+                BrushConverter bc = new BrushConverter();
+                Ellipse playerEllipse = new Ellipse();
+                playerEllipse.Margin = new Thickness(0, 0, 10, 0);
+                playerEllipse.Fill = (Brush)bc.ConvertFrom(p.Pawn.ColorValue);
+                DropShadowEffect shadowEffect = new DropShadowEffect();
+                shadowEffect.ShadowDepth = 1;
+                playerEllipse.Effect = shadowEffect;
+                playerEllipse.Width = SizeofElipse;
+                playerEllipse.Height = SizeofElipse;
+
+
+                TextBlock tbPlayerNumber = new TextBlock();
+                tbPlayerNumber.VerticalAlignment = VerticalAlignment.Center;
+                tbPlayerNumber.Text = string.Format("Player {0} : {1}  = ", index, p.Name);
+
+                TextBlock tbPlayerAmount = new TextBlock();
+                tbPlayerAmount.VerticalAlignment = VerticalAlignment.Center;
+                tbPlayerAmount.Text = string.Format("CACHING € or $");
+
+                stackPanel.Children.Add(playerEllipse);
+                stackPanel.Children.Add(tbPlayerNumber);
+                stackPanel.Children.Add(tbPlayerAmount);
+                this.StackPanel_ListOfPlayer.Children.Add(stackPanel);
+
+                object cell = MonopolyBoard.FindName(START_POSITION);
+                if (cell is Grid)
+                {
+                    Grid start = (Grid)cell;
+                    foreach (UIElement child in start.Children)
+                    {
+                        child.Visibility = Visibility.Visible;
+                    }
+                }
+
+            }
+
+        }
+        */
 
         /// <summary>
         /// UserInterface : move the player to n cell
