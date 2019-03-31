@@ -155,6 +155,9 @@
     <Compile Include="View\ConfigurationInterface.xaml.cs">
       <DependentUpon>ConfigurationInterface.xaml</DependentUpon>
     </Compile>
+    <Compile Include="View\Notifications\Dialog\ExchangeDialog.xaml.cs">
+      <DependentUpon>ExchangeDialog.xaml</DependentUpon>
+    </Compile>
     <Compile Include="View\UserControlJailInterface.xaml.cs">
       <DependentUpon>UserControlJailInterface.xaml</DependentUpon>
     </Compile>
@@ -166,7 +169,7 @@
     </Compile>
     <Compile Include="View\Notifications\Dialog\CardDialog.xaml.cs">
       <DependentUpon>CardDialog.xaml</DependentUpon>
-    </Compile>  
+    </Compile>
     <Compile Include="View\Notifications\Dialog\BuyLandDialog.xaml.cs">
       <DependentUpon>BuyLandDialog.xaml</DependentUpon>
     </Compile>
@@ -220,6 +223,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="View\Notifications\Dialog\ExchangeDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="View\UserControlJailInterface.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -233,7 +240,7 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="View\Notifications\Dialog\CardDialog.xaml">
-	  <SubType>Designer</SubType>
+      <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="View\Notifications\Dialog\BuyLandDialog.xaml">
@@ -313,13 +320,18 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Resources\Pictures\property_exchange.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Resources\XML\XMLChanceCard.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Resources\XML\XMLCommunityCard.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Resource Include="man.ico" />
+    <Content Include="man.ico">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Resources\Pictures\back.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

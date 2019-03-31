@@ -18,10 +18,14 @@
     <Page.Resources>
         <DataTemplate DataType="{x:Type m:Player}">
             <StackPanel Orientation="Horizontal" Margin="5">
-                <Ellipse Width="20" Height="20" Fill="{Binding Pawn.ColorValue}" Margin="5,0,5,0" VerticalAlignment="Center"/>
+                <Ellipse Width="20" Height="20" Fill="{Binding Pawn.ColorValue}" Margin="5,0,5,0" VerticalAlignment="Center">
+                    <Ellipse.Effect>
+                        <DropShadowEffect ShadowDepth="2"/>
+                    </Ellipse.Effect>
+                </Ellipse>
                 <TextBlock Text="{Binding Name}" FontSize="16" Margin="5,0,5,0" VerticalAlignment="Center"/>
                 <TextBlock Text="{Binding Amount.Amount}" FontSize="16" FontWeight="Bold" Margin="5,0,5,0" VerticalAlignment="Center"/>
-                <Label>€</Label>
+                <Label FontSize="16" VerticalAlignment="Center">€</Label>
             </StackPanel>
         </DataTemplate>
 
@@ -238,6 +242,7 @@
                                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
                                     <Image Grid.Column="0" Height="30" Margin="5"  Source="/Monopoly;component/Resources/Pictures/buy.png" VerticalAlignment="Center"/>
                                     <TextBlock Text="{Binding Path=CurrentPlayer.Amount.Amount , Mode=TwoWay}" VerticalAlignment="Center" FontSize="20"  Margin="10,0,10,0"></TextBlock>
+                                    <TextBlock Text="€" VerticalAlignment="Center" FontSize="20"></TextBlock>
                                 </StackPanel>
                             </StackPanel>
                         </Border>
@@ -257,37 +262,43 @@
 
                 <!-- Actions -->
                 <StackPanel Grid.Row="1" Orientation="Horizontal" Width="{Binding Width, ElementName=Right}" HorizontalAlignment="Center">
-                    <Button x:Name="btnDice" Width="80" Height="50" Margin="10" ToolTip="Lancer les dés" Click="onClickDices">
+                    <Button x:Name="btnDice" Width="70" Height="50" Margin="10" ToolTip="Lancer les dés" Click="onClickDices">
                         <Button.Effect>
                             <DropShadowEffect ShadowDepth="2" />
                         </Button.Effect>
                         <Image Source="/Monopoly;component/Resources/Pictures/dices.png"/>
                     </Button>
-                    <Button x:Name="btnBuy" Width="80" Height="50" Margin="10" ToolTip="Achat de maisons et hôtels" Click="onClickBuy">
+                    <Button x:Name="btnBuy" Width="70" Height="50" Margin="10" ToolTip="Achat de maisons et hôtels" Click="onClickBuy">
                         <Button.Effect>
                             <DropShadowEffect ShadowDepth="2" />
                         </Button.Effect>
                         <Image Source="../Resources/Pictures/city.png"/>
                     </Button>
-                    <Button x:Name="btnSell" Width="80" Height="50" Margin="10" ToolTip="Vente de maisons et hôtels" Click="onClickSell" >
+                    <Button x:Name="btnSell" Width="70" Height="50" Margin="10" ToolTip="Vente de maisons et hôtels" Click="onClickSell" >
                         <Button.Effect>
                             <DropShadowEffect ShadowDepth="2" />
                         </Button.Effect>
                         <Image Source="../Resources/Pictures/sell.png"/>
                     </Button>
-                    <Button x:Name="btnMortgaged" Width="80" Height="50" Margin="10" ToolTip="Hypothèque de propriétés" Click="onClickMortgage" >
+                    <Button x:Name="btnMortgaged" Width="70" Height="50" Margin="10" ToolTip="Hypothèque de propriétés" Click="onClickMortgage" >
                         <Button.Effect>
                             <DropShadowEffect ShadowDepth="2" />
                         </Button.Effect>
                         <Image Source="../Resources/Pictures/mortgage.png"/>
                     </Button>
-                    <Button x:Name="btnRaiseMortgaged" Width="80" Height="50" Margin="10" ToolTip="Lève l'hypothèque de propriétés" Click="onClickRaiseMortgage" >
+                    <Button x:Name="btnRaiseMortgaged" Width="70" Height="50" Margin="10" ToolTip="Lèver l'hypothèque de propriétés" Click="onClickRaiseMortgage" >
                         <Button.Effect>
                             <DropShadowEffect ShadowDepth="2" />
                         </Button.Effect>
                         <Image Source="../Resources/Pictures/mortgage.png"/>
                     </Button>
-                    <Button x:Name="btnEndTurn"  Width="80" Height="50" Margin="10,0,0,0" ToolTip="Fin de tour" Click="onClickNext" HorizontalAlignment="Stretch">
+                    <Button x:Name="btnExchange" Width="70" Height="50" Margin="10" ToolTip="Echange de propriétés" Click="onClickExchange" >
+                        <Button.Effect>
+                            <DropShadowEffect ShadowDepth="2" />
+                        </Button.Effect>
+                        <Image Source="../Resources/Pictures/property_exchange.jpg"/>
+                    </Button>
+                    <Button x:Name="btnEndTurn"  Width="70" Height="50" Margin="10,0,0,0" ToolTip="Fin de tour" Click="onClickNext">
                         <Button.Effect>
                             <DropShadowEffect ShadowDepth="2" />
                         </Button.Effect>

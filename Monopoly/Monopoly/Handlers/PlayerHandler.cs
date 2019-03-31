@@ -74,7 +74,11 @@ namespace Monopoly.Handlers
             }
         }
 
-       
+        public static void Reset()
+        {
+            instance = null;
+        }
+        
         #endregion
 
         #region Methodes (public)
@@ -408,14 +412,20 @@ namespace Monopoly.Handlers
 
         public void Mortgage(Player player, Property p)
         {
-            p.Status = Property.MORTGAGED;
-            bankInstance.Mortgaged(player, p);
+            if (p.Status == Property.NOT_AVAILABLE_ON_SALE)
+            {
+                p.Status = Property.MORTGAGED;
+                bankInstance.Mortgaged(player, p);
+            }           
         }
 
         public void RaiseMortgage(Player player, Property p)
         {
-            p.Status = Property.NOT_AVAILABLE_ON_SALE;
-            bankInstance.RaiseMortgaged(player, p);
+            if (p.Status == Property.MORTGAGED)
+            {
+                p.Status = Property.NOT_AVAILABLE_ON_SALE;
+                bankInstance.RaiseMortgaged(player, p);
+            }           
         }
 
         public void Sell(Player player, Land land)

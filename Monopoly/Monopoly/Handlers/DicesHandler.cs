@@ -53,7 +53,12 @@ namespace Monopoly.Handlers
                 }
                 return _instance;
             }            
-        }       
+        }
+
+        public static void Reset()
+        {
+            _instance = null;
+        }
 
         /// <summary>
         /// Rool dices 
@@ -93,7 +98,7 @@ namespace Monopoly.Handlers
                         CurrentLauncher.NbTurnInJail = 0;
                         this.CurrentLauncher.InJail = false;
                         this.PlayerCanBeRaise = true;
-                        EventNotifyAlertMessage("Vous etes libérer de prison !", AlertDialog.TypeOfAlert.INFO);
+                        EventNotifyAlertMessage("Vous êtes libéré de prison !", AlertDialog.TypeOfAlert.INFO);
                         EventMovePlayer(CurrentLauncher, GetValue(), true);
                     }
                     else
@@ -109,7 +114,7 @@ namespace Monopoly.Handlers
                     {
                         CurrentLauncher.NbTurnInJail += 1;
                         this.PlayerCanBeRaise = false;
-                        EventNotifyAlertMessage("Vous etes toujours en prison !", AlertDialog.TypeOfAlert.INFO);
+                        EventNotifyAlertMessage("Vous êtes toujours en prison !", AlertDialog.TypeOfAlert.INFO);
                     }
                     else
                     {

@@ -79,7 +79,7 @@ namespace Monopoly.View
             _PlayerHandler.PayeAmount(_PlayerHandler.currentPlayer, 50);
             CurrentPlayer.InJail = false;
             CurrentPlayer.NbTurnInJail = 0;
-            EventNotifyAlertMessage("Vous etes libéré de prison !", AlertDialog.TypeOfAlert.INFO);
+            EventNotifyAlertMessage("Vous êtes libéré de prison !", AlertDialog.TypeOfAlert.INFO);
             this.Content = null;
 
         }
@@ -89,7 +89,7 @@ namespace Monopoly.View
             _PlayerHandler.RemoveCardTo(_PlayerHandler.currentPlayer, CardExit);
             CurrentPlayer.InJail = false;
             CurrentPlayer.NbTurnInJail = 0;
-            EventNotifyAlertMessage("Vous etes libéré de prison !", AlertDialog.TypeOfAlert.INFO);
+            EventNotifyAlertMessage("Vous êtes libéré de prison !", AlertDialog.TypeOfAlert.INFO);
             this.Content = null;
         }
 

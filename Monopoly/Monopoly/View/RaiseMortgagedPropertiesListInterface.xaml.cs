@@ -2,7 +2,10 @@
 using Monopoly.Models.Components.Cells;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -20,9 +23,13 @@ namespace Monopoly.View
     /// <summary>
     /// Logique d'interaction pour RaiseMortgagedPropertiesListInterface.xaml
     /// </summary>
-    public partial class RaiseMortgagedPropertiesListInterface : Page
+    public partial class RaiseMortgagedPropertiesListInterface : Page, INotifyPropertyChanged
     {
         private static PlayerHandler playerHandler;
+
+        public ObservableCollection<Property> ListOfRaiseMortgagedProperties { get; set; }
+
+        public event PropertyChangedEventHandler PropertyChanged;
 
         public RaiseMortgagedPropertiesListInterface()
         {
@@ -32,11 +39,12 @@ namespace Monopoly.View
         protected override void OnInitialized(EventArgs e)
         {
             base.OnInitialized(e);
+            this.DataContext = this;
 
             playerHandler = PlayerHandler.Instance;
-            this.horizontalListBox.ItemsSource = playerHandler.MortagedLands();
+            ListOfRaiseMortgagedProperties = new ObservableCollection<Property>(playerHandler.GetCurrentPlayer().ListOfProperties.Where(l => l.Status == Property.MORTGAGED).ToList());
 
-            if (playerHandler.MortagedLands().Count() == 0)
+            if (ListOfRaiseMortgagedProperties.Count() == 0)
             {
                 EmptyList.Visibility = Visibility.Visible;
             }
@@ -45,7 +53,15 @@ namespace Monopoly.View
         private void horizontalListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             Property p = (Property)e.AddedItems[0];
+
             playerHandler.RaiseMortgage(playerHandler.GetCurrentPlayer(), p);
         }
+
+        #region Event Property Change
+        private void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+        #endregion
     }
 }

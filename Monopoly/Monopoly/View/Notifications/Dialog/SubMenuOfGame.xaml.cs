@@ -35,9 +35,10 @@ namespace Monopoly.View.Notifications.Dialog
         }
 
         public void onClick_btnHome(object sender, RoutedEventArgs e)
-        {
+        {            
             ((MainWindow)Window.GetWindow(this)).MainContent.Content = null;
             ((MainWindow)Window.GetWindow(this)).MenuContent.Visibility = Visibility.Visible;
+            GameManager.Reset();
             this.Content = null;
         }
 

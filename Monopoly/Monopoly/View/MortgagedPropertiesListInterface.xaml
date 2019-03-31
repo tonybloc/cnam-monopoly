@@ -62,7 +62,7 @@
             <TextBlock HorizontalAlignment="Center" Margin="10,30,10,30" Foreground="Black" FontWeight="DemiBold" FontSize="20" TextWrapping="WrapWithOverflow">Quels terrains souhaitez-vous hypothéquer ?</TextBlock>
            
             <!--ListBox-->
-            <ListBox x:Name="horizontalListBox"  SelectionMode="Extended" HorizontalAlignment="Center" VerticalAlignment="Center"
+            <ListBox x:Name="horizontalListBox"  SelectionMode="Extended" HorizontalAlignment="Center" VerticalAlignment="Center" ItemsSource="{Binding Path=ListOfMortgagedProperties, Mode=TwoWay}"
                         Style="{ StaticResource ListBoxWithAutoScroll_Horizontal }"                     
                         Selector.SelectionChanged="horizontalListBox_SelectionChanged">
             </ListBox>

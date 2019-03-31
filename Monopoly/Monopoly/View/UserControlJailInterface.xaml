@@ -28,7 +28,7 @@
                 <Button Grid.Column="1" Margin="10" FontSize="16" Click="onClickUseCard" IsEnabled="{Binding Path=CanUseCard}">Utiliser Carte</Button>
             </Grid>
             
-            <TextBlock TextAlignment="Center" VerticalAlignment="Center" TextWrapping="Wrap" FontSize="16" Margin="10,30">Vous etes en prison. Que voulez vous faire ?</TextBlock>
+            <TextBlock TextAlignment="Center" VerticalAlignment="Center" TextWrapping="Wrap" FontSize="16" Margin="10,30">Vous êtes en prison. Que voulez-vous faire ?</TextBlock>
         </DockPanel>
         
 
