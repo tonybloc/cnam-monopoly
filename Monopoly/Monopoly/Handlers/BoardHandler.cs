@@ -27,6 +27,12 @@ namespace Monopoly.Handlers
             
         }
 
+        public static void Reset()
+        {
+            _instance = null;
+            Board.Reset();
+        }
+
         /// <summary>
         /// Return board handler instance
         /// </summary>

@@ -84,6 +84,16 @@ namespace Monopoly.Handlers
             this.ColorHandler = ColorHandler.Instance;            
         }
 
+        public static void Reset()
+        {
+            _instance.EndGame();
+            _instance = null;
+            BoardHandler.Reset();
+            PlayerHandler.Reset();
+            DicesHandler.Reset();
+            ColorHandler.Reset();
+        }
+
         /// <summary>
         /// Get the instance of the class
         /// </summary>

@@ -39,11 +39,16 @@ namespace Monopoly.Handlers
                 return _instance;
             }
         }
+
+        public static void Reset()
+        {
+            _instance = null;
+        }
         #endregion
 
         #region Methode (public)
 
-        
+
 
         /// <summary>
         /// Retourne la prochaine couleur
