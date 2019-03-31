@@ -33,5 +33,10 @@ namespace Monopoly.Models.Components.Cells
             TrainStationRent = 25;
         }
         #endregion
+
+        public override string ToString()
+        {
+            return "Station de train : " + this.Title;
+        }
     }
 }

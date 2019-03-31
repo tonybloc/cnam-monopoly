@@ -79,7 +79,7 @@ namespace Monopoly.Handlers
             {
                 EventNotifyMessage("Vous ne pouvez pas relancer les dés !");
                 
-            }else if (NumberOfRool >= Config.NB_MAX_LAUNCH_DICES)
+            }else if (NumberOfRool >= Config.NB_MAX_LAUNCH_DICES-1)
             {
                 this.PlayerCanBeRaise = false;
                 launcher.InJail = true;

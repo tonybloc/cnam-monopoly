@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Monopoly.Models.Bank;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,6 +9,11 @@ namespace Monopoly.Models.Components.Exceptions
 {
     public class BankBalanceIsNotEnougth : Exception
     {
-        public BankBalanceIsNotEnougth() : base("Votre solde bancaire n\'est pas suffisant") {}
+        
+        public double Amount { get; }
+        public BankBalanceIsNotEnougth(double amount) : base("Votre solde bancaire n\'est pas suffisant")
+        {
+            Amount = amount;
+        }
     }
 }

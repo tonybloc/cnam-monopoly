@@ -31,6 +31,7 @@ namespace Monopoly.Models.Bank
                 }
             }
         }
+        
 
         public event PropertyChangedEventHandler PropertyChanged;
         #endregion
@@ -100,8 +101,8 @@ namespace Monopoly.Models.Bank
                 return true;
             }
             else
-            {
-                throw new BankBalanceIsNotEnougth();
+            {                
+                return false;
             }
         }
 
@@ -111,7 +112,6 @@ namespace Monopoly.Models.Bank
         /// <param name="amount">Amount value</param>
         private double Withdraw(double amount)
         {
-            CheckIfBankBalanceIsEnougth(amount);
             RemoveAmount(amount);
             return amount;
             
@@ -133,8 +133,15 @@ namespace Monopoly.Models.Bank
         /// <param name="amount">Amount value</param>
         public void BankTransfer(BankAccount bankAccount, double amount)
         {
-            double money = this.Withdraw(amount);
-            bankAccount.AddAmount(money);
+            if(CheckIfBankBalanceIsEnougth(amount))
+            {
+                double money = this.Withdraw(amount);
+                bankAccount.AddAmount(money);
+            }
+            else
+            {
+                throw new BankBalanceIsNotEnougth(amount);
+            }
         }
         
 

@@ -137,6 +137,10 @@ namespace Monopoly.Models.Components.Cells
             return RantalList[nbBulding];
         }
 
+        public override string ToString()
+        {
+            return "Terrain : " + this.Title;
+        }
         #endregion
 
 

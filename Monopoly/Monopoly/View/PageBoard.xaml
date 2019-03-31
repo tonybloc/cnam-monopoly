@@ -297,8 +297,8 @@
                             <DropShadowEffect ShadowDepth="2" />
                         </Button.Effect>
                         <Image Source="../Resources/Pictures/property_exchange.jpg"/>
-                    </Button>
-                    <Button x:Name="btnEndTurn"  Width="70" Height="50" Margin="10,0,0,0" ToolTip="Fin de tour" Click="onClickNext">
+                    </Button>                   
+                    <Button x:Name="btnEndTurn"  Width="80" Height="50" Margin="10,0,0,0" ToolTip="Fin de tour" Click="onClickNext">
                         <Button.Effect>
                             <DropShadowEffect ShadowDepth="2" />
                         </Button.Effect>
@@ -326,6 +326,8 @@
 
         <!-- Notification -->
         <ContentControl x:Name="NotificationsPanel"></ContentControl>
+        <ContentControl x:Name="NotificationsPanelSalesProperty"></ContentControl>
+        <Frame x:Name="MonopolyEndGame"></Frame>
     </Grid>
     
     

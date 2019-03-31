@@ -1,0 +1,232 @@
+﻿<UserControl x:Class="Monopoly.View.UserControlSalesProperties"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:Monopoly.View"
+             xmlns:Cells="clr-namespace:Monopoly.Models.Components.Cells"
+             mc:Ignorable="d" 
+             d:DesignHeight="{DynamicResource {x:Static SystemParameters.PrimaryScreenHeightKey}}"
+             d:DesignWidth="{DynamicResource {x:Static SystemParameters.PrimaryScreenWidthKey}}">
+    
+    <UserControl.Resources>
+        <!--
+        <DataTemplate DataType="{x:Type Cells:TrainStation}">
+            <Grid Width="220" Height="350" VerticalAlignment="Center" HorizontalAlignment="Center" Background="White" >
+                <Grid.Effect>
+                    <DropShadowEffect ShadowDepth="2"/>
+                </Grid.Effect>
+
+                <Grid Margin="10">
+                    <StackPanel>
+                        <Image Source="{Binding Icon}" VerticalAlignment="Center" Height="100"></Image>
+                        <TextBlock Text="{Binding Title}" TextAlignment="Center" VerticalAlignment="Center" TextWrapping="WrapWithOverflow" Foreground="Black" Margin="10,15,10,0" ></TextBlock>
+                        <StackPanel Orientation="Vertical" Margin="0,60,0,0">
+
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                                <Label FontWeight="DemiBold" Content="Valeur d'achat :" Foreground="Black"/>
+                                <Label Content="{Binding PurchasePrice}"></Label>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal"  HorizontalAlignment="Center">
+                                <Label FontWeight="DemiBold" Content="Valeur hypothécaire :" Foreground="Black"/>
+                                <Label Content="{Binding MortgagePrice}"></Label>
+                            </StackPanel>
+                        </StackPanel>
+                    </StackPanel>
+                </Grid>
+            </Grid>
+        </DataTemplate>
+
+        <DataTemplate DataType="{x:Type Cells:Land}">
+            <Grid Width="220" Height="400" VerticalAlignment="Center" HorizontalAlignment="Center" >
+                <Grid.Effect>
+                    <DropShadowEffect ShadowDepth="2"/>
+                </Grid.Effect>
+
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="2*"/>
+                    <RowDefinition Height="2*"/>
+                    <RowDefinition Height="9*"/>
+                </Grid.RowDefinitions>
+
+
+                <Border BorderBrush="Black" Grid.Row="1">
+                    <Label Content="{Binding Title}" Background="{Binding LandGroup.Color}" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
+                </Border>
+
+                <Border BorderBrush="Black" Background="White" Grid.Row="2">
+
+                    <Border BorderBrush="Black" Background="White" Grid.Row="2">
+                        <Grid Grid.Row="2" Margin="10">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="*"/>
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="2*"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+
+                            <Label FontWeight="DemiBold" Grid.Row="0" HorizontalAlignment="Left" Content="Prix d'achat :" VerticalAlignment="Top" Foreground="Black"/>
+                            <Label Grid.Row="0" Grid.Column="1" Content="{Binding PurchasePrice}" HorizontalAlignment="Right"/>
+                            <Label FontWeight="DemiBold" Grid.Row="1" HorizontalAlignment="Left" Content="Loyers :" VerticalAlignment="Top" Foreground="Black"/>
+                            <Label Grid.Row="2" HorizontalAlignment="Left" Content="- Terrain nu : " VerticalAlignment="Top" Foreground="Black"/>
+                            <Label Grid.Row="2" Grid.Column="1" Content="{Binding RantalList[0]}" HorizontalAlignment="Right"/>
+                            <Label Grid.Row="3" HorizontalAlignment="Left" Content="- Avec 1 maison :" VerticalAlignment="Top" Foreground="Black"/>
+                            <Label Grid.Row="3" Grid.Column="1" Content="{Binding RantalList[1]}" HorizontalAlignment="Right"/>
+                            <Label Grid.Row="4" HorizontalAlignment="Left" Content="- Avec 2 maisons :" VerticalAlignment="Top" Foreground="Black"/>
+                            <Label Grid.Row="4" Grid.Column="1" Content="{Binding RantalList[2]}" HorizontalAlignment="Right"/>
+                            <Label Grid.Row="5" HorizontalAlignment="Left" Content="- Avec 3 maisons :" VerticalAlignment="Top" Foreground="Black"/>
+                            <Label Grid.Row="5" Grid.Column="1" Content="{Binding RantalList[3]}" HorizontalAlignment="Right"/>
+                            <Label Grid.Row="6" HorizontalAlignment="Left" Content="- Avec 4 maisons :" VerticalAlignment="Top" Foreground="Black"/>
+                            <Label Grid.Row="6" Grid.Column="1" Content="{Binding RantalList[4]}" HorizontalAlignment="Right"/>
+                            <Label Grid.Row="7" HorizontalAlignment="Left" Content="- Avec hôtel :" VerticalAlignment="Top" Foreground="Black"/>
+                            <Label Grid.Row="7" Grid.Column="1" Content="{Binding RantalList[5]}" HorizontalAlignment="Right"/>
+                            <Label FontWeight="DemiBold" Grid.Row="8" HorizontalAlignment="Left" Content="Valeur hypothécaire :" VerticalAlignment="Top" Foreground="Black"/>
+                            <Label Grid.Row="8" Grid.Column="1" Content="{Binding MortgagePrice}" HorizontalAlignment="Right"/>
+
+                        </Grid>
+                    </Border>
+                </Border>
+            </Grid>
+        </DataTemplate>
+
+        <DataTemplate DataType="{x:Type Cells:PublicService}">
+            <Grid Width="220" Height="350" VerticalAlignment="Center" HorizontalAlignment="Center" Background="White" >
+                <Grid.Effect>
+                    <DropShadowEffect ShadowDepth="2"/>
+                </Grid.Effect>
+
+                <Grid Margin="10">
+                    <StackPanel>
+                        <Image Source="{Binding Icon}" VerticalAlignment="Center" Height="100"></Image>
+                        <TextBlock Text="{Binding Title}" TextAlignment="Center" VerticalAlignment="Center" TextWrapping="WrapWithOverflow" Foreground="Black" Margin="10,15,10,0" ></TextBlock>
+                        <StackPanel Orientation="Vertical" Margin="0,60,0,0">
+
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                                <Label FontWeight="DemiBold" Content="Valeur d'achat :" Foreground="Black"/>
+                                <Label Content="{Binding PurchasePrice}"></Label>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal"  HorizontalAlignment="Center">
+                                <Label FontWeight="DemiBold" Content="Valeur hypothécaire :" Foreground="Black"/>
+                                <Label Content="{Binding MortgagePrice}"></Label>
+                            </StackPanel>
+                        </StackPanel>
+                    </StackPanel>
+                </Grid>
+            </Grid>
+        </DataTemplate>
+        
+        <Cells:Property x:Key="MyProperty"/>
+
+        -->
+        <DataTemplate DataType="{x:Type Cells:TrainStation}">
+            <StackPanel Orientation="Horizontal" Margin="5">
+                <TextBlock Text="Station de train : " FontWeight="Bold" FontSize="16"></TextBlock>
+                <TextBlock Text="{Binding Title}" FontSize="16"></TextBlock>
+            </StackPanel>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type Cells:PublicService}" >
+            <StackPanel Orientation="Horizontal" Margin="5">
+                <TextBlock Text="Service Public : " FontWeight="Bold" FontSize="16"></TextBlock>
+                <TextBlock Text="{Binding Title}" FontSize="16"></TextBlock>
+            </StackPanel>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type Cells:Land}" >
+            <StackPanel Orientation="Vertical" Margin="5">
+                <StackPanel Orientation="Horizontal">
+                    <Rectangle Width="20" Height="20" Fill="{Binding LandGroup.Color}" Margin="0,0,10,0"></Rectangle>
+                    <TextBlock Text="Terrain : " FontWeight="Bold" FontSize="16" VerticalAlignment="Center"></TextBlock>
+                    <TextBlock Text="{Binding Title}" FontSize="16" VerticalAlignment="Center"></TextBlock>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="Nb Maison : " FontSize="12" Foreground="Gray" Margin="30,0,0,0" ></TextBlock>
+                    <TextBlock Text="{Binding NbHouse}" FontSize="12" Foreground="Gray"></TextBlock>
+                    <TextBlock Text="; "></TextBlock>
+                    <TextBlock Text="Nb Hotel : " FontSize="12" Foreground="Gray"></TextBlock>
+                    <TextBlock Text="{Binding NbHotel}" FontSize="12" Foreground="Gray"></TextBlock>
+                </StackPanel>
+                
+            </StackPanel>
+            
+        </DataTemplate>
+        
+
+    </UserControl.Resources>
+    
+    <Grid>
+        <Grid.Background>
+            <SolidColorBrush Color="black" Opacity="0.5"/>
+        </Grid.Background>
+
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="2*"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="2*"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <DockPanel Background="White" Grid.Column="1" Grid.Row="1">
+            <DockPanel DockPanel.Dock="Top">
+                <TextBlock FontSize="28" FontWeight="Bold" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="20">Vous n'avez plus assez d'argent !</TextBlock>
+            </DockPanel>
+
+            <StackPanel DockPanel.Dock="Bottom" Margin="10" Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center">
+                <Button Click="OnClick_Continu" Margin="5"  Width="200">Continuer</Button>
+                <Button Click="OnClick_GiveUp" Margin="5" Width="200">Abandonner le jeu</Button>
+            </StackPanel>
+
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <StackPanel Margin="30,0"  Grid.Column="0" VerticalAlignment="Center">
+                    <TextBlock Text="Liste des propriétés :" FontSize="16" Margin="10"></TextBlock>
+                    <ScrollViewer VerticalScrollBarVisibility="auto">
+                        <ListView x:Name="ListBoxProperties" BorderThickness="1" BorderBrush="Black"
+                            SelectedIndex="{Binding Path=IndexSelected, Mode=TwoWay}"
+                            SelectedItem="{Binding Path=PropertySelected, Mode=TwoWay}"
+                            ItemsSource="{Binding Path=ListOfProperties, Mode=TwoWay}" Height="300" SelectionChanged="onSelecionChangeListeViewProperties">
+
+                        </ListView>
+                    </ScrollViewer>
+                </StackPanel>
+
+                <Grid Grid.Column="2" Grid.Row="1">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="2*"/>                        
+                    </Grid.RowDefinitions>
+
+                    <TextBlock Grid.Row="0" Text="{Binding Path=PropertySelected.Title}"></TextBlock>
+                   
+                    <ContentControl  x:Name="AlertNotification"  Margin="10" Grid.Row="0" VerticalAlignment="Center" HorizontalAlignment="Center"></ContentControl>
+                    
+                    <StackPanel Margin="10" Grid.Row="1" VerticalAlignment="Center" HorizontalAlignment="Center">
+                        <Button Margin="10" Click="OnClick_Mortgage" IsEnabled="{Binding Path=BtnMortgageEnable}">Hyptotéqué</Button>
+                        <Button Margin="10" Click="OnClick_SellHotel" IsEnabled="{Binding Path=BtnSellHotelEnable}">Vendre Hotel</Button>
+                        <Button Margin="10" Click="OnClick_SellHouse" IsEnabled="{Binding Path=BtnSellHouseEnable}">Vendre Maison</Button>
+                        <Button Margin="10" Click="OnClick_Exchange" IsEnabled="{Binding Path=BtnExchangeEnable}">Faire un Echange</Button>
+                    </StackPanel>
+                </Grid>
+                
+            </Grid>
+        </DockPanel>
+
+
+    </Grid>
+</UserControl>

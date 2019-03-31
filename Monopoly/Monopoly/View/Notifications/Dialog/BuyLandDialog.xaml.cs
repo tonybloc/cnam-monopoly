@@ -1,6 +1,7 @@
 ﻿using Monopoly.Handlers;
 using Monopoly.Models.Components;
 using Monopoly.Models.Components.Cells;
+using Monopoly.Models.Components.Exceptions;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -29,8 +30,11 @@ namespace Monopoly.View.Notifications.Dialog
         private Property _currentProperty;
 
         public delegate void PropertyBought(Player p);
-
         public static event PropertyBought propertyBought;
+
+        public delegate void EventExceptionHandling(double amount);
+        public static event EventExceptionHandling EventException;
+
 
         private string _message;
         public string Message
@@ -66,9 +70,21 @@ namespace Monopoly.View.Notifications.Dialog
 
         private void BtnOui_Click(object sender, RoutedEventArgs e)
         {
-            _PlayerHandler.BuyProperty(_currentProperty);
-            propertyBought(_PlayerHandler.GetCurrentPlayer());
-            this.Content = null;
+            try
+            {
+                _PlayerHandler.BuyProperty(_currentProperty);
+                propertyBought(_PlayerHandler.GetCurrentPlayer());
+                this.Content = null;
+
+            }
+            catch (BankBalanceIsNotEnougth exp)
+            {
+                this.Content = null;
+                EventException(exp.Amount);
+            }
+
+
+
         }
 
         private void BtnNon_Click(object sender, RoutedEventArgs e)
