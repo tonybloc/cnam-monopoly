@@ -280,6 +280,8 @@ namespace Monopoly.View.Notifications.Dialog
                 _PlayerHandler.PayeAmount(CurrentPlayer, AmountPlayer);
                 this.Content = null;
             }
+
+            PageBoard.Instance.RefreshBoardProperties();
         }
 
         private void onClickCancel(object sender, RoutedEventArgs e)

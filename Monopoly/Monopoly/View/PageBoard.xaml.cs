@@ -1990,17 +1990,25 @@ namespace Monopoly.View
         {
             NotificationContent.Content = null;
             AlertNotification.Content = null;
-            if (_DicesHandler.PlayerCanBeRaise)
-            {
-                DicesInterface dicesInterface = new DicesInterface();
-                DicesContent.Content = dicesInterface;
-                DicesContent.Visibility = Visibility.Visible;
-                PropertiesListContent.Visibility = Visibility.Hidden;
-            }
-            else
+            if(CurrentPlayer.HasLost)
             {
                 UINotifyMessage("Vous ne pouvez pas relancer les dés !");
             }
+            else
+            {
+                if (_DicesHandler.PlayerCanBeRaise)
+                {
+                    DicesInterface dicesInterface = new DicesInterface();
+                    DicesContent.Content = dicesInterface;
+                    DicesContent.Visibility = Visibility.Visible;
+                    PropertiesListContent.Visibility = Visibility.Hidden;
+                }
+                else
+                {
+                    UINotifyMessage("Vous ne pouvez pas relancer les dés !");
+                }
+            }
+            
         }
         #endregion
 
@@ -2119,7 +2127,7 @@ namespace Monopoly.View
                 else
                 {
                     BrushConverter bc = new BrushConverter();
-                    child.Background = (Brush)bc.ConvertFrom("#000000");
+                    child.Background = Brushes.Transparent; ;
                 }
                 
             }
