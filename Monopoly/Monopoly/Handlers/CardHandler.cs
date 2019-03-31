@@ -115,11 +115,17 @@ namespace Monopoly.Handlers
             {
                 CardUpdateMoneyAccordingBuilds card = (CardUpdateMoneyAccordingBuilds)c;
                 ObservableCollection<Property> properties = _PlayerHandler.Properties();
+                
                 int Amount = 0;
-                foreach(Land p in properties)
+                foreach(Property p in properties)
                 {
-                    Amount += p.NbHotel * card.CostHotel;
-                    Amount += p.NbHouse * card.CostHouse;
+                    if(p is Land)
+                    {
+                        Land l = (Land)p;
+                        Amount += l.NbHotel * card.CostHotel;
+                        Amount += l.NbHouse * card.CostHouse;
+                    }
+                    
                 }
                 _PlayerHandler.CardPayeAmount(PlayerHandler.Instance.currentPlayer, Math.Abs(Amount));
             }
