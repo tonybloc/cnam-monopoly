@@ -2003,7 +2003,7 @@ namespace Monopoly.View
             {
                 _GameManager.PlayerHandler.GetGratification(CurrentPlayer);
 
-                AlertNotification.Content = new AlertDialog("Vous avez gagné : 200 €");
+                AlertNotification.Content = new AlertDialog("Vous avez gagné : 200 €", AlertDialog.TypeOfAlert.SUCCES);
             }
 
             DoCellAction();
@@ -2034,7 +2034,7 @@ namespace Monopoly.View
             {
                 _GameManager.PlayerHandler.GetGratification(CurrentPlayer);
 
-                AlertNotification.Content = new AlertDialog("Vous avez gagné : 200 €");
+                AlertNotification.Content = new AlertDialog("Vous avez gagné : 200 €", AlertDialog.TypeOfAlert.SUCCES);
             }
 
             DoCellAction();
@@ -2077,7 +2077,7 @@ namespace Monopoly.View
 
             if (_DicesHandler.PlayerCanBeRaise)
             {
-                UINotifyMessage("Vous avez oublié de lancer les dées !");
+                UINotifyMessage("Vous avez oublié de lancer les dés !");
             }
             else
             {
@@ -2096,7 +2096,7 @@ namespace Monopoly.View
                 {
                     CurrentPlayer.InJail = false;
                     CurrentPlayer.NbTurnInJail = 0;
-                    UINotifyAlertMessage("Vous avez passer 3 tour en prison. Vous êtes dorénavant libérer de prison.", AlertDialog.TypeOfAlert.INFO);
+                    UINotifyAlertMessage("Vous avez passé 3 tours en prison. Vous êtes dorénavant libéré de prison.", AlertDialog.TypeOfAlert.INFO);
                 }
             }
         }
@@ -2135,7 +2135,7 @@ namespace Monopoly.View
                 lblPurchasePriceValue.Content = t.PurchasePrice + " €";
                 lblMortgagePriceValue.Content = t.MortgagePrice + " €";
                 lblOwnerCardValue.Content = t.OwnerName;
-
+                
                 Property property = (Property)c;
                 if (property.Status == Property.MORTGAGED)
                 {
@@ -2248,7 +2248,7 @@ namespace Monopoly.View
             }
             else if (c.GetType() == typeof(Tax))
             {
-                UINotifyAlertMessage("Vous avez payer une taxe de : " + ((Tax)c).Amount, AlertDialog.TypeOfAlert.INFO);
+                UINotifyAlertMessage("Vous avez payer une taxe de : " + ((Tax)c).Amount + " €", AlertDialog.TypeOfAlert.INFO);
                 _PlayerHandler.PayTheTax((Tax) c);
             }
             else if (c.GetType() == typeof(DrawCard))
@@ -2272,7 +2272,7 @@ namespace Monopoly.View
             }
             else if (c.GetType() == typeof(StartPoint))
             {
-                UINotifyAlertMessage("Vous etes sur la case départ et recevez 200 € !", AlertDialog.TypeOfAlert.INFO);
+                UINotifyAlertMessage("Vous êtes sur la case départ et recevez 200 € !", AlertDialog.TypeOfAlert.INFO);
                 _PlayerHandler.GetGratification(CurrentPlayer);
             }
             else if (c.GetType() == typeof(Jail))
@@ -2352,6 +2352,12 @@ namespace Monopoly.View
             PropertiesListContent.Visibility = Visibility.Visible;
             PropertiesListContent.Content = raiseMortgagedPropertiesListInterface;
         }
+
+        private void onClickExchange(object sender, RoutedEventArgs e)
+        {
+            NotificationsPanel.Visibility = Visibility.Visible;
+            NotificationsPanel.Content = new ExchangeDialog();
+        }
         #endregion
 
         /// <summary>
@@ -2373,6 +2379,8 @@ namespace Monopoly.View
         {
             AlertNotification.Content = new AlertDialog(Message, type);
             AlertNotification.Visibility = Visibility.Visible;
-        }        
+        }
+
+        
     }
 }

@@ -18,7 +18,11 @@
     <Page.Resources>
         <DataTemplate DataType="{x:Type Model:Player}">
             <StackPanel Orientation="Horizontal" Margin="5">
-                <Ellipse Width="20" Height="20" Fill="{Binding Pawn.ColorValue}" Margin="5,0" VerticalAlignment="Center"/>
+                <Ellipse Width="20" Height="20" Fill="{Binding Pawn.ColorValue}" Margin="5,0" VerticalAlignment="Center">
+                    <Ellipse.Effect>
+                        <DropShadowEffect ShadowDepth="2"/>
+                    </Ellipse.Effect>
+                </Ellipse>
                 <TextBlock Text="{Binding Name}" FontSize="16" VerticalAlignment="Center"/>
             </StackPanel>
         </DataTemplate>

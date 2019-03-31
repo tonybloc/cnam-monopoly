@@ -60,9 +60,9 @@
         <StackPanel Grid.Row="2" >
             <Border BorderBrush="Black" BorderThickness="1" CornerRadius="4" ></Border>
             <!--Title-->
-            <TextBlock HorizontalAlignment="Center" Margin="10,20,10,20" Foreground="Black" FontWeight="DemiBold" FontSize="20" TextWrapping="WrapWithOverflow">Quels terrains souhaitez-vous lever l'hypothèque ?</TextBlock>
+            <TextBlock HorizontalAlignment="Center" Margin="10,30,10,30" Foreground="Black" FontWeight="DemiBold" FontSize="20" TextWrapping="WrapWithOverflow">Quels terrains souhaitez-vous lever l'hypothèque ?</TextBlock>
             <!--ListBox-->
-            <ListBox x:Name="horizontalListBox"  SelectionMode="Extended" HorizontalAlignment="Center"
+            <ListBox x:Name="horizontalListBox"  SelectionMode="Extended" HorizontalAlignment="Center" ItemsSource="{Binding Path=ListOfRaiseMortgagedProperties, Mode=TwoWay}"
                         Style="{ StaticResource ListBoxWithAutoScroll_Horizontal }"
                         Selector.SelectionChanged="horizontalListBox_SelectionChanged">
             </ListBox>

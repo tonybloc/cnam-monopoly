@@ -31,6 +31,11 @@ namespace Monopoly.Models.Components
         {
             this.ListCell = new List<Cell>();
         }
+
+        public static void Reset()
+        {
+            _instance = null;
+        }
         
         /// <summary>
         /// Return the unique instance of the class

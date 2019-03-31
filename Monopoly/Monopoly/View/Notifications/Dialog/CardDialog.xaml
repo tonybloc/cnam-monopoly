@@ -86,8 +86,8 @@
 
                 <!-- Actions -->
                 <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Center" Margin="10">
-                    <Button Width="150" Height="40" Click="CardExitToJail_OnClickUseCard" FontSize="16">Utiliser</Button>
-                    <Button Width="150" Height="40" Click="CardExitToJail_OnClickGetCard" FontSize="16">Garder</Button>
+                    <Button Width="150" Height="40" Click="CardExitToJail_OnClickUseCard" FontSize="16" Margin="0,0,20,0">Utiliser</Button>
+                    <Button Width="150" Height="40" Click="CardExitToJail_OnClickGetCard" FontSize="16" Margin="20,0,0,0">Garder</Button>
                 </StackPanel>
             </Grid>
         </DataTemplate>

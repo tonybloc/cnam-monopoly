@@ -2,7 +2,11 @@
 using Monopoly.Models.Components.Cells;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Collections.Specialized;
+using System.ComponentModel;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -20,11 +24,15 @@ namespace Monopoly.View
     /// <summary>
     /// Logique d'interaction pour MortgagedPropertiesListInterface.xaml
     /// </summary>
-    public partial class MortgagedPropertiesListInterface : Page
+    public partial class MortgagedPropertiesListInterface : Page, INotifyPropertyChanged
     {
         private static PlayerHandler playerHandler;
 
         public new double Opacity = 1;
+
+        public ObservableCollection<Property> ListOfMortgagedProperties { get; set; }
+
+        public event PropertyChangedEventHandler PropertyChanged;
 
         public MortgagedPropertiesListInterface()
         {
@@ -34,11 +42,24 @@ namespace Monopoly.View
         protected override void OnInitialized(EventArgs e)
         {
             base.OnInitialized(e);
+            this.DataContext = this;
 
             playerHandler = PlayerHandler.Instance;
-            this.horizontalListBox.ItemsSource = playerHandler.Properties();
+            //this.horizontalListBox.ItemsSource = playerHandler.Properties();
 
-            if (playerHandler.Properties().Count() == 0)
+            List<Property> properties = playerHandler.GetCurrentPlayer().ListOfProperties.Where(l => l.Status == Property.NOT_AVAILABLE_ON_SALE).ToList();
+            List<Property> ListOtherProperties = properties.Where(l => l.GetType() != typeof(Land)).ToList();
+            List<Property> ListOfLands = properties.Where(l => l is Land).Cast<Land>().Where(l => l.NbHouse == 0 && l.NbHotel == 0).OrderBy(l => l.LandGroup.IdGroup).Cast<Property>().ToList();
+
+            var res = new ObservableCollection<Property>();
+            ListOtherProperties.ForEach(p => res.Add(p));
+            ListOfLands.ForEach(p => res.Add(p));
+            res.OrderBy(p => p.Id);
+
+            ListOfMortgagedProperties = res;
+            ListOfMortgagedProperties.CollectionChanged += OnCollectionChanged;
+
+            if (ListOfMortgagedProperties.Count == 0)
             {
                 EmptyList.Visibility = Visibility.Visible;
             }
@@ -50,5 +71,17 @@ namespace Monopoly.View
 
             playerHandler.Mortgage(playerHandler.GetCurrentPlayer(), p);
         }
+
+        #region Event Property Change
+        private void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+        private void OnCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+        {
+            OnPropertyChanged("ListOfMortgagedProperties");
+        }
+        #endregion
     }
 }
