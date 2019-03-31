@@ -25,5 +25,10 @@ namespace Monopoly.Models.Components.Cells
         /// </summary>
         public PublicService() { }
         #endregion
+
+        public override string ToString()
+        {
+            return "Service public : " + this.Title;
+        }
     }
 }

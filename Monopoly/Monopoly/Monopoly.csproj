@@ -158,6 +158,9 @@
     <Compile Include="View\Notifications\Dialog\ExchangeDialog.xaml.cs">
       <DependentUpon>ExchangeDialog.xaml</DependentUpon>
     </Compile>
+    <Compile Include="View\Notifications\Dialog\WinnerDialog.xaml.cs">
+      <DependentUpon>WinnerDialog.xaml</DependentUpon>
+    </Compile>
     <Compile Include="View\UserControlJailInterface.xaml.cs">
       <DependentUpon>UserControlJailInterface.xaml</DependentUpon>
     </Compile>
@@ -203,6 +206,9 @@
     <Compile Include="View\SellPropertiesListInterface.xaml.cs">
       <DependentUpon>SellPropertiesListInterface.xaml</DependentUpon>
     </Compile>
+    <Compile Include="View\UserControlSalesProperties.xaml.cs">
+      <DependentUpon>UserControlSalesProperties.xaml</DependentUpon>
+    </Compile>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -224,6 +230,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="View\Notifications\Dialog\ExchangeDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Notifications\Dialog\WinnerDialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -286,6 +296,10 @@
     <Page Include="View\SellPropertiesListInterface.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\UserControlSalesProperties.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
   </ItemGroup>
   <ItemGroup>
@@ -445,32 +459,32 @@
   <ItemGroup>
     <PublishFile Include="Resources\XML\XMLBoardCell.xml">
       <Visible>False</Visible>
+      <PublishState>Include</PublishState>
+      <IncludeHash>True</IncludeHash>
       <Group>
       </Group>
       <TargetPath>
       </TargetPath>
-      <PublishState>Include</PublishState>
-      <IncludeHash>True</IncludeHash>
       <FileType>File</FileType>
     </PublishFile>
     <PublishFile Include="Resources\XML\XMLChanceCard.xml">
       <Visible>False</Visible>
+      <PublishState>Include</PublishState>
+      <IncludeHash>True</IncludeHash>
       <Group>
       </Group>
       <TargetPath>
       </TargetPath>
-      <PublishState>Include</PublishState>
-      <IncludeHash>True</IncludeHash>
       <FileType>File</FileType>
     </PublishFile>
     <PublishFile Include="Resources\XML\XMLCommunityCard.xml">
       <Visible>False</Visible>
+      <PublishState>Include</PublishState>
+      <IncludeHash>True</IncludeHash>
       <Group>
       </Group>
       <TargetPath>
       </TargetPath>
-      <PublishState>Include</PublishState>
-      <IncludeHash>True</IncludeHash>
       <FileType>File</FileType>
     </PublishFile>
   </ItemGroup>

@@ -21,6 +21,8 @@ using System.Windows.Media.Effects;
 using Monopoly.Models.Components.Exceptions;
 using Monopoly.Models.Components.Cards;
 using System.Collections.ObjectModel;
+using Monopoly.Models.Bank;
+using Card = Monopoly.Models.Components.Cards.Card;
 
 namespace Monopoly.View
 {
@@ -121,19 +123,23 @@ namespace Monopoly.View
             DicesHandler.EventMovePlayer += UIMovePlayer;
             DicesHandler.EventMovePlayerToCell += UIMovePlayerToCell;
             DicesHandler.EventNotifyAlertMessage += UINotifyAlertMessage;
-
-            PlayerHandler.EventNotifyMessage += UINotifyMessage;
-            PlayerHandler.EventMovePlayer += UIMovePlayer;
+            
             PlayerHandler.EventMovePlayerToCell += UIMovePlayerToCell;
+            PlayerHandler.EventNotifyAlertMessage += UINotifyAlertMessage;
+            PlayerHandler.EventRefreshBoard += RefreshBoardProperties;
 
             JailInterface.EventNotifyAlertMessage += UINotifyAlertMessage;
-
             PropertiesListInterface.buildingBought += BuildingBought;
             SellPropertiesListInterface.buildingBought += BuildingBought;
             BuyLandDialog.propertyBought += PropertyBought;
+            BuyLandDialog.EventException += BadExceptionHandling;
+
             CardDialog.EventMovePlayer += UIMovePlayer;
             CardDialog.EventMovePlayerToCell += UIMovePlayerToCell;
+            CardDialog.EventException += BadCardExceptionHandling;
 
+            UserControlSalesProperties.EventCellAction += DoCellAction;
+            UserControlSalesProperties.EventCardAction += DoCardAction;
             UINumberOfTurn = _GameManager.NumberOfTurn;
            
 
@@ -2042,12 +2048,42 @@ namespace Monopoly.View
 
 
 
-        void PropertyBought(Player p)
+        private void PropertyBought(Player p)
         {
             int currentPosition = p.Position;
             StackPanel child = (StackPanel)this.FindName("PlayerColor" + currentPosition);
             BrushConverter bc = new BrushConverter();
             child.Background = (Brush)bc.ConvertFrom(p.Pawn.ColorValue);
+        }
+
+        private void PropertyBought(Cell c)
+        {
+            if(c is Property)
+            {
+                Property p = (Property)c;
+                Player player = _PlayerHandler.WhoOwnThisProperty(p);
+
+                StackPanel child = (StackPanel)this.FindName("PlayerColor" + p.Id);
+                if(player != null)
+                {
+                    BrushConverter bc = new BrushConverter();
+                    child.Background = (Brush)bc.ConvertFrom(player.Pawn.ColorValue);
+                }
+                else
+                {
+                    BrushConverter bc = new BrushConverter();
+                    child.Background = (Brush)bc.ConvertFrom("#000000");
+                }
+                
+            }
+        }
+
+        public void RefreshBoardProperties()
+        {
+            foreach(Cell c in BoardHandler.Instance.Board.ListCell)
+            {
+                PropertyBought(c);
+            }
         }
 
         void BuildingBought(Land l)
@@ -2081,23 +2117,39 @@ namespace Monopoly.View
             }
             else
             {
-                _GameManager.NextTurn();
-                _DicesHandler.PlayerCanBeRaise = true;
-                CurrentPlayer = _PlayerHandler.GetCurrentPlayer();
-                UINumberOfTurn = _GameManager.NumberOfTurn;
+                bool temp = true;
+                while(temp)
+                {
+                    _GameManager.NextTurn();
+                    _DicesHandler.PlayerCanBeRaise = true;
+                    CurrentPlayer = _PlayerHandler.GetCurrentPlayer();
+                    UINumberOfTurn = _GameManager.NumberOfTurn;
 
-                if ( (CurrentPlayer.InJail) && (CurrentPlayer.NbTurnInJail < 3) )
-                {
-                    NotificationContent.Content = new JailInterface();
-                    NotificationContent.Visibility = Visibility.Visible;
-                    PropertiesListContent.Visibility = Visibility.Hidden;
+                    if ((CurrentPlayer.InJail) && (CurrentPlayer.NbTurnInJail < 3))
+                    {
+                        NotificationContent.Content = new JailInterface();
+                        NotificationContent.Visibility = Visibility.Visible;
+                        PropertiesListContent.Visibility = Visibility.Hidden;
+                    }
+                    else if ((CurrentPlayer.InJail) && (CurrentPlayer.NbTurnInJail - 1 >= 3))
+                    {
+                        CurrentPlayer.InJail = false;
+                        CurrentPlayer.NbTurnInJail = 0;
+                        UINotifyAlertMessage("Vous avez passer 3 tour en prison. Vous êtes dorénavant libérer de prison.", AlertDialog.TypeOfAlert.INFO);
+                    }
+                    
+                    if(!CurrentPlayer.HasLost)
+                    {
+                        temp = false;
+                    }
                 }
-                else if ((CurrentPlayer.InJail) && (CurrentPlayer.NbTurnInJail >= 3))
+
+                if(_PlayerHandler.GameIsFinish())
                 {
-                    CurrentPlayer.InJail = false;
-                    CurrentPlayer.NbTurnInJail = 0;
-                    UINotifyAlertMessage("Vous avez passé 3 tours en prison. Vous êtes dorénavant libéré de prison.", AlertDialog.TypeOfAlert.INFO);
+                    MonopolyEndGame.Visibility = Visibility.Visible;
+                    MonopolyEndGame.Content = new WinnerDialog();
                 }
+                
             }
         }
         #endregion
@@ -2134,8 +2186,8 @@ namespace Monopoly.View
                 lblCardTitle.Text = c.Title;
                 lblPurchasePriceValue.Content = t.PurchasePrice + " €";
                 lblMortgagePriceValue.Content = t.MortgagePrice + " €";
-                lblOwnerCardValue.Content = t.OwnerName;
-                
+                lblOwnerCardValue.Content = (t.Owner != null)?t.Owner.Name:"";
+
                 Property property = (Property)c;
                 if (property.Status == Property.MORTGAGED)
                 {
@@ -2152,7 +2204,7 @@ namespace Monopoly.View
                 lblLandTitle.Background = (Brush)bc.ConvertFrom(GameManager.Instance.BoardHandler.getColor(c));
 
                 Land l = (Land)GameManager.Instance.BoardHandler.Board.ListCell.ElementAt(id);
-                lblOwnerValue.Content = l.OwnerName;
+                lblOwnerValue.Content = (l.Owner != null) ? l.Owner.Name : "";
                 lblBuyingPriceValue.Content = l.PurchasePrice + " €";
                 lblLandValue.Content = l.RantalList[0] + " €";
                 lblHouse1Value.Content = l.RantalList[1] + " €";
@@ -2192,7 +2244,7 @@ namespace Monopoly.View
                 Card.Visibility = Visibility.Visible;
 
                 CardIcon.Source = Base64Converter.base64ToImageSource(((PublicService)c).Icon);
-                lblOwnerCardValue.Content = p.OwnerName;
+                lblOwnerCardValue.Content = (p.Owner != null) ? p.Owner.Name : "";
                 lblCardTitle.Text = p.Title;
                 lblPurchasePriceValue.Content = p.PurchasePrice + " €";
                 lblMortgagePriceValue.Content = p.MortgagePrice + " €";
@@ -2214,92 +2266,108 @@ namespace Monopoly.View
         /// <summary>
         /// Execute the action on cell
         /// </summary>
-        private void DoCellAction()
+        public void DoCellAction()
         {
             Cell c = _GameManager.BoardHandler.Board.GetCell(CurrentPlayer.Position);
 
-            if (c is Property)
+            try
             {
-                Property p = (Property)c;
+                if (c is Property)
+                {
+                    Property p = (Property)c;
 
-                if (p.Status == Property.AVAILABLE_ON_SALE)
-                {
-                    BuyProperty(p);
-                }
-                else if (p.Status == Property.NOT_AVAILABLE_ON_SALE)
-                {
-                    if (_PlayerHandler.CheckIfPlayerOwnThisProperty(p))
+                    if (p.Status == Property.AVAILABLE_ON_SALE)
                     {
-                        /*if (p is Land)
+                        BuyProperty(p);
+                    }
+                    else if (p.Status == Property.NOT_AVAILABLE_ON_SALE)
+                    {
+                        if (!_PlayerHandler.CheckIfPlayerOwnThisProperty(p))
                         {
+                            int loyer = _PlayerHandler.GetTheRent(p, _DicesHandler.FirstDice.Value + _DicesHandler.SecondDice.Value);
 
-                            BuyBuilding((Land)p);
-                        }*/
+                            _PlayerHandler.PayTheRent(p, _DicesHandler.FirstDice.Value + _DicesHandler.SecondDice.Value);
+                            UINotifyAlertMessage("Vous avez payé " + loyer + " € de loyer", AlertDialog.TypeOfAlert.INFO);
 
+                        }
+
+                    }
+                }
+                else if (c.GetType() == typeof(Tax))
+                {
+                    Tax t = (Tax)c;
+
+                    UINotifyAlertMessage("Vous avez payer une taxe de : " + t.Amount, AlertDialog.TypeOfAlert.INFO);
+                    _PlayerHandler.PayTheTax(t);
+
+                }
+                else if (c.GetType() == typeof(DrawCard))
+                {
+                    UINotifyAlertMessage("Vous piochez une carte !", AlertDialog.TypeOfAlert.INFO);
+                    DrawCard card = (DrawCard)c;
+
+                    switch (card.Type)
+                    {
+                        case (int)CardType.CHANCE:
+                            _CardHandler.GetNextChanceCard();
+                            NotificationsPanel.Content = new CardDialog(_CardHandler.CurrentCard);
+                            NotificationsPanel.Visibility = Visibility.Visible;
+                            break;
+                        case (int)CardType.COMMUNITY:
+                            _CardHandler.GetNextCommunityCard();
+                            NotificationsPanel.Content = new CardDialog(_CardHandler.CurrentCard);
+                            NotificationsPanel.Visibility = Visibility.Visible;
+                            break;
+                    }
+                }
+                else if (c.GetType() == typeof(StartPoint))
+                {
+                    UINotifyAlertMessage("Vous etes sur la case départ et recevez 200 € !", AlertDialog.TypeOfAlert.INFO);
+                    _PlayerHandler.GetGratification(CurrentPlayer);
+                }
+                else if (c.GetType() == typeof(Jail))
+                {
+                    if (CurrentPlayer.InJail)
+                    {
+                        UINotifyAlertMessage("Vous êtes en prison !", AlertDialog.TypeOfAlert.WARNING);
                     }
                     else
                     {
-                        int loyer = _PlayerHandler.PayTheRent(p, _DicesHandler.FirstDice.Value + _DicesHandler.SecondDice.Value);
-                        UINotifyAlertMessage("Vous avez payé " + loyer + " € de loyer", AlertDialog.TypeOfAlert.INFO);
-                        _PlayerHandler.PayTheRent(p, _DicesHandler.FirstDice.Value + _DicesHandler.SecondDice.Value);
+                        UINotifyAlertMessage("Vous êtes en visite !", AlertDialog.TypeOfAlert.INFO);
                     }
 
                 }
-            }
-            else if (c.GetType() == typeof(Tax))
-            {
-                UINotifyAlertMessage("Vous avez payer une taxe de : " + ((Tax)c).Amount + " €", AlertDialog.TypeOfAlert.INFO);
-                _PlayerHandler.PayTheTax((Tax) c);
-            }
-            else if (c.GetType() == typeof(DrawCard))
-            {
-                UINotifyAlertMessage("Vous piochez une carte !", AlertDialog.TypeOfAlert.INFO);
-                DrawCard card = (DrawCard)c;
-
-                switch(card.Type)
+                else if (c.GetType() == typeof(GoToJail))
                 {
-                    case (int)CardType.CHANCE:
-                        _CardHandler.GetNextChanceCard();
-                        NotificationsPanel.Content = new CardDialog(_CardHandler.CurrentCard);
-                        NotificationsPanel.Visibility = Visibility.Visible;
-                        break;
-                    case (int)CardType.COMMUNITY:
-                        _CardHandler.GetNextCommunityCard();
-                        NotificationsPanel.Content = new CardDialog(_CardHandler.CurrentCard);
-                        NotificationsPanel.Visibility = Visibility.Visible;
-                        break;
+                    UINotifyAlertMessage("Vous êtes en prison !", AlertDialog.TypeOfAlert.INFO);
+                    _PlayerHandler.GoToJail();
+                }
+                else if (c.GetType() == typeof(Parking))
+                {
+                    UINotifyAlertMessage("Vous recevez toute la MONEY !", AlertDialog.TypeOfAlert.INFO);
+                    _PlayerHandler.GetParkingMoney();
+                }
+                else
+                {
+                    UINotifyAlertMessage("Action non définie !", AlertDialog.TypeOfAlert.ERROR);
                 }
             }
-            else if (c.GetType() == typeof(StartPoint))
+            catch(BankBalanceIsNotEnougth exp)
             {
-                UINotifyAlertMessage("Vous êtes sur la case départ et recevez 200 € !", AlertDialog.TypeOfAlert.INFO);
-                _PlayerHandler.GetGratification(CurrentPlayer);
+                UINotifyUserNotEnougthAmountToPay(exp.Amount);
             }
-            else if (c.GetType() == typeof(Jail))
+            catch (Exception exp)
             {
-                if(CurrentPlayer.InJail)
-                {
-                    UINotifyAlertMessage("Vous êtes en prison !", AlertDialog.TypeOfAlert.WARNING);
-                }else
-                {
-                    UINotifyAlertMessage("Vous êtes en visite !", AlertDialog.TypeOfAlert.INFO);
-                }
-                
+                UINotifyMessage(exp.Message);
             }
-            else if (c.GetType() == typeof(GoToJail))
-            {
-                UINotifyAlertMessage("Vous êtes en prison !", AlertDialog.TypeOfAlert.INFO);
-                _PlayerHandler.GoToJail();
-            }
-            else if (c.GetType() == typeof(Parking))
-            {
-                UINotifyAlertMessage("Vous recevez toute la MONEY !", AlertDialog.TypeOfAlert.INFO);
-                _PlayerHandler.GetParkingMoney();
-            }
-            else
-            {
-                UINotifyAlertMessage("Action non définie !", AlertDialog.TypeOfAlert.ERROR);
-            }
+            
+        }
+        
+        public void DoCardAction(Card c)
+        {
+            UINotifyAlertMessage("Vous piochez une carte !", AlertDialog.TypeOfAlert.INFO);
+            NotificationsPanel.Content = new CardDialog(c);
+            NotificationsPanel.Visibility = Visibility.Visible;
         }
         #endregion
 
@@ -2352,7 +2420,6 @@ namespace Monopoly.View
             PropertiesListContent.Visibility = Visibility.Visible;
             PropertiesListContent.Content = raiseMortgagedPropertiesListInterface;
         }
-
         private void onClickExchange(object sender, RoutedEventArgs e)
         {
             NotificationsPanel.Visibility = Visibility.Visible;
@@ -2379,8 +2446,27 @@ namespace Monopoly.View
         {
             AlertNotification.Content = new AlertDialog(Message, type);
             AlertNotification.Visibility = Visibility.Visible;
+        }   
+        
+        public void UINotifyUserNotEnougthAmountToPay(double amount)
+        {
+            NotificationsPanelSalesProperty.Content = new UserControlSalesProperties(amount);
+            NotificationsPanelSalesProperty.Visibility = Visibility.Visible;
         }
 
-        
+        public void UINotifyUserNotEnougthAmountToPay(double amount, Card c)
+        {
+            NotificationsPanelSalesProperty.Content = new UserControlSalesProperties(amount, c);
+            NotificationsPanelSalesProperty.Visibility = Visibility.Visible;
+        }
+
+        public void BadExceptionHandling (double amount)
+        {
+            UINotifyUserNotEnougthAmountToPay(amount);
+        }
+        public void BadCardExceptionHandling(double amount, Card c)
+        {
+            UINotifyUserNotEnougthAmountToPay(amount, c);
+        }
     }
 }

@@ -34,7 +34,7 @@
                 <!-- Actions -->
                 <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Center" Margin="10">
                     <Button Width="150" Height="40" Click="CardChoice_OnClickPay" FontSize="16">Payer</Button>
-                    <Button Width="150" Height="40" Click="CardChoice_OnClickDrawNewCard" FontSize="16">Piocher</Button>
+                    <Button Width="150" Height="40" Click="CardChoice_OnClickDrawNewCard" FontSize="16" Margin="10">Piocher</Button>
                 </StackPanel>
             </Grid>
         </DataTemplate>
@@ -60,7 +60,7 @@
 
                 <!-- Actions -->
                 <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Center" Margin="10">
-                    <Button Width="150" Height="40" Click="CardAnniversary_OnClickValidate" FontSize="16">OK</Button>
+                    <Button Width="150" Height="40" Click="CardAnniversary_OnClickValidate" FontSize="16" Margin="10">OK</Button>
                 </StackPanel>
             </Grid>
         </DataTemplate>
@@ -86,8 +86,7 @@
 
                 <!-- Actions -->
                 <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Center" Margin="10">
-                    <Button Width="150" Height="40" Click="CardExitToJail_OnClickUseCard" FontSize="16" Margin="0,0,20,0">Utiliser</Button>
-                    <Button Width="150" Height="40" Click="CardExitToJail_OnClickGetCard" FontSize="16" Margin="20,0,0,0">Garder</Button>
+                    <Button Width="150" Height="40" Click="CardExitToJail_OnClickGetCard" FontSize="16" Margin="10">Garder</Button>
                 </StackPanel>
             </Grid>
         </DataTemplate>
@@ -113,7 +112,7 @@
 
                 <!-- Actions -->
                 <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Center" Margin="10">
-                    <Button Width="150" Height="40" Click="CardMove_OnClickValidate" FontSize="16">Ok</Button>
+                    <Button Width="150" Height="40" Click="CardMove_OnClickValidate" FontSize="16" Margin="10" >Ok</Button>
                 </StackPanel>
             </Grid>
         </DataTemplate>
@@ -139,7 +138,7 @@
 
                 <!-- Actions -->
                 <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Center" Margin="10">
-                    <Button Width="150" Height="40" Click="CardMoveToCell_OnClickValidate" FontSize="16">Ok</Button>
+                    <Button Width="150" Height="40" Click="CardMoveToCell_OnClickValidate" FontSize="16" Margin="10">Ok</Button>
                 </StackPanel>
             </Grid>
         </DataTemplate>
@@ -165,7 +164,7 @@
 
                 <!-- Actions -->
                 <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Center" Margin="10">
-                    <Button Width="150" Height="40" Click="CardMoveToJail_OnClickValidate" FontSize="16">Ok</Button>
+                    <Button Width="150" Height="40" Click="CardMoveToJail_OnClickValidate" FontSize="16" Margin="10">Ok</Button>
                 </StackPanel>
             </Grid>
         </DataTemplate>
@@ -191,7 +190,7 @@
 
                 <!-- Actions -->
                 <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Center" Margin="10">
-                    <Button Width="150" Height="40" Click="CardUpdateMoney_OnClickValidate" FontSize="16">Ok</Button>
+                    <Button Width="150" Height="40" Click="CardUpdateMoney_OnClickValidate" FontSize="16" Margin="10">Ok</Button>
                 </StackPanel>
             </Grid>
         </DataTemplate>
@@ -217,7 +216,7 @@
 
                 <!-- Actions -->
                 <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Center" Margin="10">
-                    <Button Width="150" Height="40" Click="CardUpdateMoneyAccordingBuilds_OnClickValidate" FontSize="16">Ok</Button>
+                    <Button Width="150" Height="40" Click="CardUpdateMoneyAccordingBuilds_OnClickValidate" FontSize="16" Margin="10">Ok</Button>
                 </StackPanel>
             </Grid>
         </DataTemplate>

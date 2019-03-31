@@ -2,6 +2,7 @@
 using Monopoly.Models.Components;
 using Monopoly.Models.Components.Cards;
 using Monopoly.Models.Components.Cells;
+using Monopoly.Models.Components.Exceptions;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -39,6 +40,10 @@ namespace Monopoly.View.Notifications.Dialog
 
         public delegate void UIEventMovePlayerCell(Player p, Cell c, bool startAmount);
         public static event UIEventMovePlayerCell EventMovePlayerToCell;
+
+
+        public delegate void EventExceptionHandling(double amount, Card c);
+        public static event EventExceptionHandling EventException;
 
         // Handler
         private CardHandler _CardHandler;
@@ -90,8 +95,17 @@ namespace Monopoly.View.Notifications.Dialog
         {
             CardChoice card = (CardChoice)_CardHandler.CurrentCard;
             card.Action = CardChoice.ActionOption.PAY;
-            _CardHandler.ExecuteCardAction(card);
-            this.Content = null;
+            try
+            {                
+                _CardHandler.ExecuteCardAction(card);
+                this.Content = null;
+            }
+            catch (BankBalanceIsNotEnougth exp)
+            {
+                this.Content = null;
+                EventException(exp.Amount, card);
+
+            }
 
         }
         private void CardChoice_OnClickDrawNewCard(object sender, EventArgs e)
@@ -112,15 +126,7 @@ namespace Monopoly.View.Notifications.Dialog
 
         }
 
-        // Event for CardExitToJail
-        private void CardExitToJail_OnClickUseCard(object sender, EventArgs e)
-        {
-            CardExitToJail card = (CardExitToJail)_CardHandler.CurrentCard;
-            card.Action = CardExitToJail.ActionOption.EXITTOJAIL;
-            _CardHandler.ExecuteCardAction(card);
-            this.Content = null;
-
-        }        
+                
         private void CardExitToJail_OnClickGetCard(object sender, EventArgs e)
         {
             CardExitToJail card = (CardExitToJail)_CardHandler.CurrentCard;
@@ -153,8 +159,8 @@ namespace Monopoly.View.Notifications.Dialog
         private void CardMoveToJail_OnClickValidate(object sender, EventArgs e)
         {
             CardMoveToJail card = (CardMoveToJail)_CardHandler.CurrentCard;
-            EventMovePlayerToCell(PlayerHandler.Instance.currentPlayer, BoardHandler.Instance.Board.GetCell(card.CellPosition), false);
             _CardHandler.ExecuteCardAction(card);
+            EventMovePlayerToCell(PlayerHandler.Instance.currentPlayer, BoardHandler.Instance.Board.GetCell(card.CellPosition), false);
 
             this.Content = null;
         }
@@ -163,8 +169,18 @@ namespace Monopoly.View.Notifications.Dialog
         private void CardUpdateMoney_OnClickValidate(object sender, EventArgs e)
         {
             CardUpdateMoney card = (CardUpdateMoney)_CardHandler.CurrentCard;
-            _CardHandler.ExecuteCardAction(card);
-            this.Content = null;
+            try
+            {
+                _CardHandler.ExecuteCardAction(card);
+                this.Content = null;
+            }
+            catch (BankBalanceIsNotEnougth exp)
+            {
+                this.Content = null;
+                EventException(exp.Amount, card);
+
+            }
+
 
         }
 
@@ -172,8 +188,17 @@ namespace Monopoly.View.Notifications.Dialog
         private void CardUpdateMoneyAccordingBuilds_OnClickValidate(object sender, EventArgs e)
         {
             CardUpdateMoneyAccordingBuilds card = (CardUpdateMoneyAccordingBuilds)_CardHandler.CurrentCard;
-            _CardHandler.ExecuteCardAction(card);
-            this.Content = null;
+            try
+            {
+                _CardHandler.ExecuteCardAction(card);
+                this.Content = null;
+            }            
+            catch (BankBalanceIsNotEnougth exp)
+            {
+                this.Content = null;
+                EventException(exp.Amount, card);
+
+            }
 
         }
         

@@ -107,7 +107,7 @@ namespace Monopoly.Handlers
             {
                 CardUpdateMoney card = (CardUpdateMoney)c;
                 if (card.Amount < 0)
-                    _PlayerHandler.CardPayeAmount(PlayerHandler.Instance.currentPlayer, Math.Abs(card.Amount));
+                    _PlayerHandler.PayeAmount(PlayerHandler.Instance.currentPlayer, Math.Abs(card.Amount));
                 else
                     _PlayerHandler.CardGiveMoney(PlayerHandler.Instance.currentPlayer, card.Amount);
             }
@@ -127,7 +127,7 @@ namespace Monopoly.Handlers
                     }
                     
                 }
-                _PlayerHandler.CardPayeAmount(PlayerHandler.Instance.currentPlayer, Math.Abs(Amount));
+                _PlayerHandler.PayeAmount(PlayerHandler.Instance.currentPlayer, Math.Abs(Amount));
             }
             else if (c is CardAnniversary)
             {
@@ -158,6 +158,7 @@ namespace Monopoly.Handlers
                 CardMoveToJail card = (CardMoveToJail)c;
                 Player current = _PlayerHandler.currentPlayer;
                 current.InJail = true;
+                DicesHandler.Instance.PlayerCanBeRaise = false;
                 _PlayerHandler.MoveTo(current, _BoardHandler.Board.GetCell(card.CellPosition));
             }
             else if (c is CardExitToJail)

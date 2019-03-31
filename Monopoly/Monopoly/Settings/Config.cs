@@ -16,7 +16,7 @@ namespace Monopoly.Settings
         public static int NUMBER_MAX_OF_HOTEL = 16;
         public static int NUMBER_MAX_OF_HOUSE = 32;
         public static int INITIAL_BANK_BALANCE = 100000;
-        public static int INITIAL_PLAYER_BANK_BALANCE = 1500;
+        public static int INITIAL_PLAYER_BANK_BALANCE = 500;
         public static int INITIAL_PARKING_BALANCE = 0;
         public static int GRATIFICATION = 200;
         public static int NB_MIN_PLAYER_IN_GAME = 2;

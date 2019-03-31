@@ -6,6 +6,7 @@ using Monopoly.Models.Components.Exceptions;
 using Monopoly.Models.Tools;
 using Monopoly.Resources.Colors;
 using Monopoly.Settings;
+using Monopoly.View.Notifications.Dialog;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -35,16 +36,19 @@ namespace Monopoly.Handlers
         public List<Player> ListOfPlayers { get; private set; }
 
         public Player currentPlayer { get; private set; }
-
-        public delegate void UIEventNotifyMessage(string Message);
-        public static event UIEventNotifyMessage EventNotifyMessage;
-
-        public delegate void UIEventMovePlayer(Player p, int move, bool startAmount);
-        public static event UIEventMovePlayer EventMovePlayer;
+        
+        public delegate void UIEventNotifyAlertMessage(string Message, AlertDialog.TypeOfAlert type);
+        public static event UIEventNotifyAlertMessage EventNotifyAlertMessage;
+        
 
         public delegate void UIEventMovePlayerCell(Player p, Cell c, bool startAmount);
         public static event UIEventMovePlayerCell EventMovePlayerToCell;
 
+        public delegate void UIEventRefreshBoard();
+        public static event UIEventRefreshBoard EventRefreshBoard;
+
+
+        
         #endregion
 
 
@@ -106,8 +110,7 @@ namespace Monopoly.Handlers
             
             return colors;
         }
-    
-        
+     
 
         /// <summary>
         /// Récupère le nombre de joueur dans la liste
@@ -280,7 +283,7 @@ namespace Monopoly.Handlers
             account.BankTransfer(bankInstance.GetBankAccount(), property.PurchasePrice);
             player.AddPorperty(property);
             property.Status = Property.NOT_AVAILABLE_ON_SALE;
-            property.OwnerName = player.Name;
+            property.Owner = player;
 
         }
 
@@ -391,7 +394,7 @@ namespace Monopoly.Handlers
             return GetCurrentPlayer().ListOfProperties.Any(p => p.Id.Equals(property.Id));
         }
 
-        private Player WhoOwnThisProperty(Property property)
+        public Player WhoOwnThisProperty(Property property)
         {
             return ListOfPlayers.Find(player => player.ListOfProperties.Contains(property));
         }
@@ -414,31 +417,43 @@ namespace Monopoly.Handlers
         {
             if (p.Status == Property.NOT_AVAILABLE_ON_SALE)
             {
-                p.Status = Property.MORTGAGED;
+               p.Status = Property.MORTGAGED;
                 bankInstance.Mortgaged(player, p);
-            }           
+                EventNotifyAlertMessage("Vous venez de mettre en hypotèque une propriété", AlertDialog.TypeOfAlert.INFO);
+            }
         }
 
         public void RaiseMortgage(Player player, Property p)
         {
             if (p.Status == Property.MORTGAGED)
-            {
+            {               
                 p.Status = Property.NOT_AVAILABLE_ON_SALE;
                 bankInstance.RaiseMortgaged(player, p);
-            }           
+                EventNotifyAlertMessage("Vous venez de récupérer la propriété hypothéqué", AlertDialog.TypeOfAlert.INFO);
+            }      
         }
 
         public void Sell(Player player, Land land)
         {
-            if ((land.NbHouse <= Land.NB_MAX_HOUSES) && (land.NbHotel == 0))
+            if( (land.NbHouse == 0) && (land.NbHotel == 0) )
             {
-                bankInstance.BuyHouse(player, land);
+                EventNotifyAlertMessage("La vente est imposible, vous ne possèder pas de maison ni d'hotel sur la propriété", AlertDialog.TypeOfAlert.ERROR);
             }
+            else
+            {
+                if ((land.NbHouse <= Land.NB_MAX_HOUSES) && (land.NbHotel == 0))
+                {
+                    bankInstance.BuyHouse(player, land);
+                    EventNotifyAlertMessage("Vous venez de vendre une maison", AlertDialog.TypeOfAlert.INFO);
+                }
 
-            if ((land.NbHouse == 0) && (land.NbHotel == Land.NB_MAX_HOTEL))
-            {
-                bankInstance.BuyHotel(player, land);
+                if ((land.NbHouse == 0) && (land.NbHotel == Land.NB_MAX_HOTEL))
+                {
+                    bankInstance.BuyHotel(player, land);
+                    EventNotifyAlertMessage("Vous venez de vendre un hotel", AlertDialog.TypeOfAlert.INFO);
+                }
             }
+            
 
         }
 
@@ -448,6 +463,17 @@ namespace Monopoly.Handlers
         /// //Le loyer pour un terrain nu (sans bâtiments) est indiqué sur le titre de propriété 
         /// //correspondant. Ce loyer est doublé si le propriétaire possède tous les terrains (non hypothéqués) d’un même groupe de couleur.
         public int PayTheRent(Property p, int dicesValue)
+        {
+            int rentValue = GetTheRent(p, dicesValue);
+
+            BankAccount accountPlayer = bankInstance.GetBankAccount(GetCurrentPlayer());
+            BankAccount accountToPlayer = bankInstance.GetBankAccount(WhoOwnThisProperty(p));
+            accountPlayer.BankTransfer(accountToPlayer, rentValue);
+
+            return rentValue;
+        }
+
+        public int GetTheRent(Property p, int dicesValue)
         {
             int rentValue = 0;
 
@@ -479,13 +505,12 @@ namespace Monopoly.Handlers
                 TrainStation t = (TrainStation)p;
                 rentValue = t.TrainStationRent * NumberOfTrainStationOwned(p);
             }
-
-            BankAccount accountPlayer = bankInstance.GetBankAccount(GetCurrentPlayer());
-            BankAccount accountToPlayer = bankInstance.GetBankAccount(WhoOwnThisProperty(p));
-            accountPlayer.BankTransfer(accountToPlayer, rentValue);
+            
 
             return rentValue;
         }
+
+
 
         /// <summary>
         /// When the player is on a tax cell, he pays the tax
@@ -526,33 +551,58 @@ namespace Monopoly.Handlers
             bankInstance.PlayerPayTo(p,target,amount);
         }
 
+        /// <summary>
+        /// The player does pay amount
+        /// </summary>
+        /// <param name="p">player</param>
+        /// <param name="amount">amount</param>
         public void PayeAmount(Player p, int amount)
         {
             Bank.Instance.PlayerPaye(p, amount);
         }
 
+        /// <summary>
+        /// Give money to player
+        /// </summary>
+        /// <param name="p">player</param>
+        /// <param name="amount">amount</param>
         public void CardGiveMoney(Player p, int amount)
         {
             Bank.Instance.GiveMoneyTo(p, amount);
         }
-
-        public void CardPayeAmount(Player p, int amount)
-        {
-            Bank.Instance.PlayerPaye(p, amount);
-        }
-
+        
+        /// <summary>
+        /// Add card in listeOfCard
+        /// </summary>
+        /// <param name="p">player</param>
+        /// <param name="c">card to add</param>
         public void AddCardTo(Player p, Card c)
         {
             p.AddCard(c);
         }
+
+        /// <summary>
+        /// Remove card of player
+        /// </summary>
+        /// <param name="p">player</param>
+        /// <param name="c">card to remove</param>
         public void RemoveCardTo(Player p, Card c)
         {
             p.RemoveCard(c);
         }
+
+        /// <summary>
+        /// Player exit to jail
+        /// </summary>
+        /// <param name="p">player</param>
         public void ExitToJail(Player p)
         {
             currentPlayer.InJail = false;
         }
+
+        /// <summary>
+        /// Player go to jail
+        /// </summary>
         public void GoToJail()
         {
             currentPlayer.InJail = true;
@@ -561,11 +611,66 @@ namespace Monopoly.Handlers
             DicesHandler.Instance.PlayerCanBeRaise = false;
         }
 
+        /// <summary>
+        /// Check if player own card : exit to jail
+        /// </summary>
+        /// <param name="card">card</param>
+        /// <returns></returns>
         public bool PlayerOwnExitToJailCard(out CardExitToJail card)
         {
             card = (CardExitToJail)currentPlayer.ListOfCards.FirstOrDefault(x => x is CardExitToJail);
             return (card != default(CardExitToJail));
 
+        }
+
+        /// <summary>
+        /// Check if player can buy amount
+        /// </summary>
+        /// <param name="p">player</param>
+        /// <param name="Amount">amount to pay</param>
+        /// <returns></returns>
+        public bool CheckIfPlayerCanBuy(Player p, double Amount)
+        {
+            return (bankInstance.GetBankAccount(p).Amount >= Amount);            
+        }
+
+        /// <summary>
+        /// When the player give up
+        /// </summary>
+        /// <param name="p"></param>
+        public void PlayerGiveUp(Player player)
+        {
+            foreach(Property p in player.ListOfProperties)
+            {
+                p.Owner = null;
+                p.Status = Property.AVAILABLE_ON_SALE;                
+            }
+            player.ListOfProperties.Clear();
+            player.ListOfCards.Clear();
+
+            player.HasLost = true;
+
+            EventRefreshBoard();
+        }
+
+        public Player FindWiner()
+        {
+            return ListOfPlayers.Find(x => (x.IsWinner == true));
+        }
+
+        public bool GameIsFinish()
+        {
+            int nb = ListOfPlayers.Count(x => (x.HasLost == true));
+            if (nb == GetNumberOfPlayer()-1)
+            {
+                Player p = ListOfPlayers.Find(x => (x.HasLost != true));
+                p.IsWinner = true;
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
         #endregion
     }

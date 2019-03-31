@@ -2,6 +2,7 @@
 using Monopoly.Models.Components;
 using Monopoly.Models.Components.Cards;
 using Monopoly.Models.Components.Cells;
+using Monopoly.Models.Components.Exceptions;
 using Monopoly.View.Notifications.Dialog;
 using System;
 using System.Collections.Generic;
@@ -76,11 +77,18 @@ namespace Monopoly.View
 
         private void onClickPayeFees(object sender, EventArgs e)
         {
-            _PlayerHandler.PayeAmount(_PlayerHandler.currentPlayer, 50);
-            CurrentPlayer.InJail = false;
-            CurrentPlayer.NbTurnInJail = 0;
-            EventNotifyAlertMessage("Vous êtes libéré de prison !", AlertDialog.TypeOfAlert.INFO);
-            this.Content = null;
+            try
+            {
+                _PlayerHandler.PayeAmount(_PlayerHandler.currentPlayer, 50);
+                CurrentPlayer.InJail = false;
+                CurrentPlayer.NbTurnInJail = 0;
+                EventNotifyAlertMessage("Vous etes libéré de prison !", AlertDialog.TypeOfAlert.INFO);
+                this.Content = null;
+            }
+            catch(BankBalanceIsNotEnougth exp)
+            {
+                EventNotifyAlertMessage("Vous n'avez pas assez d'argent pour payer les frais de caution !", AlertDialog.TypeOfAlert.INFO);
+            }            
 
         }
 

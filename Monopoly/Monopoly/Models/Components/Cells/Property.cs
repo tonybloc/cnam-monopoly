@@ -46,13 +46,13 @@ namespace Monopoly.Models.Components.Cells
             }
             set
             {
-                if(_status != value)
+                if (_status != value)
                 {
                     _status = value;
                     OnPropertyChanged();
                 }
             }
-            
+
         }
 
         private int _purchasePrice;
@@ -65,7 +65,7 @@ namespace Monopoly.Models.Components.Cells
             }
             set
             {
-                if(_purchasePrice != value)
+                if (_purchasePrice != value)
                 {
                     _purchasePrice = value;
                     OnPropertyChanged();
@@ -83,7 +83,7 @@ namespace Monopoly.Models.Components.Cells
             }
             set
             {
-                if(_mortgagePrice != value)
+                if (_mortgagePrice != value)
                 {
                     _mortgagePrice = value;
                     OnPropertyChanged();
@@ -91,22 +91,19 @@ namespace Monopoly.Models.Components.Cells
             }
         }
 
-        private string _ownerName;
+        
         [XmlIgnore]
-        public string OwnerName
+        private Player _owner;
+        public Player Owner
         {
-            get
-            {
-                return _ownerName;
-            }
+            get { return _owner; }
             set
             {
-                if(_ownerName != value)
+                if(_owner != value)
                 {
-                    _ownerName = value;
+                    _owner = value;
                     OnPropertyChanged();
                 }
-
             }
         }
 
@@ -124,7 +121,7 @@ namespace Monopoly.Models.Components.Cells
             Status = AVAILABLE_ON_SALE;
             PurchasePrice = 0;
             MortgagePrice = 0;
-            OwnerName = "";
+            Owner = null;
         }
 
         #endregion
@@ -141,5 +138,10 @@ namespace Monopoly.Models.Components.Cells
         }
 
         #endregion
+
+        public override string ToString()
+        {
+            return this.Title;
+        }
     }
 }
