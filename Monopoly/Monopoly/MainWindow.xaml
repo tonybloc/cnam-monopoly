@@ -49,7 +49,7 @@
 
                         <Button x:Name="btnPlayAlone" Content="Jouer" Height="50" Width="350" Margin="35,15" FontSize="16" Padding="10" VerticalAlignment="Top" Grid.Row="0" Click="btnPlayAlone_Click" />
                         <Button x:Name="btnLocalMultiplayer" Content="Multijoueur" Height="50" Width="350" Margin="35,15" FontSize="16" Padding="10" VerticalAlignment="Top" Grid.Row="1" Click="btnLocalMultiplayer_Click"/>
-                        <Button x:Name="btnCustomize" Content="Option" Height="50" Width="350" Margin="35,15"   FontSize="16" Padding="10" VerticalAlignment="Top" Grid.Row="2" Click="btnCustomize_Click" />
+                        <!--<Button x:Name="btnCustomize" Content="Option" Height="50" Width="350" Margin="35,15"   FontSize="16" Padding="10" VerticalAlignment="Top" Grid.Row="2" Click="btnCustomize_Click" />-->
                         <Button x:Name="btnRules" Content="Règles du jeu" Height="50" Width="350" Margin="35,15" FontSize="16" Padding="10" VerticalAlignment="Top" Grid.Row="3" Click="btnRules_Click" />
                     </Grid>
                 </StackPanel>

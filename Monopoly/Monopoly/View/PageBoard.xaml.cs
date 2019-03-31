@@ -90,11 +90,31 @@ namespace Monopoly.View
 
 
         public event PropertyChangedEventHandler PropertyChanged;
-        #endregion
+        private static PageBoard _instance = null;
+        public static PageBoard Instance
+        {
+            get
+            {
+                if (_instance == null)
+                {
+                    _instance = new PageBoard();
+                }
+                return _instance;
+            }
+            set
+            {
+                if(_instance != value)
+                {
+                    _instance = value;
+                }
+            }
+        }
 
         #endregion
 
-        public PageBoard()
+        #endregion
+
+        private PageBoard()
         {
             // Initialise GUI components
             InitializeComponent();
@@ -144,6 +164,33 @@ namespace Monopoly.View
            
 
             StartGame();
+        }
+
+        
+
+        public void PageBoardClean()
+        {
+            DicesHandler.EventNotifyMessage -= UINotifyMessage;
+            DicesHandler.EventMovePlayer -= UIMovePlayer;
+            DicesHandler.EventMovePlayerToCell -= UIMovePlayerToCell;
+            DicesHandler.EventNotifyAlertMessage -= UINotifyAlertMessage;
+
+            PlayerHandler.EventMovePlayerToCell -= UIMovePlayerToCell;
+            PlayerHandler.EventNotifyAlertMessage -= UINotifyAlertMessage;
+            PlayerHandler.EventRefreshBoard -= RefreshBoardProperties;
+
+            JailInterface.EventNotifyAlertMessage -= UINotifyAlertMessage;
+            PropertiesListInterface.buildingBought -= BuildingBought;
+            SellPropertiesListInterface.buildingBought -= BuildingBought;
+            BuyLandDialog.propertyBought -= PropertyBought;
+            BuyLandDialog.EventException -= BadExceptionHandling;
+
+            CardDialog.EventMovePlayer -= UIMovePlayer;
+            CardDialog.EventMovePlayerToCell -= UIMovePlayerToCell;
+            CardDialog.EventException -= BadCardExceptionHandling;
+
+            UserControlSalesProperties.EventCellAction -= DoCellAction;
+            UserControlSalesProperties.EventCardAction -= DoCardAction;
         }
 
         #region Game State

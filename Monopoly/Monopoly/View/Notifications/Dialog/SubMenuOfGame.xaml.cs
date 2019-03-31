@@ -38,8 +38,13 @@ namespace Monopoly.View.Notifications.Dialog
         {            
             ((MainWindow)Window.GetWindow(this)).MainContent.Content = null;
             ((MainWindow)Window.GetWindow(this)).MenuContent.Visibility = Visibility.Visible;
+
+            PageBoard.Instance.PageBoardClean();
+            PageBoard.Instance = null;
+
             GameManager.Reset();
             this.Content = null;
+            
         }
 
         public void onClick_btnQuit(object sender, RoutedEventArgs e)

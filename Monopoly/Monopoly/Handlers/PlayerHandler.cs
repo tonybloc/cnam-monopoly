@@ -81,6 +81,7 @@ namespace Monopoly.Handlers
         public static void Reset()
         {
             instance = null;
+            
         }
         
         #endregion

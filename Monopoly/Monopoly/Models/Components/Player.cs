@@ -297,6 +297,13 @@ namespace Monopoly.Models.Components
             this.ListOfCards.Remove(c);
         }
 
+        public void Clear()
+        {
+            this.Position = 0;
+            this.ListOfCards.Clear();
+            this.ListOfProperties.Clear();
+        }
+
         #endregion
     }
 }

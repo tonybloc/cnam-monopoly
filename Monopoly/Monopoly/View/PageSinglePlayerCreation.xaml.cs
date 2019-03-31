@@ -138,7 +138,7 @@ namespace Monopoly.View
                 }
 
                 _GameManager.IntialiseGame();
-                ((MainWindow)Window.GetWindow(this)).MainContent.Content = new PageBoard();
+                ((MainWindow)Window.GetWindow(this)).MainContent.Content = PageBoard.Instance;
                 ((MainWindow)Window.GetWindow(this)).MenuContent.Visibility = Visibility.Hidden;
             }
             catch (Exception exp)

@@ -87,6 +87,7 @@ namespace Monopoly.Handlers
         public static void Reset()
         {
             _instance.EndGame();
+            _instance.Clear();
             _instance = null;
             BoardHandler.Reset();
             PlayerHandler.Reset();
@@ -156,9 +157,20 @@ namespace Monopoly.Handlers
             this.Status = GameStatus.END;
         }
 
-       
+        public void Clear()
+        {
 
-        
+            foreach(Player p in PlayerHandler.Instance.ListOfPlayers)
+            {
+                p.Clear();
+            }
+            PlayerHandler.Instance.ListOfPlayers.Clear();
+
+        }
+
+
+
+
 
         #endregion
 
