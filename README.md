@@ -1,7 +1,6 @@
 # Monopoly
 
-L'application Monopoly a été raliser dans le cadre du module POO de la formation CNAM
-Application réaliser en C# avec le framework WPF.
+L'application Monopoly a été réalisée dans le cadre du module POO de la formation du CNAM. Elle a été réalisée en C# avec le framework WPF.
 
 Les règles du jeu
 
@@ -19,9 +18,9 @@ Rôle du banquier et de la banque
 
 Rôle du banquier : (Le rôle du banquier, sera géré automatiquement pas l’application) :
 
-· Il vend les propriétés (sous forme de titre de propriété correspondant aux terrains).
+· Il vend les propriétés (sous forme de titres de propriétés correspondants aux terrains).
 
-· Il gère les titres de propriété pas encore achetés par les joueurs.
+· Il gère les titres de propriété à vendre.
 
 · Il vend les maisons et les hôtels.
 
@@ -195,24 +194,24 @@ Les éléments composant le jeu sont :
 
 ## Description :
 
-Développer une application dématérialiser et portable du célébré jeux de société “Monopoly”
+Développer une application dématérialisée et portable du célèbre jeu de société “Monopoly”
 
-## Contraintes Fonctionnels :
+## Contraintes Fonctionnelles :
 
 Développer l’intégralité des fonctionnalités présentes dans le jeu classique du “Monopoly”. Puis y ajouter de nouvelles fonctionnalités comme par exemple :
 
 · La personnalisation du thème et des couleurs de jeux (Classique, Sombre, Modern, Rose, ...)
 
-· Implanté un mode multijoueur (en LAN).
+· Implémenté un mode multijoueur (en LAN ou avec des Intelligence Artificielle).
 
 ## Contraintes Techniques :
 
-L’application “Monopoly” sera développer en WPF avec la technologie .NET et les langages C#, XAML, XML.
+L’application “Monopoly” sera développée en WPF avec la technologie .NET et les langages C#, XAML et XML.
 
 ## Contraintes Organisationnelles :
 
-Réalisation du projet par groupe de 2 personne : Heures de travail estimées : 4 heures par Semaine (8heure toutes les 2 semaine)
+Réalisation du projet par groupe de 2 personnes : Heures de travail estimées : 4 heures par Semaine (8heures toutes les 2 semaines)
 
 ## Ébauches visuelles du jeu :
 
-Au lancement de l’application, une interface apparaît avec une brève description du jeu et de ses règles, suivi d’une interface de type “menu”. Sur celle-ci plusieurs boutons seront disponibles : “Jouer seul”, “Jouer en réseau”, “Personnaliser”, “Règles du jeu”, etc. Un personnage fictif sera créé dès le lancement du jeu, pour avoir un historique de ses résultats et rendre le jeu plus ludique.
+Au lancement de l’application, une interface de type “menu” apparaît. Sur celle-ci plusieurs boutons seront disponibles : “Jouer seul”, “Multijoueur”, “Personnaliser”, “Règles du jeu”, etc. Un personnage fictif sera créé dès le lancement du jeu, en saisissant son pseudo et en choisissant sa couleur de pion pour afin de rendre le jeu plus ludique.
