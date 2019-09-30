@@ -2165,15 +2165,15 @@ namespace Monopoly.View
             PropertiesListContent.Content = null;
             NotificationContent.Content = null;
             AlertNotification.Content = null;
-
-            if (_DicesHandler.PlayerCanBeRaise)
+            
+            if (_DicesHandler.PlayerCanBeRaise && !CurrentPlayer.HasLost)
             {
                 UINotifyMessage("Vous avez oublié de lancer les dés !");
             }
             else
             {
                 bool temp = true;
-                while(temp)
+                while (temp)
                 {
                     _GameManager.NextTurn();
                     _DicesHandler.PlayerCanBeRaise = true;
@@ -2192,20 +2192,22 @@ namespace Monopoly.View
                         CurrentPlayer.NbTurnInJail = 0;
                         UINotifyAlertMessage("Vous avez passer 3 tour en prison. Vous êtes dorénavant libérer de prison.", AlertDialog.TypeOfAlert.INFO);
                     }
-                    
-                    if(!CurrentPlayer.HasLost)
+
+                    if (!CurrentPlayer.HasLost)
                     {
                         temp = false;
                     }
                 }
 
-                if(_PlayerHandler.GameIsFinish())
+                if (_PlayerHandler.GameIsFinish())
                 {
                     MonopolyEndGame.Visibility = Visibility.Visible;
                     MonopolyEndGame.Content = new WinnerDialog();
                 }
-                
+
             }
+            
+            
         }
         #endregion
 

@@ -304,6 +304,8 @@ namespace Monopoly.View.Notifications.Dialog
             lstPropertiesOther.ItemsSource = ListOfPropertiesOtherPlayer;
             ListOfCardsOtherPlayer = SelectedPlayer.ListOfCards;
             lstCardsOther.ItemsSource = ListOfCardsOtherPlayer;
+
+            CanEditAmountOther = true;
         }
 
         private void onListCardsOther_SelectionChanged(object sender, SelectionChangedEventArgs e)
